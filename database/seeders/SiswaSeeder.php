@@ -12,7 +12,7 @@ class SiswaSeeder extends Seeder
      */
     public function run(): void
     {
-        $siswaUser = \App\Models\User::where('email', 'siswa@smk.id')->first();
+        $siswaUser = \App\Models\User::where('email', 'siswa@smkbaktiidhata.sch.id')->first();
         $kelas = \App\Models\Kelas::first();
 
         \App\Models\Siswa::create([

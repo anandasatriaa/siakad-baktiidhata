@@ -12,7 +12,7 @@ class GuruSeeder extends Seeder
      */
     public function run(): void
     {
-        $guruUser1 = \App\Models\User::where('email', 'guru@smk.id')->first();
+        $guruUser1 = \App\Models\User::where('email', 'guru@smkbaktiidhata.sch.id')->first();
         \App\Models\Guru::create([
             'user_id' => $guruUser1->id,
             'nip' => '198001012005011003',
@@ -21,7 +21,7 @@ class GuruSeeder extends Seeder
             'no_hp' => '081234567890',
         ]);
         
-        $guruUser2 = \App\Models\User::where('email', 'piket@smk.id')->first();
+        $guruUser2 = \App\Models\User::where('email', 'piket@smkbaktiidhata.sch.id')->first();
         \App\Models\Guru::create([
             'user_id' => $guruUser2->id,
             'nip' => '198502022010012004',
