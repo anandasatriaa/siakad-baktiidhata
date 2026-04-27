@@ -84,7 +84,7 @@
 
                 <!-- GURU -->
                 @if (in_array(Auth::user()->role, ['super_admin', 'guru']))
-                    <li class="sidebar-title">Akademik Guru</li>
+                    <li class="sidebar-title">Guru</li>
                     <li class="sidebar-item {{ request()->routeIs('guru.jadwal-mengajar') ? 'active' : '' }}">
                         <a href="{{ route('guru.jadwal-mengajar') }}" class='sidebar-link'>
                             <i class="bi bi-calendar-week-fill"></i>
@@ -125,10 +125,10 @@
 
                 <!-- GURU PIKET -->
                 @if (in_array(Auth::user()->role, ['super_admin', 'guru_piket']))
-                    <li class="sidebar-title">Piket</li>
+                    <li class="sidebar-title">Guru Piket</li>
                     <li class="sidebar-item {{ request()->routeIs('absensi.*') ? 'active' : '' }}">
                         <a href="{{ route('absensi.index') }}" class='sidebar-link'>
-                            <i class="bi bi-clipboard-check-fill"></i>
+                            <i class="bi bi-person-check-fill"></i>
                             <span>Input Absensi Harian</span>
                         </a>
                     </li>
@@ -148,7 +148,7 @@
 
                 <!-- SISWA -->
                 @if (in_array(Auth::user()->role, ['super_admin', 'siswa']))
-                    <li class="sidebar-title">Akademik Siswa</li>
+                    <li class="sidebar-title">Siswa</li>
                     <li class="sidebar-item {{ request()->routeIs('siswa.my-jadwal') ? 'active' : '' }}">
                         <a href="{{ route('siswa.my-jadwal') }}" class='sidebar-link'>
                             <i class="bi bi-calendar-week-fill"></i>
