@@ -31,7 +31,7 @@
                     </a>
                 </li>
 
-                <!-- SUPER ADMIN / KEPALA SEKOLAH / ADMIN -->
+                <!-- KEPALA SEKOLAH / ADMIN -->
                 @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
                     <li class="sidebar-title">Data Master</li>
                     <li class="sidebar-item {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
@@ -68,13 +68,13 @@
                     <li class="sidebar-item {{ request()->routeIs('guru.rekap-nilai') ? 'active' : '' }}">
                         <a href="{{ route('guru.rekap-nilai') }}" class='sidebar-link'>
                             <i class="bi bi-file-earmark-spreadsheet-fill"></i>
-                            <span>Rekap Nilai Siswa</span>
+                            <span>Hasil Nilai Siswa</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-file-earmark-person-fill"></i>
-                            <span>Laporan Absen & Pelanggaran</span>
+                            <span>Laporan Absensi & Pelanggaran</span>
                         </a>
                     </li>
                 @endif
@@ -97,13 +97,13 @@
                     <li class="sidebar-item">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-journal-check"></i>
-                            <span>Rekap Nilai Per Kelas</span>
+                            <span>Hasil Nilai Siswa</span>
                         </a>
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('guru.data-siswa-ajar') ? 'active' : '' }}">
                         <a href="{{ route('guru.data-siswa-ajar') }}" class='sidebar-link'>
                             <i class="bi bi-people-fill"></i>
-                            <span>Data Siswa yang diajar</span>
+                            <span>Data Siswa</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -149,13 +149,13 @@
                     <li class="sidebar-item {{ request()->routeIs('siswa.my-jadwal') ? 'active' : '' }}">
                         <a href="{{ route('siswa.my-jadwal') }}" class='sidebar-link'>
                             <i class="bi bi-calendar-week-fill"></i>
-                            <span>Jadwal Ku</span>
+                            <span>Jadwal Pelajaran</span>
                         </a>
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('siswa.my-nilai') ? 'active' : '' }}">
                         <a href="{{ route('siswa.my-nilai') }}" class='sidebar-link'>
                             <i class="bi bi-journal-check"></i>
-                            <span>Rapor Nilai</span>
+                            <span>Nilai</span>
                         </a>
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('siswa.my-absensi') ? 'active' : '' }}">
