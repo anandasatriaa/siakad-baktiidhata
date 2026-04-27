@@ -58,8 +58,8 @@
                             <span>Data Mata Pelajaran</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('jadwal.*') ? 'active' : '' }}">
+                        <a href="{{ route('jadwal.index') }}" class='sidebar-link'>
                             <i class="bi bi-calendar-day"></i>
                             <span>Jadwal Pelajaran</span>
                         </a>
@@ -88,8 +88,8 @@
                             <span>Jadwal Mengajar</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('nilai.*') ? 'active' : '' }}">
+                        <a href="{{ route('nilai.index') }}" class='sidebar-link'>
                             <i class="bi bi-pen-fill"></i>
                             <span>Input Nilai</span>
                         </a>
@@ -106,8 +106,8 @@
                             <span>Cetak / Ekspor Nilai</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('agenda.*') ? 'active' : '' }}">
+                        <a href="{{ route('agenda.index') }}" class='sidebar-link'>
                             <i class="bi bi-file-earmark-medical-fill"></i>
                             <span>Agenda Mengajar</span>
                         </a>
@@ -117,14 +117,14 @@
                 <!-- GURU PIKET -->
                 @if (in_array(Auth::user()->role, ['super_admin', 'guru_piket']))
                     <li class="sidebar-title">Piket</li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('absensi.*') ? 'active' : '' }}">
+                        <a href="{{ route('absensi.index') }}" class='sidebar-link'>
                             <i class="bi bi-clipboard-check-fill"></i>
                             <span>Input Absensi Harian</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('keterlambatan.*') ? 'active' : '' }}">
+                        <a href="{{ route('keterlambatan.index') }}" class='sidebar-link'>
                             <i class="bi bi-exclamation-triangle-fill"></i>
                             <span>Input Keterlambatan</span>
                         </a>
