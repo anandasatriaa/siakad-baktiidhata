@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SIAKAD SMK Bakti Idhata</title>
+    <title>Login | SIAKAD SMK Bakti Idhata</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/pages/auth.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/images/logo/logo-smkbaktiidhata.png') }}" type="image/png">
-    
+
     <style>
         #auth #auth-right {
             background: url("{{ asset('assets/images/bg/bg-smkbaktiidhata.jpg') }}"), linear-gradient(90deg, #2d499d, #3f5491);
