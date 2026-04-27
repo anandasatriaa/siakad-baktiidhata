@@ -26,8 +26,8 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nis' => 'required|unique:siswas,nis',
-            'nisn' => 'nullable|unique:siswas,nisn',
+            'nis' => 'required|unique:siswa,nis',
+            'nisn' => 'nullable|unique:siswa,nisn',
             'nama_lengkap' => 'required',
             'kelas_id' => 'required|exists:kelas,id',
             'jenis_kelamin' => 'required|in:L,P',
@@ -69,8 +69,8 @@ class SiswaController extends Controller
     public function update(Request $request, Siswa $siswa)
     {
         $request->validate([
-            'nis' => 'required|unique:siswas,nis,' . $siswa->id,
-            'nisn' => 'nullable|unique:siswas,nisn,' . $siswa->id,
+            'nis' => 'required|unique:siswa,nis,' . $siswa->id,
+            'nisn' => 'nullable|unique:siswa,nisn,' . $siswa->id,
             'nama_lengkap' => 'required',
             'kelas_id' => 'required|exists:kelas,id',
             'jenis_kelamin' => 'required|in:L,P',

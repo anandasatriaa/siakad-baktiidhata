@@ -140,22 +140,28 @@
                 <!-- SISWA -->
                 @if (in_array(Auth::user()->role, ['super_admin', 'siswa']))
                     <li class="sidebar-title">Akademik Siswa</li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('siswa.my-jadwal') ? 'active' : '' }}">
+                        <a href="{{ route('siswa.my-jadwal') }}" class='sidebar-link'>
                             <i class="bi bi-calendar-week-fill"></i>
                             <span>Jadwal Ku</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('siswa.my-nilai') ? 'active' : '' }}">
+                        <a href="{{ route('siswa.my-nilai') }}" class='sidebar-link'>
                             <i class="bi bi-journal-check"></i>
                             <span>Rapor Nilai</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('siswa.my-absensi') ? 'active' : '' }}">
+                        <a href="{{ route('siswa.my-absensi') }}" class='sidebar-link'>
                             <i class="bi bi-clock-history"></i>
                             <span>Kehadiran</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('siswa.my-keterlambatan') ? 'active' : '' }}">
+                        <a href="{{ route('siswa.my-keterlambatan') }}" class='sidebar-link'>
+                            <i class="bi bi-alarm-fill"></i>
+                            <span>Keterlambatan</span>
                         </a>
                     </li>
                 @endif

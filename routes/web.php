@@ -13,6 +13,7 @@ use App\Http\Controllers\KeterlambatanController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\AcademicSiswaController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -42,6 +43,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
     Route::post('/nilai', [NilaiController::class, 'store'])->name('nilai.store');
     Route::resource('agenda', AgendaController::class);
+
+    // Akademik Siswa
+    Route::get('/my-jadwal', [AcademicSiswaController::class, 'jadwal'])->name('siswa.my-jadwal');
+    Route::get('/my-absensi', [AcademicSiswaController::class, 'absensi'])->name('siswa.my-absensi');
+    Route::get('/my-keterlambatan', [AcademicSiswaController::class, 'keterlambatan'])->name('siswa.my-keterlambatan');
+    Route::get('/my-nilai', [AcademicSiswaController::class, 'nilai'])->name('siswa.my-nilai');
 
     // Role-based routes can be enclosed in middleware groups.
     // Example:
