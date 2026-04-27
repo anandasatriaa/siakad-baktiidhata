@@ -8,7 +8,7 @@
                             style="height: 3.5rem !important; width: auto;">
                         <div class="ms-2">
                             <h5 class="mb-0"
-                                style="font-weight: 800; color: #435ebe; font-size: 1.2rem; line-height: 1.1; margin-bottom: 2px !important;">
+                                style="font-weight: 800; color: #435ebe; font-size: 1.2rem; line-height: 1.1; margin-bottom: 6px !important;">
                                 SIAKAD
                             </h5>
                             <span

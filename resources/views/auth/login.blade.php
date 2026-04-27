@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/pages/auth.css') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo/logo-smkbaktiidhata.png') }}" type="image/png">
+    
     <style>
         #auth #auth-right {
             background: url("{{ asset('assets/images/bg/bg-smkbaktiidhata.jpg') }}"), linear-gradient(90deg, #2d499d, #3f5491);
