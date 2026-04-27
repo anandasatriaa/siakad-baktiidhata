@@ -41,10 +41,8 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label for="email">Email (untuk Login)</label>
-                            <input type="email" id="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $guru->user->email) }}" required placeholder="Masukkan Email">
-                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="alert alert-info py-2">
+                            <i class="bi bi-info-circle"></i> Email login otomatis: <strong>{{ $guru->user->email }}</strong>
                         </div>
                         <div class="form-group mb-3">
                             <label for="password">Password (Kosongkan jika tidak ingin diubah)</label>

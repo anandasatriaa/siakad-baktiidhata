@@ -40,15 +40,8 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label for="email">Email (untuk Login)</label>
-                            <input type="email" id="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Masukkan Email">
-                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="Masukkan Password">
-                            @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan <strong>NIP</strong> sebagai email dan password default <strong>smkbaktiidhata</strong>.
                         </div>
                         <div class="form-group mb-3">
                             <label for="alamat">Alamat</label>

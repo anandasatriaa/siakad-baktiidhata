@@ -24,20 +24,18 @@ class GuruController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nip' => 'nullable|unique:gurus,nip',
+            'nip' => 'required|unique:guru,nip',
             'nama_lengkap' => 'required',
             'jenis_kelamin' => 'required|in:L,P',
             'no_hp' => 'nullable',
             'alamat' => 'nullable',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
         ]);
 
         DB::transaction(function () use ($request) {
             $user = User::create([
                 'name' => $request->nama_lengkap,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'email' => $request->nip . '@smkbaktiidhata.sch.id',
+                'password' => Hash::make('smkbaktiidhata'),
                 'role' => 'guru',
             ]);
 
@@ -62,18 +60,17 @@ class GuruController extends Controller
     public function update(Request $request, Guru $guru)
     {
         $request->validate([
-            'nip' => 'nullable|unique:gurus,nip,' . $guru->id,
+            'nip' => 'required|unique:guru,nip,' . $guru->id,
             'nama_lengkap' => 'required',
             'jenis_kelamin' => 'required|in:L,P',
             'no_hp' => 'nullable',
             'alamat' => 'nullable',
-            'email' => 'required|email|unique:users,email,' . $guru->user_id,
         ]);
 
         DB::transaction(function () use ($request, $guru) {
             $guru->user->update([
                 'name' => $request->nama_lengkap,
-                'email' => $request->email,
+                'email' => $request->nip . '@smkbaktiidhata.sch.id',
             ]);
 
             if ($request->filled('password')) {

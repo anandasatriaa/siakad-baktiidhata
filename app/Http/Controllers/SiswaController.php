@@ -33,15 +33,13 @@ class SiswaController extends Controller
             'jenis_kelamin' => 'required|in:L,P',
             'no_hp' => 'nullable',
             'alamat' => 'nullable',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
         ]);
 
         DB::transaction(function () use ($request) {
             $user = User::create([
                 'name' => $request->nama_lengkap,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'email' => $request->nis . '@smkbaktiidhata.sch.id',
+                'password' => Hash::make('smkbaktiidhata'),
                 'role' => 'siswa',
             ]);
 
@@ -76,13 +74,12 @@ class SiswaController extends Controller
             'jenis_kelamin' => 'required|in:L,P',
             'no_hp' => 'nullable',
             'alamat' => 'nullable',
-            'email' => 'required|email|unique:users,email,' . $siswa->user_id,
         ]);
 
         DB::transaction(function () use ($request, $siswa) {
             $siswa->user->update([
                 'name' => $request->nama_lengkap,
-                'email' => $request->email,
+                'email' => $request->nis . '@smkbaktiidhata.sch.id',
             ]);
 
             if ($request->filled('password')) {
