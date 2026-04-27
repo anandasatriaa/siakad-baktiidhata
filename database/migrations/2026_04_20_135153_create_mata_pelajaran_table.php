@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('keterlambatans', function (Blueprint $table) {
+        Schema::create('mata_pelajaran', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->cascadeOnDelete();
-            $table->date('tanggal');
-            $table->integer('lama_menit');
-            $table->text('alasan')->nullable();
-            $table->foreignId('pencatat_id')->constrained('users')->cascadeOnDelete();
+            $table->string('kode_mapel')->unique();
+            $table->string('nama_mapel');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('keterlambatans');
+        Schema::dropIfExists('mata_pelajaran');
     }
 };

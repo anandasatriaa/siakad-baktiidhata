@@ -3,7 +3,17 @@
         <div class="sidebar-header">
             <div class="d-flex justify-content-between">
                 <div class="logo">
-                    <a href="{{ route('dashboard') }}"><img src="{{ asset('assets/images/logo/logo.png') }}" alt="Logo" srcset=""></a>
+                    <a href="{{ route('dashboard') }}" class="d-flex align-items-center">
+                        <img src="{{ asset('assets/images/logo/logo-smkbaktiidhata.png') }}" alt="Logo"
+                            style="height: 3.5rem !important; width: auto;">
+                        <div class="ms-2">
+                            <h5 class="mb-0"
+                                style="font-weight: 800; color: #435ebe; font-size: 1.2rem; line-height: 1;">SIAKAD</h5>
+                            <span
+                                style="font-size: 0.65rem; font-weight: 700; color: #7c8db5; text-transform: uppercase; letter-spacing: 0.5px;">SMK
+                                Bakti Idhata</span>
+                        </div>
+                    </a>
                 </div>
                 <div class="toggler">
                     <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -22,18 +32,30 @@
                 </li>
 
                 <!-- SUPER ADMIN / KEPALA SEKOLAH / ADMIN -->
-                @if(in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
+                @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
                     <li class="sidebar-title">Data Master</li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
+                        <a href="{{ route('siswa.index') }}" class='sidebar-link'>
                             <i class="bi bi-stack"></i>
                             <span>Data Siswa</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('guru.*') ? 'active' : '' }}">
+                        <a href="{{ route('guru.index') }}" class='sidebar-link'>
                             <i class="bi bi-person-badge-fill"></i>
                             <span>Data Guru</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('kelas.*') ? 'active' : '' }}">
+                        <a href="{{ route('kelas.index') }}" class='sidebar-link'>
+                            <i class="bi bi-house-door-fill"></i>
+                            <span>Data Kelas</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('mapel.*') ? 'active' : '' }}">
+                        <a href="{{ route('mapel.index') }}" class='sidebar-link'>
+                            <i class="bi bi-book-fill"></i>
+                            <span>Data Mata Pelajaran</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -58,7 +80,7 @@
                 @endif
 
                 <!-- GURU -->
-                @if(in_array(Auth::user()->role, ['super_admin', 'guru']))
+                @if (in_array(Auth::user()->role, ['super_admin', 'guru']))
                     <li class="sidebar-title">Akademik Guru</li>
                     <li class="sidebar-item">
                         <a href="#" class='sidebar-link'>
@@ -93,7 +115,7 @@
                 @endif
 
                 <!-- GURU PIKET -->
-                @if(in_array(Auth::user()->role, ['super_admin', 'guru_piket']))
+                @if (in_array(Auth::user()->role, ['super_admin', 'guru_piket']))
                     <li class="sidebar-title">Piket</li>
                     <li class="sidebar-item">
                         <a href="#" class='sidebar-link'>
@@ -116,7 +138,7 @@
                 @endif
 
                 <!-- SISWA -->
-                @if(in_array(Auth::user()->role, ['super_admin', 'siswa']))
+                @if (in_array(Auth::user()->role, ['super_admin', 'siswa']))
                     <li class="sidebar-title">Akademik Siswa</li>
                     <li class="sidebar-item">
                         <a href="#" class='sidebar-link'>
@@ -139,8 +161,8 @@
                 @endif
 
                 <li class="sidebar-title">Informasi</li>
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->routeIs('pengumuman.*') ? 'active' : '' }}">
+                    <a href="{{ route('pengumuman.index') }}" class='sidebar-link'>
                         <i class="bi bi-bell-fill"></i>
                         <span>Pengumuman</span>
                     </a>

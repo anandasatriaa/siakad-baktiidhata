@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('agenda_mengajars', function (Blueprint $table) {
+        Schema::create('pengumuman', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('guru_id')->constrained('gurus')->cascadeOnDelete();
-            $table->foreignId('jadwal_id')->constrained('jadwal_pelajarans')->cascadeOnDelete();
+            $table->string('judul');
+            $table->text('konten');
             $table->date('tanggal');
-            $table->string('materi');
-            $table->text('keterangan')->nullable();
+            $table->foreignId('penulis_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('agenda_mengajars');
+        Schema::dropIfExists('pengumuman');
     }
 };

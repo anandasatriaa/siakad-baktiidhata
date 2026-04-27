@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AbsensiHarian extends Model
 {
+    protected $table = 'absensi_harian';
+
     protected $fillable = ['siswa_id', 'tanggal', 'status', 'keterangan', 'pencatat_id'];
 
     public function siswa() { return $this->belongsTo(Siswa::class); }

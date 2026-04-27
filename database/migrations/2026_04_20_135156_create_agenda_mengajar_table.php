@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absensi_harians', function (Blueprint $table) {
+        Schema::create('agenda_mengajar', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->cascadeOnDelete();
+            $table->foreignId('guru_id')->constrained('guru')->cascadeOnDelete();
+            $table->foreignId('jadwal_id')->constrained('jadwal_pelajaran')->cascadeOnDelete();
             $table->date('tanggal');
-            $table->enum('status', ['Hadir', 'Sakit', 'Izin', 'Alpa']);
+            $table->string('materi');
             $table->text('keterangan')->nullable();
-            $table->foreignId('pencatat_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absensi_harians');
+        Schema::dropIfExists('agenda_mengajar');
     }
 };

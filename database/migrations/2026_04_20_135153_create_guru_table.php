@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('siswas', function (Blueprint $table) {
+        Schema::create('guru', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->nullOnDelete();
-            $table->string('nis')->unique();
-            $table->string('nisn')->nullable();
+            $table->string('nip')->nullable()->unique();
             $table->string('nama_lengkap');
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->string('no_hp')->nullable();
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('siswas');
+        Schema::dropIfExists('guru');
     }
 };

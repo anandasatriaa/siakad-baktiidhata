@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mata_pelajarans', function (Blueprint $table) {
+        Schema::create('tahun_akademik', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_mapel')->unique();
-            $table->string('nama_mapel');
+            $table->string('tahun_ajaran'); // e.g. 2026/2027
+            $table->enum('semester', ['Ganjil', 'Genap']);
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mata_pelajarans');
+        Schema::dropIfExists('tahun_akademik');
     }
 };

@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tahun_akademiks', function (Blueprint $table) {
+        Schema::create('keterlambatan', function (Blueprint $table) {
             $table->id();
-            $table->string('tahun_ajaran'); // e.g. 2026/2027
-            $table->enum('semester', ['Ganjil', 'Genap']);
-            $table->boolean('is_active')->default(false);
+            $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+            $table->date('tanggal');
+            $table->integer('lama_menit');
+            $table->text('alasan')->nullable();
+            $table->foreignId('pencatat_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tahun_akademiks');
+        Schema::dropIfExists('keterlambatan');
     }
 };

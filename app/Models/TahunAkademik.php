@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TahunAkademik extends Model
 {
+    protected $table = 'tahun_akademik';
+
     protected $fillable = ['tahun_ajaran', 'semester', 'is_active'];
 }
