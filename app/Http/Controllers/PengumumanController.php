@@ -14,6 +14,11 @@ class PengumumanController extends Controller
         return view('admin.pengumuman.index', compact('pengumumans'));
     }
 
+    public function show(Pengumuman $pengumuman)
+    {
+        return view('admin.pengumuman.show', compact('pengumuman'));
+    }
+
     public function create()
     {
         return view('admin.pengumuman.create');
