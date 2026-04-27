@@ -65,10 +65,10 @@
                         </a>
                     </li>
                     <li class="sidebar-title">Laporan</li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
-                            <i class="bi bi-file-earmark-excel-fill"></i>
-                            <span>Laporan Nilai Siswa</span>
+                    <li class="sidebar-item {{ request()->routeIs('guru.rekap-nilai') ? 'active' : '' }}">
+                        <a href="{{ route('guru.rekap-nilai') }}" class='sidebar-link'>
+                            <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                            <span>Rekap Nilai Siswa</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -82,9 +82,9 @@
                 <!-- GURU -->
                 @if (in_array(Auth::user()->role, ['super_admin', 'guru']))
                     <li class="sidebar-title">Akademik Guru</li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
-                            <i class="bi bi-calendar-check-fill"></i>
+                    <li class="sidebar-item {{ request()->routeIs('guru.jadwal-mengajar') ? 'active' : '' }}">
+                        <a href="{{ route('guru.jadwal-mengajar') }}" class='sidebar-link'>
+                            <i class="bi bi-calendar-week-fill"></i>
                             <span>Jadwal Mengajar</span>
                         </a>
                     </li>
@@ -98,6 +98,12 @@
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-journal-check"></i>
                             <span>Rekap Nilai Per Kelas</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ request()->routeIs('guru.data-siswa-ajar') ? 'active' : '' }}">
+                        <a href="{{ route('guru.data-siswa-ajar') }}" class='sidebar-link'>
+                            <i class="bi bi-people-fill"></i>
+                            <span>Data Siswa yang diajar</span>
                         </a>
                     </li>
                     <li class="sidebar-item">

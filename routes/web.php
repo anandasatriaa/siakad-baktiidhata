@@ -14,6 +14,7 @@ use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\AcademicSiswaController;
+use App\Http\Controllers\AcademicGuruController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -43,6 +44,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
     Route::post('/nilai', [NilaiController::class, 'store'])->name('nilai.store');
     Route::resource('agenda', AgendaController::class);
+
+    // Akademik Guru Tambahan
+    Route::get('/jadwal-mengajar', [AcademicGuruController::class, 'jadwal'])->name('guru.jadwal-mengajar');
+    Route::get('/data-siswa-ajar', [AcademicGuruController::class, 'dataSiswa'])->name('guru.data-siswa-ajar');
+    Route::get('/rekap-nilai', [AcademicGuruController::class, 'rekapNilai'])->name('guru.rekap-nilai');
+    Route::get('/export-nilai-pdf/{jadwal_id}', [AcademicGuruController::class, 'exportPdf'])->name('guru.export-nilai-pdf');
+    Route::get('/export-nilai-excel/{jadwal_id}', [AcademicGuruController::class, 'exportExcel'])->name('guru.export-nilai-excel');
 
     // Akademik Siswa
     Route::get('/my-jadwal', [AcademicSiswaController::class, 'jadwal'])->name('siswa.my-jadwal');
