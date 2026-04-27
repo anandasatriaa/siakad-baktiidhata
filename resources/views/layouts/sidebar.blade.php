@@ -8,10 +8,13 @@
                             style="height: 3.5rem !important; width: auto;">
                         <div class="ms-2">
                             <h5 class="mb-0"
-                                style="font-weight: 800; color: #435ebe; font-size: 1.2rem; line-height: 1;">SIAKAD</h5>
+                                style="font-weight: 800; color: #435ebe; font-size: 1.2rem; line-height: 1.1; margin-bottom: 2px !important;">
+                                SIAKAD
+                            </h5>
                             <span
-                                style="font-size: 0.65rem; font-weight: 700; color: #7c8db5; text-transform: uppercase; letter-spacing: 0.5px;">SMK
-                                Bakti Idhata</span>
+                                style="font-size: 0.65rem; font-weight: 700; color: #7c8db5; text-transform: uppercase; letter-spacing: 0.5px; display: block; line-height: 1;">
+                                SMK Bakti Idhata
+                            </span>
                         </div>
                     </a>
                 </div>
