@@ -27,7 +27,6 @@ class SiswaController extends Controller
     {
         $request->validate([
             'nis' => 'required|unique:siswa,nis',
-            'nisn' => 'nullable|unique:siswa,nisn',
             'nama_lengkap' => 'required',
             'kelas_id' => 'required|exists:kelas,id',
             'jenis_kelamin' => 'required|in:L,P',
@@ -47,7 +46,6 @@ class SiswaController extends Controller
                 'user_id' => $user->id,
                 'kelas_id' => $request->kelas_id,
                 'nis' => $request->nis,
-                'nisn' => $request->nisn,
                 'nama_lengkap' => $request->nama_lengkap,
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'no_hp' => $request->no_hp,
@@ -68,7 +66,6 @@ class SiswaController extends Controller
     {
         $request->validate([
             'nis' => 'required|unique:siswa,nis,' . $siswa->id,
-            'nisn' => 'nullable|unique:siswa,nisn,' . $siswa->id,
             'nama_lengkap' => 'required',
             'kelas_id' => 'required|exists:kelas,id',
             'jenis_kelamin' => 'required|in:L,P',
@@ -91,7 +88,6 @@ class SiswaController extends Controller
             $siswa->update([
                 'kelas_id' => $request->kelas_id,
                 'nis' => $request->nis,
-                'nisn' => $request->nisn,
                 'nama_lengkap' => $request->nama_lengkap,
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'no_hp' => $request->no_hp,

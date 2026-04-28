@@ -19,7 +19,6 @@ class SiswaSeeder extends Seeder
             'user_id' => $siswaUser->id,
             'kelas_id' => $kelas->id,
             'nis' => '12345',
-            'nisn' => '0012345678',
             'nama_lengkap' => 'Andi Susanto',
             'jenis_kelamin' => 'L',
         ]);

@@ -21,11 +21,6 @@
                             @error('nis') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         <div class="form-group mb-3">
-                            <label for="nisn">NISN</label>
-                            <input type="text" id="nisn" class="form-control @error('nisn') is-invalid @enderror" name="nisn" value="{{ old('nisn', $siswa->nisn) }}" placeholder="Masukkan NISN">
-                            @error('nisn') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-                        <div class="form-group mb-3">
                             <label for="nama_lengkap">Nama Lengkap</label>
                             <input type="text" id="nama_lengkap" class="form-control @error('nama_lengkap') is-invalid @enderror" name="nama_lengkap" value="{{ old('nama_lengkap', $siswa->nama_lengkap) }}" required placeholder="Masukkan Nama Lengkap">
                             @error('nama_lengkap') <div class="invalid-feedback">{{ $message }}</div> @enderror

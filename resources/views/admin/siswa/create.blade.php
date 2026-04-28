@@ -20,11 +20,6 @@
                             @error('nis') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         <div class="form-group mb-3">
-                            <label for="nisn">NISN</label>
-                            <input type="text" id="nisn" class="form-control @error('nisn') is-invalid @enderror" name="nisn" value="{{ old('nisn') }}" placeholder="Masukkan NISN">
-                            @error('nisn') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-                        <div class="form-group mb-3">
                             <label for="nama_lengkap">Nama Lengkap</label>
                             <input type="text" id="nama_lengkap" class="form-control @error('nama_lengkap') is-invalid @enderror" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required placeholder="Masukkan Nama Lengkap">
                             @error('nama_lengkap') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -51,7 +46,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="alert alert-info">
-                            <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan <strong>NIS</strong> sebagai email dan password default <strong>smkbaktiidhata</strong>.
+                            <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan '<strong>NIS</strong>' sebagai email dan password default adalah '<strong>smkbaktiidhata</strong>'.
                         </div>
                         <div class="form-group mb-3">
                             <label for="no_hp">No. HP</label>
