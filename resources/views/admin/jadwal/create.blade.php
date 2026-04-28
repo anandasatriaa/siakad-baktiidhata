@@ -47,7 +47,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title">Detail Jadwal</h4>
                 <button type="button" class="btn btn-sm btn-success" id="add-row">
-                    <i class="bi bi-plus-circle"></i> Tambah Baris
+                    <i class="bi bi-plus-circle icon-mid"></i> Tambah Baris
                 </button>
             </div>
             <div class="card-body">
@@ -96,7 +96,7 @@
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
-                                        <i class="bi bi-trash"></i>
+                                        <i class="bi bi-trash icon-mid"></i>
                                     </button>
                                 </td>
                             </tr>

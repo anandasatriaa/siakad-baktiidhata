@@ -9,7 +9,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Daftar Keterlambatan</h4>
             <a href="{{ route('keterlambatan.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Input Keterlambatan
+                <i class="bi bi-plus-circle icon-mid"></i> Input Keterlambatan
             </a>
         </div>
         <div class="card-body">
@@ -38,13 +38,13 @@
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('keterlambatan.edit', $k->id) }}" class="btn btn-sm btn-warning">
-                                        <i class="bi bi-pencil-fill"></i>
+                                        <i class="bi bi-pencil-fill icon-mid"></i>
                                     </a>
                                     <form action="{{ route('keterlambatan.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash-fill"></i>
+                                            <i class="bi bi-trash-fill icon-mid"></i>
                                         </button>
                                     </form>
                                 </div>

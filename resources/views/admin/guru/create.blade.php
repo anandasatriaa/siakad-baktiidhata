@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="alert alert-info">
-                            <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan <strong>NIP</strong> sebagai email dan password default <strong>smkbaktiidhata</strong>.
+                            <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan '<strong>NIP</strong>' sebagai email dan password default adalah '<strong>smkbaktiidhata</strong>'.
                         </div>
                         <div class="form-group mb-3">
                             <label for="alamat">Alamat</label>

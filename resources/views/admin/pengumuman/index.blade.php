@@ -10,7 +10,7 @@
             <h4 class="card-title">Daftar Pengumuman</h4>
             @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
             <a href="{{ route('pengumuman.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Tambah Pengumuman
+                <i class="bi bi-plus-circle icon-mid"></i> Tambah Pengumuman
             </a>
             @endif
         </div>
@@ -38,20 +38,20 @@
                             <td>{{ $p->penulis->name }}</td>
                             <td>
                                 <a href="{{ route('pengumuman.show', $p->id) }}" class="btn btn-sm btn-info text-white">
-                                    <i class="bi bi-eye-fill"></i> Lihat
+                                    <i class="bi bi-eye-fill icon-mid"></i> Lihat
                                 </a>
                             </td>
                                 @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
                                 <td>
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('pengumuman.edit', $p->id) }}" class="btn btn-sm btn-warning">
-                                            <i class="bi bi-pencil-fill"></i>
+                                            <i class="bi bi-pencil-fill icon-mid"></i>
                                         </a>
                                         <form action="{{ route('pengumuman.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-trash-fill icon-mid"></i>
                                             </button>
                                         </form>
                                     </div>

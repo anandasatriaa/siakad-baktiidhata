@@ -32,10 +32,10 @@
             <h4 class="card-title">Rekap Nilai: {{ $jadwal_info->mata_pelajaran->nama_mapel }} - {{ $jadwal_info->kelas->nama_kelas }}</h4>
             <div class="btn-group">
                 <a href="{{ route('guru.export-nilai-pdf', $selected_jadwal) }}" class="btn btn-danger">
-                    <i class="bi bi-file-earmark-pdf"></i> Export PDF
+                    <i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF
                 </a>
                 <a href="{{ route('guru.export-nilai-excel', $selected_jadwal) }}" class="btn btn-success">
-                    <i class="bi bi-file-earmark-excel"></i> Export Excel
+                    <i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel
                 </a>
             </div>
         </div>

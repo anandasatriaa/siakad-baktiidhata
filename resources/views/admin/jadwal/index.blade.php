@@ -9,7 +9,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Daftar Jadwal</h4>
             <a href="{{ route('jadwal.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Tambah Jadwal
+                <i class="bi bi-plus-circle icon-mid"></i> Tambah Jadwal
             </a>
         </div>
         <div class="card-body">
@@ -40,13 +40,13 @@
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('jadwal.edit', $j->id) }}" class="btn btn-sm btn-warning">
-                                        <i class="bi bi-pencil-fill"></i>
+                                        <i class="bi bi-pencil-fill icon-mid"></i>
                                     </a>
                                     <form action="{{ route('jadwal.destroy', $j->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash-fill"></i>
+                                            <i class="bi bi-trash-fill icon-mid"></i>
                                         </button>
                                     </form>
                                 </div>
