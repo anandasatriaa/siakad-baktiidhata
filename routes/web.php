@@ -15,6 +15,7 @@ use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\AcademicSiswaController;
 use App\Http\Controllers\AcademicGuruController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -58,11 +59,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-keterlambatan', [AcademicSiswaController::class, 'keterlambatan'])->name('siswa.my-keterlambatan');
     Route::get('/my-nilai', [AcademicSiswaController::class, 'nilai'])->name('siswa.my-nilai');
 
-    // Role-based routes can be enclosed in middleware groups.
-    // Example:
-    /*
-    Route::middleware(['role:super_admin,admin'])->group(function() {
-        Route::get('/master-data/guru', [GuruController::class, 'index']);
-    });
-    */
+    // Profile
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
 });

@@ -61,6 +61,11 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
+                                        <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                            <i class="icon-mid bi bi-person me-2"></i> My Profile
+                                        </a>
+                                    </li>
+                                    <li>
                                         <form action="{{ route('logout') }}" method="POST">
                                             @csrf
                                             <button type="submit" class="dropdown-item"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</button>
@@ -106,7 +111,7 @@
                             <p>{{ date('Y') }} &copy; SIAKAD SMK Bakti Idhata</p>
                         </div>
                         <div class="float-end">
-                            <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span> by Mazer</p>
+                            <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span> by Yuni</p>
                         </div>
                     </div>
                 </footer>
