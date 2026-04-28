@@ -47,7 +47,7 @@
                                         <a href="{{ route('pengumuman.edit', $p->id) }}" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil-fill icon-mid"></i>
                                         </a>
-                                        <form action="{{ route('pengumuman.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')">
+                                        <form action="{{ route('pengumuman.destroy', $p->id) }}" method="POST" class="delete-form" data-message="Apakah Anda yakin ingin menghapus pengumuman ini?">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">

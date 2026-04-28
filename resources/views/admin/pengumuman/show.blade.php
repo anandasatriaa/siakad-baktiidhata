@@ -31,7 +31,7 @@
             <a href="{{ route('pengumuman.edit', $pengumuman->id) }}" class="btn btn-warning">
                 <i class="bi bi-pencil-fill icon-mid"></i> Edit
             </a>
-            <form action="{{ route('pengumuman.destroy', $pengumuman->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')">
+            <form action="{{ route('pengumuman.destroy', $pengumuman->id) }}" method="POST" class="delete-form" data-message="Apakah Anda yakin ingin menghapus pengumuman ini?">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">

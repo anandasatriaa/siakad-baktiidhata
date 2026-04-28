@@ -40,7 +40,7 @@
                                     <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-sm btn-warning">
                                         <i class="bi bi-pencil-fill icon-mid"></i>
                                     </a>
-                                    <form action="{{ route('siswa.destroy', $siswa->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    <form action="{{ route('siswa.destroy', $siswa->id) }}" method="POST" class="delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">

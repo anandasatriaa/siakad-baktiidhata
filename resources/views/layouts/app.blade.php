@@ -122,6 +122,34 @@
     <script src="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle delete confirmation
+            document.body.addEventListener('submit', function(e) {
+                if (e.target.classList.contains('delete-form')) {
+                    e.preventDefault();
+                    const form = e.target;
+                    const message = form.getAttribute('data-message') || 'Apakah Anda yakin ingin menghapus data ini?';
+                    
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: message,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#435ebe',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 

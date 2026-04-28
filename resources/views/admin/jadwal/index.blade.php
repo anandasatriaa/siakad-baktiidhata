@@ -42,7 +42,7 @@
                                     <a href="{{ route('jadwal.edit', $j->id) }}" class="btn btn-sm btn-warning">
                                         <i class="bi bi-pencil-fill icon-mid"></i>
                                     </a>
-                                    <form action="{{ route('jadwal.destroy', $j->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
+                                    <form action="{{ route('jadwal.destroy', $j->id) }}" method="POST" class="delete-form" data-message="Apakah Anda yakin ingin menghapus jadwal ini?">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">
