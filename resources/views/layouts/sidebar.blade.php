@@ -64,7 +64,7 @@
                     <li class="sidebar-item {{ request()->routeIs('jadwal.*') ? 'active' : '' }}">
                         <a href="{{ route('jadwal.index') }}" class='sidebar-link'>
                             <i class="bi bi-calendar-day"></i>
-                            <span>Jadwal Pelajaran</span>
+                            <span>Input Jadwal Pelajaran</span>
                         </a>
                     </li>
                     <li class="sidebar-title">Laporan</li>
@@ -141,7 +141,7 @@
                     <li class="sidebar-item">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-card-checklist"></i>
-                            <span>Rekap Absensi Seluruh Kelas</span>
+                            <span>Rekap Absensi</span>
                         </a>
                     </li>
                 @endif
