@@ -45,6 +45,6 @@ class LaporanController extends Controller
             $siswa->total_menit = $keterlambatan->sum('lama_menit');
         }
 
-        return view('admin.laporan.absensi-pelanggaran', compact('kelas', 'siswas', 'selected_kelas', 'tanggal_mulai', 'tanggal_selesai'));
+        return view('admin.laporan.index', compact('kelas', 'siswas', 'selected_kelas', 'tanggal_mulai', 'tanggal_selesai'));
     }
 }
