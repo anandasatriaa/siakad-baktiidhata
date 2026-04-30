@@ -74,8 +74,8 @@
                             <span>Hasil Nilai Siswa</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('laporan.absensi-pelanggaran') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.absensi-pelanggaran') }}" class='sidebar-link'>
                             <i class="bi bi-file-earmark-person-fill"></i>
                             <span>Laporan Absensi & Pelanggaran</span>
                         </a>
@@ -97,8 +97,8 @@
                             <span>Input Nilai</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('guru.rekap-nilai') ? 'active' : '' }}">
+                        <a href="{{ route('guru.rekap-nilai') }}" class='sidebar-link'>
                             <i class="bi bi-journal-check"></i>
                             <span>Hasil Nilai Siswa</span>
                         </a>
@@ -107,12 +107,6 @@
                         <a href="{{ route('guru.data-siswa-ajar') }}" class='sidebar-link'>
                             <i class="bi bi-people-fill"></i>
                             <span>Data Siswa</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
-                            <i class="bi bi-printer-fill"></i>
-                            <span>Cetak / Ekspor Nilai</span>
                         </a>
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('agenda.*') ? 'active' : '' }}">
@@ -129,7 +123,7 @@
                     <li class="sidebar-item {{ request()->routeIs('absensi.*') ? 'active' : '' }}">
                         <a href="{{ route('absensi.index') }}" class='sidebar-link'>
                             <i class="bi bi-person-check-fill"></i>
-                            <span>Input Absensi Harian</span>
+                            <span>Input Absensi</span>
                         </a>
                     </li>
                     <li class="sidebar-item {{ request()->routeIs('keterlambatan.*') ? 'active' : '' }}">
@@ -138,10 +132,10 @@
                             <span>Input Keterlambatan</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('laporan.absensi-pelanggaran') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.absensi-pelanggaran') }}" class='sidebar-link'>
                             <i class="bi bi-card-checklist"></i>
-                            <span>Rekap Absensi</span>
+                            <span>Laporan Absensi & Pelanggaran</span>
                         </a>
                     </li>
                 @endif
