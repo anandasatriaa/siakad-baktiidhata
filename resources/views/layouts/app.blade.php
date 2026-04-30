@@ -56,6 +56,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                                     <li>
                                         <h6 class="dropdown-header">Halo, {{ strtok(Auth::user()->name, " ") }}!</h6>
+                                        <p class="dropdown-item-text text-muted mb-0" style="font-size: 0.8rem; line-height: 0rem;">{{ Auth::user()->email }}</p>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider">
