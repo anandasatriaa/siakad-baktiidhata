@@ -253,7 +253,7 @@
                     @endforelse
 
                     <div class="px-4">
-                        <a href="{{ route('pengumuman.index') }}" class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Lihat Semua</a>
+                        <a href="{{ route('pengumuman.index') }}" class='btn btn-block btn-xl btn-primary font-bold mt-3'>Lihat Semua</a>
                     </div>
                 </div>
             </div>

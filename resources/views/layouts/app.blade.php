@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
+
     <link rel="shortcut icon" href="{{ asset('assets/images/logo/logo-smkbaktiidhata.png') }}" type="image/png">
     @stack('styles')
 </head>
@@ -123,6 +125,8 @@
     <script src="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -149,7 +153,13 @@
                     });
                 }
             });
+            
+            const table = document.querySelector('#table');
+            if (table) {
+                new simpleDatatables.DataTable(table);
+            }
         });
+
     </script>
     @stack('scripts')
 </body>
