@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="alert alert-info py-2">
-                            <i class="bi bi-info-circle"></i> Email login otomatis: <strong>{{ $guru->user->email }}</strong>
+                            <i class="bi bi-info-circle"></i> Email login: <strong>{{ $guru->user->email }}</strong>
                         </div>
                         <div class="form-group mb-3">
                             <label for="password">Password (Kosongkan jika tidak ingin diubah)</label>

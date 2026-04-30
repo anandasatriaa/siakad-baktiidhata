@@ -130,7 +130,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Handle delete confirmation
             document.body.addEventListener('submit', function(e) {
                 if (e.target.classList.contains('delete-form')) {
                     e.preventDefault();
@@ -138,7 +137,7 @@
                     const message = form.getAttribute('data-message') || 'Apakah Anda yakin ingin menghapus data ini?';
                     
                     Swal.fire({
-                        title: 'Apakah Anda yakin?',
+                        title: 'Hapus!',
                         text: message,
                         icon: 'warning',
                         showCancelButton: true,

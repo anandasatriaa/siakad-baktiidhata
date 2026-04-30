@@ -27,9 +27,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-start mt-4">
-                    <button type="submit" class="btn btn-primary me-2">Simpan Perubahan</button>
-                    <a href="{{ route('mapel.index') }}" class="btn btn-light-secondary">Batal</a>
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="{{ route('mapel.index') }}" class="btn btn-light-secondary me-2">Batal</a>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
