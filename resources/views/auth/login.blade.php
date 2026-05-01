@@ -15,22 +15,28 @@
     <style>
         #auth #auth-right {
             background: url("{{ asset('assets/images/bg/bg-smkbaktiidhata.jpg') }}"), linear-gradient(90deg, #2d499d, #3f5491);
-            background-size: cover;
+            background-size: 100% 100%;
             background-position: center;
+            background-repeat: no-repeat;
         }
+
         #auth #auth-left {
             padding: 3rem 8rem;
         }
+
         .auth-logo {
             margin-bottom: 3rem !important;
         }
+
         .auth-title {
             font-size: 3rem !important;
         }
+
         @media screen and (max-width: 767px) {
             #auth #auth-left {
                 padding: 2rem 3rem;
             }
+
             .auth-logo img {
                 height: 5rem !important;
             }
@@ -45,7 +51,8 @@
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
-                        <a href="#"><img src="{{ asset('assets/images/logo/logo-smkbaktiidhata.png') }}" alt="Logo" style="height: 7rem;"></a>
+                        <a href="#"><img src="{{ asset('assets/images/logo/logo-smkbaktiidhata.png') }}"
+                                alt="Logo" style="height: 7rem;"></a>
                     </div>
                     <h1 class="auth-title">Log in.</h1>
                     <p class="auth-subtitle mb-4">Sistem Informasi Akademik SMK Bakti Idhata.</p>
@@ -63,24 +70,31 @@
                     <form action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="email" class="form-control form-control-xl" placeholder="Email" name="email" value="{{ old('email') }}" required>
+                            <input type="email" class="form-control form-control-xl" placeholder="Email"
+                                name="email" value="{{ old('email') }}" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" class="form-control form-control-xl" placeholder="Password" name="password" required>
+                            <input type="password" class="form-control form-control-xl" placeholder="Password"
+                                name="password" id="password" required style="padding-right: 3rem;">
                             <div class="form-control-icon">
                                 <i class="bi bi-shield-lock"></i>
+                            </div>
+                            <div class="form-control-icon"
+                                style="left: auto; right: 1rem; cursor: pointer; pointer-events: auto;"
+                                id="togglePassword">
+                                <i class="bi bi-eye"></i>
                             </div>
                         </div>
                         <div class="form-check form-check-lg d-flex align-items-end">
                             <input class="form-check-input me-2" type="checkbox" name="remember" id="flexCheckDefault">
                             <label class="form-check-label text-gray-600" for="flexCheckDefault">
-                                Keep me logged in
+                                Ingat Saya
                             </label>
                         </div>
-                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-4">Log in</button>
+                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-4">Log In</button>
                     </form>
                 </div>
             </div>
@@ -91,6 +105,17 @@
         </div>
 
     </div>
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function(e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+    </script>
 </body>
 
 </html>
