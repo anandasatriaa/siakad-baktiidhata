@@ -16,7 +16,9 @@ class KelasController extends Controller
 
     public function create()
     {
-        $gurus = User::where('role', 'guru')->get();
+        $gurus = User::where('role', 'guru')
+            ->whereDoesntHave('wali_kelas')
+            ->get();
         return view('admin.kelas.create', compact('gurus'));
     }
 
@@ -24,7 +26,9 @@ class KelasController extends Controller
     {
         $request->validate([
             'nama_kelas' => 'required|unique:kelas,nama_kelas',
-            'wali_kelas_id' => 'nullable|exists:users,id',
+            'wali_kelas_id' => 'nullable|exists:users,id|unique:kelas,wali_kelas_id',
+        ], [
+            'wali_kelas_id.unique' => 'Guru tersebut sudah menjadi wali kelas di kelas lain.',
         ]);
 
         Kelas::create($request->all());
@@ -32,9 +36,14 @@ class KelasController extends Controller
         return redirect()->route('kelas.index')->with('success', 'Data Kelas berhasil ditambahkan');
     }
 
-    public function edit(Kelas $kela) // Laravel resource routing uses singular form for parameters
+    public function edit(Kelas $kela)
     {
-        $gurus = User::where('role', 'guru')->get();
+        $gurus = User::where('role', 'guru')
+            ->where(function ($query) use ($kela) {
+                $query->whereDoesntHave('wali_kelas')
+                    ->orWhere('id', $kela->wali_kelas_id);
+            })
+            ->get();
         return view('admin.kelas.edit', ['kelas' => $kela, 'gurus' => $gurus]);
     }
 
@@ -42,7 +51,9 @@ class KelasController extends Controller
     {
         $request->validate([
             'nama_kelas' => 'required|unique:kelas,nama_kelas,' . $kela->id,
-            'wali_kelas_id' => 'nullable|exists:users,id',
+            'wali_kelas_id' => 'nullable|exists:users,id|unique:kelas,wali_kelas_id,' . $kela->id,
+        ], [
+            'wali_kelas_id.unique' => 'Guru tersebut sudah menjadi wali kelas di kelas lain.',
         ]);
 
         $kela->update($request->all());

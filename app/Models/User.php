@@ -29,4 +29,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function wali_kelas()
+    {
+        return $this->hasOne(Kelas::class, 'wali_kelas_id');
+    }
 }
