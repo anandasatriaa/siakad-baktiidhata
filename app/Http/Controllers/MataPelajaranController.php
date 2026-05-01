@@ -21,7 +21,7 @@ class MataPelajaranController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_mapel' => 'required|unique:mata_pelajarans,kode_mapel',
+            'kode_mapel' => 'required|unique:mata_pelajaran,kode_mapel',
             'nama_mapel' => 'required',
         ]);
 
@@ -38,7 +38,7 @@ class MataPelajaranController extends Controller
     public function update(Request $request, MataPelajaran $mapel)
     {
         $request->validate([
-            'kode_mapel' => 'required|unique:mata_pelajarans,kode_mapel,' . $mapel->id,
+            'kode_mapel' => 'required|unique:mata_pelajaran,kode_mapel,' . $mapel->id,
             'nama_mapel' => 'required',
         ]);
 
