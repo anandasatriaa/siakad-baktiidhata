@@ -1,22 +1,24 @@
 @extends('layouts.app')
 
 @section('title', 'Input Absensi Harian')
-@section('subtitle', 'Input kehadiran siswa per kelas')
+@section('subtitle', 'Input kehadiran siswa per mata pelajaran')
 
 @section('content')
 <section class="section">
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title">Filter Kelas</h4>
+            <h4 class="card-title">Filter Jadwal</h4>
         </div>
         <div class="card-body">
             <form action="{{ route('absensi.index') }}" method="GET" class="row g-3">
-                <div class="col-md-4">
-                    <label for="kelas_id" class="form-label">Pilih Kelas</label>
-                    <select name="kelas_id" id="kelas_id" class="form-select" onchange="this.form.submit()">
-                        <option value="">-- Pilih Kelas --</option>
-                        @foreach ($kelas as $k)
-                            <option value="{{ $k->id }}" {{ $selected_kelas == $k->id ? 'selected' : '' }}>{{ $k->nama_kelas }}</option>
+                <div class="col-md-6">
+                    <label for="jadwal_id" class="form-label">Pilih Jadwal Pelajaran</label>
+                    <select name="jadwal_id" id="jadwal_id" class="form-select" onchange="this.form.submit()">
+                        <option value="">-- Pilih Jadwal --</option>
+                        @foreach ($jadwals as $j)
+                            <option value="{{ $j->id }}" {{ $selected_jadwal == $j->id ? 'selected' : '' }}>
+                                {{ $j->hari }} - {{ $j->mapel->nama_mapel }} - Kelas {{ $j->kelas->nama_kelas }} ({{ substr($j->jam_mulai, 0, 5) }} - {{ substr($j->jam_selesai, 0, 5) }})
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -28,15 +30,16 @@
         </div>
     </div>
 
-    @if ($selected_kelas)
+    @if ($selected_jadwal && $jadwal)
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title">Daftar Siswa Kelas {{ $kelas->firstWhere('id', $selected_kelas)->nama_kelas }}</h4>
+            <h4 class="card-title">Daftar Siswa Kelas {{ $jadwal->kelas->nama_kelas }} - {{ $jadwal->mapel->nama_mapel }}</h4>
         </div>
         <div class="card-body">
             <form action="{{ route('absensi.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="tanggal" value="{{ $tanggal }}">
+                <input type="hidden" name="jadwal_id" value="{{ $selected_jadwal }}">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
@@ -94,7 +97,7 @@
     </div>
     @else
     <div class="alert alert-info">
-        <i class="bi bi-info-circle"></i> Silakan pilih kelas terlebih dahulu untuk menginput absensi.
+        <i class="bi bi-info-circle"></i> Silakan pilih jadwal pelajaran terlebih dahulu untuk menginput absensi.
     </div>
     @endif
 </section>
