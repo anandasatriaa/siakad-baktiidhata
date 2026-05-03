@@ -61,6 +61,12 @@
                             <span>Data Mata Pelajaran</span>
                         </a>
                     </li>
+                    <li class="sidebar-item {{ request()->routeIs('tahun-akademik.*') ? 'active' : '' }}">
+                        <a href="{{ route('tahun-akademik.index') }}" class='sidebar-link'>
+                            <i class="bi bi-calendar-event-fill"></i>
+                            <span>Tahun Akademik</span>
+                        </a>
+                    </li>
                     <li class="sidebar-item {{ request()->routeIs('jadwal.*') ? 'active' : '' }}">
                         <a href="{{ route('jadwal.index') }}" class='sidebar-link'>
                             <i class="bi bi-calendar-day"></i>

@@ -17,6 +17,7 @@ use App\Http\Controllers\AcademicSiswaController;
 use App\Http\Controllers\AcademicGuruController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\TahunAkademikController;
 
 
 Route::get('/', function () {
@@ -37,6 +38,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('mapel', MataPelajaranController::class);
     Route::resource('jadwal', JadwalController::class);
     Route::resource('pengumuman', PengumumanController::class);
+    Route::resource('tahun-akademik', TahunAkademikController::class);
+    Route::post('tahun-akademik/{id}/activate', [TahunAkademikController::class, 'activate'])->name('tahun-akademik.activate');
 
     // Piket
     Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
