@@ -69,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Laporan
-    Route::get('/laporan-absensi-pelanggaran', [LaporanController::class, 'absensiPelanggaran'])->name('laporan.absensi-pelanggaran');
+    Route::get('/laporan-absensi-keterlambatan', [LaporanController::class, 'absensiKeterlambatan'])->name('laporan.absensi-keterlambatan');
 
 });
 

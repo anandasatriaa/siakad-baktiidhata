@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
-    public function absensiPelanggaran(Request $request)
+    public function absensiKeterlambatan(Request $request)
     {
         $kelas = Kelas::all();
         $selected_kelas = $request->kelas_id;

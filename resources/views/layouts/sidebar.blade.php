@@ -80,10 +80,10 @@
                             <span>Hasil Nilai Siswa</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->routeIs('laporan.absensi-pelanggaran') ? 'active' : '' }}">
-                        <a href="{{ route('laporan.absensi-pelanggaran') }}" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('laporan.absensi-keterlambatan') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.absensi-keterlambatan') }}" class='sidebar-link'>
                             <i class="bi bi-file-earmark-person-fill"></i>
-                            <span>Laporan Absensi & Pelanggaran</span>
+                            <span>Laporan Absensi & Keterlambatan</span>
                         </a>
                     </li>
                 @endif
@@ -138,10 +138,10 @@
                             <span>Input Keterlambatan</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->routeIs('laporan.absensi-pelanggaran') ? 'active' : '' }}">
-                        <a href="{{ route('laporan.absensi-pelanggaran') }}" class='sidebar-link'>
+                    <li class="sidebar-item {{ request()->routeIs('laporan.absensi-keterlambatan') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.absensi-keterlambatan') }}" class='sidebar-link'>
                             <i class="bi bi-card-checklist"></i>
-                            <span>Laporan Absensi & Pelanggaran</span>
+                            <span>Laporan Absensi & Keterlambatan</span>
                         </a>
                     </li>
                 @endif

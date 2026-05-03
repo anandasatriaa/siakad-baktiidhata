@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Absensi & Pelanggaran')
+@section('title', 'Laporan Absensi & Keterlambatan')
 @section('subtitle', 'Rekapitulasi kehadiran dan keterlambatan siswa')
 
 @section('content')
@@ -10,7 +10,7 @@
             <h4 class="card-title">Filter Laporan</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('laporan.absensi-pelanggaran') }}" method="GET">
+            <form action="{{ route('laporan.absensi-keterlambatan') }}" method="GET">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
