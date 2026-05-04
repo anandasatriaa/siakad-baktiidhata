@@ -226,6 +226,56 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- LATEST ATTENDANCE FOR SISWA -->
+                @if (isset($latest_absensi_siswa))
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h4>Absensi Terbaru</h4>
+                                    <a href="{{ route('siswa.my-absensi') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-lg">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tanggal</th>
+                                                    <th>Mata Pelajaran</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse($latest_absensi_siswa as $la)
+                                                    <tr>
+                                                        <td>{{ \Carbon\Carbon::parse($la->tanggal)->format('d/m/Y') }}</td>
+                                                        <td>{{ $la->jadwal->mata_pelajaran->nama_mapel ?? '-' }}</td>
+                                                        <td>
+                                                            @if ($la->status == 'Hadir')
+                                                                <span class="badge bg-success">H</span>
+                                                            @elseif($la->status == 'Sakit')
+                                                                <span class="badge bg-warning">S</span>
+                                                            @elseif($la->status == 'Izin')
+                                                                <span class="badge bg-info">I</span>
+                                                            @else
+                                                                <span class="badge bg-danger">A</span>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="3" class="text-center text-muted italic">Belum ada data absensi.</td>
+                                                    </tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div class="col-12 col-lg-3">

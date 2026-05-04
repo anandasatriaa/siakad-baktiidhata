@@ -68,7 +68,8 @@
                 <table class="table table-hover table-lg">
                     <thead>
                         <tr>
-                            <th>Tanggal</th>
+                            <th>Hari/Tanggal</th>
+                            <th>Mata Pelajaran</th>
                             <th>Status</th>
                             <th>Keterangan</th>
                         </tr>
@@ -76,7 +77,14 @@
                     <tbody>
                         @forelse ($absensis as $a)
                         <tr>
-                            <td>{{ \Carbon\Carbon::parse($a->tanggal)->format('d M Y') }}</td>
+                            <td>
+                                <div>{{ $a->jadwal->hari ?? \Carbon\Carbon::parse($a->tanggal)->isoFormat('dddd') }}</div>
+                                <small class="text-muted">{{ \Carbon\Carbon::parse($a->tanggal)->format('d M Y') }}</small>
+                            </td>
+                            <td>
+                                <div class="fw-bold">{{ $a->jadwal->mata_pelajaran->nama_mapel ?? '-' }}</div>
+                                <small class="text-muted">{{ $a->jadwal->guru->nama_lengkap ?? '-' }}</small>
+                            </td>
                             <td>
                                 @if($a->status == 'Hadir')
                                     <span class="badge bg-success">Hadir</span>
@@ -92,7 +100,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="3" class="text-center text-muted">Belum ada riwayat kehadiran.</td>
+                            <td colspan="4" class="text-center text-muted">Belum ada riwayat kehadiran.</td>
                         </tr>
                         @endforelse
                     </tbody>

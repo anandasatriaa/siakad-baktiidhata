@@ -61,6 +61,11 @@ class DashboardController extends Controller
                     ->where('hari', self::translateDay(date('l')))
                     ->orderBy('jam_mulai')
                     ->get();
+                $data['latest_absensi_siswa'] = AbsensiHarian::with(['jadwal.mata_pelajaran'])
+                    ->where('siswa_id', $siswa->id)
+                    ->latest('tanggal')
+                    ->take(5)
+                    ->get();
             }
         }
 

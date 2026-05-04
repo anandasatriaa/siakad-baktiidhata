@@ -36,9 +36,13 @@ class AcademicSiswaController extends Controller
         $siswa = Siswa::where('user_id', $user->id)->first();
         if (!$siswa) return redirect()->route('dashboard')->with('error', 'Data siswa tidak ditemukan');
 
-        $absensis = AbsensiHarian::where('siswa_id', $siswa->id)
-            ->latest()
-            ->get();
+        $absensis = AbsensiHarian::with(['jadwal.mata_pelajaran', 'jadwal.guru'])
+            ->where('siswa_id', $siswa->id)
+            ->orderBy('tanggal', 'desc')
+            ->get()
+            ->sortByDesc(function($absensi) {
+                return $absensi->tanggal . ' ' . ($absensi->jadwal->jam_mulai ?? '00:00:00');
+            });
 
         return view('siswa.absensi', compact('absensis'));
     }
