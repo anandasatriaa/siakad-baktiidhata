@@ -13,7 +13,20 @@ class JadwalController extends Controller
 {
     public function index()
     {
-        $jadwals = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'guru', 'tahun_akademik'])->latest()->get();
+        $daysOrder = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+
+        $jadwals = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'guru', 'tahun_akademik'])
+            ->get()
+            ->sortBy(function ($item) use ($daysOrder) {
+                $dayIndex = array_search($item->hari, $daysOrder);
+                return [
+                    $item->kelas->nama_kelas,
+                    $dayIndex !== false ? $dayIndex : 999,
+                    $item->jam_mulai
+                ];
+            })
+            ->groupBy('kelas.nama_kelas');
+
         return view('admin.jadwal.index', compact('jadwals'));
     }
 
@@ -23,7 +36,7 @@ class JadwalController extends Controller
         $mapels = MataPelajaran::all();
         $gurus = Guru::all();
         $tahun_akademiks = TahunAkademik::all();
-        
+
         return view('admin.jadwal.create', compact('kelas', 'mapels', 'gurus', 'tahun_akademiks'));
     }
 
@@ -61,7 +74,7 @@ class JadwalController extends Controller
         $mapels = MataPelajaran::all();
         $gurus = Guru::all();
         $tahun_akademiks = TahunAkademik::all();
-        
+
         return view('admin.jadwal.edit', compact('jadwal', 'kelas', 'mapels', 'gurus', 'tahun_akademiks'));
     }
 
