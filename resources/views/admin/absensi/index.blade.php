@@ -29,6 +29,14 @@
             </form>
         </div>
     </div>
+    
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible show fade">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Mohon lengkapi status kehadiran untuk semua siswa.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     @if ($selected_jadwal && $jadwal)
     <div class="card">
@@ -58,19 +66,19 @@
                                 <td>
                                     <div class="d-flex gap-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="absensi[{{ $siswa->id }}][status]" id="status_h_{{ $siswa->id }}" value="Hadir" {{ ($siswa->absensi && $siswa->absensi->status == 'Hadir') || !$siswa->absensi ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="absensi[{{ $siswa->id }}][status]" id="status_h_{{ $siswa->id }}" value="Hadir" {{ (old("absensi.{$siswa->id}.status") == 'Hadir' || ($siswa->absensi && $siswa->absensi->status == 'Hadir')) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="status_h_{{ $siswa->id }}">H</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="absensi[{{ $siswa->id }}][status]" id="status_s_{{ $siswa->id }}" value="Sakit" {{ $siswa->absensi && $siswa->absensi->status == 'Sakit' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="absensi[{{ $siswa->id }}][status]" id="status_s_{{ $siswa->id }}" value="Sakit" {{ (old("absensi.{$siswa->id}.status") == 'Sakit' || ($siswa->absensi && $siswa->absensi->status == 'Sakit')) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="status_s_{{ $siswa->id }}">S</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="absensi[{{ $siswa->id }}][status]" id="status_i_{{ $siswa->id }}" value="Izin" {{ $siswa->absensi && $siswa->absensi->status == 'Izin' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="absensi[{{ $siswa->id }}][status]" id="status_i_{{ $siswa->id }}" value="Izin" {{ (old("absensi.{$siswa->id}.status") == 'Izin' || ($siswa->absensi && $siswa->absensi->status == 'Izin')) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="status_i_{{ $siswa->id }}">I</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="absensi[{{ $siswa->id }}][status]" id="status_a_{{ $siswa->id }}" value="Alpa" {{ $siswa->absensi && $siswa->absensi->status == 'Alpa' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="absensi[{{ $siswa->id }}][status]" id="status_a_{{ $siswa->id }}" value="Alpa" {{ (old("absensi.{$siswa->id}.status") == 'Alpa' || ($siswa->absensi && $siswa->absensi->status == 'Alpa')) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="status_a_{{ $siswa->id }}">A</label>
                                         </div>
                                     </div>

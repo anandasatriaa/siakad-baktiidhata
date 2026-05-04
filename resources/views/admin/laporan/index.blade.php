@@ -50,11 +50,6 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Hasil Rekapitulasi</h4>
-            <div class="btn-group">
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="window.print()">
-                    <i class="bi bi-printer"></i> Cetak
-                </button>
-            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
