@@ -7,7 +7,7 @@
 <section class="section">
     <div class="row">
         @foreach ($days as $day)
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100">
                 <div class="card-header bg-success py-2">
                     <h5 class="mb-0 text-white">{{ $day }}</h5>
