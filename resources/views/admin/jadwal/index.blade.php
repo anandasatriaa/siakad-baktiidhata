@@ -33,7 +33,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td><strong>{{ $j->hari }}</strong></td>
                             <td>{{ substr($j->jam_mulai, 0, 5) }} - {{ substr($j->jam_selesai, 0, 5) }}</td>
-                            <td>{{ $j->mata_pelajaran->nama_mapel }}</td>
+                            <td>{{ $j->mapel->nama_mapel }}</td>
                             <td>{{ $j->guru->nama_lengkap }}</td>
                             <td>{{ $j->kelas->nama_kelas }}</td>
                             <td>{{ $j->tahun_akademik->semester }} ({{ $j->tahun_akademik->tahun_ajaran }})</td>

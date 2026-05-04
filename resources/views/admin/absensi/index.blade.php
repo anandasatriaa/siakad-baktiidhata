@@ -17,7 +17,7 @@
                         <option value="">-- Pilih Jadwal --</option>
                         @foreach ($jadwals as $j)
                             <option value="{{ $j->id }}" {{ $selected_jadwal == $j->id ? 'selected' : '' }}>
-                                {{ $j->hari }} - {{ $j->mapel->nama_mapel }} - Kelas {{ $j->kelas->nama_kelas }} ({{ substr($j->jam_mulai, 0, 5) }} - {{ substr($j->jam_selesai, 0, 5) }})
+                                {{ $j->hari }} - {{ $j->mata_pelajaran->nama_mapel }} - Kelas {{ $j->kelas->nama_kelas }} ({{ substr($j->jam_mulai, 0, 5) }} - {{ substr($j->jam_selesai, 0, 5) }})
                             </option>
                         @endforeach
                     </select>
@@ -33,7 +33,7 @@
     @if ($selected_jadwal && $jadwal)
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title">Daftar Siswa Kelas {{ $jadwal->kelas->nama_kelas }} - {{ $jadwal->mapel->nama_mapel }}</h4>
+            <h4 class="card-title">Daftar Siswa Kelas {{ $jadwal->kelas->nama_kelas }} - {{ $jadwal->mata_pelajaran->nama_mapel }}</h4>
         </div>
         <div class="card-body">
             <form action="{{ route('absensi.store') }}" method="POST">

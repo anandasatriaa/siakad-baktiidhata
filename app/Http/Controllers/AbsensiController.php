@@ -15,7 +15,7 @@ class AbsensiController extends Controller
     {
         $user = Auth::user();
         
-        $query = JadwalPelajaran::with(['kelas', 'mapel', 'guru']);
+        $query = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'guru']);
         
         if ($user && $user->role === 'guru') {
             $guru = Guru::where('user_id', $user->id)->first();
