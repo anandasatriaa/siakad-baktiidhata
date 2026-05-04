@@ -20,16 +20,24 @@ class ProfileController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+        $canEditBasic = in_array($user->role, ['super_admin', 'admin']);
 
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+        $rules = [
             'current_password' => ['nullable', 'required_with:new_password', 'current_password'],
             'new_password' => ['nullable', 'confirmed', Password::defaults()],
-        ]);
+        ];
 
-        $user->name = $request->name;
-        $user->email = $request->email;
+        if ($canEditBasic) {
+            $rules['name'] = ['required', 'string', 'max:255'];
+            $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id];
+        }
+
+        $request->validate($rules);
+
+        if ($canEditBasic) {
+            $user->name = $request->name;
+            $user->email = $request->email;
+        }
 
         if ($request->filled('new_password')) {
             $user->password = Hash::make($request->new_password);
