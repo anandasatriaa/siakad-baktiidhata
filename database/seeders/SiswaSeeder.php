@@ -15,12 +15,19 @@ class SiswaSeeder extends Seeder
         $siswaUser = \App\Models\User::where('email', 'siswa@smkbaktiidhata.sch.id')->first();
         $kelas = \App\Models\Kelas::first();
 
-        \App\Models\Siswa::create([
+        $tahunAkademik = \App\Models\TahunAkademik::where('is_active', true)->first();
+
+        $siswa = \App\Models\Siswa::create([
             'user_id' => $siswaUser->id,
-            'kelas_id' => $kelas->id,
             'nis' => '12345',
             'nama_lengkap' => 'Andi Susanto',
             'jenis_kelamin' => 'L',
+        ]);
+
+        \App\Models\AnggotaKelas::create([
+            'siswa_id' => $siswa->id,
+            'kelas_id' => $kelas->id,
+            'tahun_akademik_id' => $tahunAkademik->id,
         ]);
     }
 }

@@ -15,7 +15,8 @@ class KelasSeeder extends Seeder
         $guru = \App\Models\Guru::first();
         \App\Models\Kelas::create([
             'nama_kelas' => 'X RPL 1',
-            'wali_kelas_id' => $guru->user_id, // refers to user id which is safe.
+            'tingkat' => 10,
+            'wali_kelas_id' => $guru->user_id,
         ]);
     }
 }
