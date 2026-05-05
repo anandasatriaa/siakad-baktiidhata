@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\AnggotaKelas;
+use App\Models\TahunAkademik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +15,8 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        $siswas = Siswa::with('kelas')->latest()->get();
+        // Eager load kelas (AnggotaKelas) dan kelas asli di dalamnya
+        $siswas = Siswa::with(['kelas.kelas'])->latest()->get();
         return view('admin.siswa.index', compact('siswas'));
     }
 
@@ -35,6 +38,12 @@ class SiswaController extends Controller
         ]);
 
         DB::transaction(function () use ($request) {
+            $tahunAkademik = TahunAkademik::where('is_active', true)->first();
+            
+            if (!$tahunAkademik) {
+                throw new \Exception('Tahun akademik aktif tidak ditemukan. Silakan aktifkan tahun akademik terlebih dahulu.');
+            }
+
             $user = User::create([
                 'name' => $request->nama_lengkap,
                 'email' => $request->nis . '@smkbaktiidhata.sch.id',
@@ -42,14 +51,20 @@ class SiswaController extends Controller
                 'role' => 'siswa',
             ]);
 
-            Siswa::create([
+            $siswa = Siswa::create([
                 'user_id' => $user->id,
-                'kelas_id' => $request->kelas_id,
                 'nis' => $request->nis,
                 'nama_lengkap' => $request->nama_lengkap,
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'no_hp' => $request->no_hp,
                 'alamat' => $request->alamat,
+            ]);
+
+            // Simpan ke tabel anggota_kelas
+            AnggotaKelas::create([
+                'siswa_id' => $siswa->id,
+                'kelas_id' => $request->kelas_id,
+                'tahun_akademik_id' => $tahunAkademik->id,
             ]);
         });
 
@@ -74,6 +89,12 @@ class SiswaController extends Controller
         ]);
 
         DB::transaction(function () use ($request, $siswa) {
+            $tahunAkademik = TahunAkademik::where('is_active', true)->first();
+
+            if (!$tahunAkademik) {
+                throw new \Exception('Tahun akademik aktif tidak ditemukan.');
+            }
+
             $siswa->user->update([
                 'name' => $request->nama_lengkap,
                 'email' => $request->nis . '@smkbaktiidhata.sch.id',
@@ -86,13 +107,23 @@ class SiswaController extends Controller
             }
 
             $siswa->update([
-                'kelas_id' => $request->kelas_id,
                 'nis' => $request->nis,
                 'nama_lengkap' => $request->nama_lengkap,
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'no_hp' => $request->no_hp,
                 'alamat' => $request->alamat,
             ]);
+
+            // Update atau create anggota kelas untuk tahun akademik aktif
+            AnggotaKelas::updateOrCreate(
+                [
+                    'siswa_id' => $siswa->id,
+                    'tahun_akademik_id' => $tahunAkademik->id,
+                ],
+                [
+                    'kelas_id' => $request->kelas_id,
+                ]
+            );
         });
 
         return redirect()->route('siswa.index')->with('success', 'Data Siswa berhasil diperbarui');

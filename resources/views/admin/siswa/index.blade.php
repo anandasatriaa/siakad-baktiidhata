@@ -32,7 +32,7 @@
                                         <strong>{{ $siswa->nis }}</strong>
                                     </td>
                                     <td>{{ $siswa->nama_lengkap }}</td>
-                                    <td>{{ $siswa->kelas->nama_kelas ?? '-' }}</td>
+                                    <td>{{ $siswa->kelas->kelas->nama_kelas ?? '-' }}</td>
                                     <td>{{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                                     <td>{{ $siswa->no_hp ?? '-' }}</td>
                                     <td>
