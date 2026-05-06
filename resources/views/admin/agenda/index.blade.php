@@ -13,6 +13,18 @@
             </a>
         </div>
         <div class="card-body">
+            <form action="{{ route('agenda.index') }}" method="GET" class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label for="periode_id" class="form-label">Tahun Akademik</label>
+                    <select name="periode_id" id="periode_id" class="form-select" onchange="this.form.submit()">
+                        @foreach ($periodes as $p)
+                            <option value="{{ $p->id }}" {{ $periode_id == $p->id ? 'selected' : '' }}>
+                                {{ $p->tahun_ajaran }} - {{ $p->semester }} {{ $p->is_active ? '(Aktif)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </form>
             <div class="table-responsive">
                 <table class="table table-hover mb-0" id="table">
                     <thead>

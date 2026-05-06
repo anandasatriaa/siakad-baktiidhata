@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('guru_id')->constrained('guru')->cascadeOnDelete();
             $table->foreignId('jadwal_id')->constrained('jadwal_pelajaran')->cascadeOnDelete();
+            $table->foreignId('tahun_akademik_id')->constrained('tahun_akademik')->cascadeOnDelete();
             $table->date('tanggal');
             $table->string('materi');
             $table->text('keterangan')->nullable();

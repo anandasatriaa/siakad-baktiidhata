@@ -10,10 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AgendaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $query = AgendaMengajar::with(['guru', 'jadwal.kelas', 'jadwal.mata_pelajaran']);
+        $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
+        $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
+
+        $query = AgendaMengajar::with(['guru', 'jadwal.kelas', 'jadwal.mata_pelajaran', 'tahunAkademik']);
 
         if ($user->role == 'guru') {
             $query->whereHas('guru', function($q) use ($user) {
@@ -21,13 +24,21 @@ class AgendaController extends Controller
             });
         }
 
+        if ($periode_id) {
+            $query->where('tahun_akademik_id', $periode_id);
+        }
+
         $agendas = $query->latest()->get();
-        return view('admin.agenda.index', compact('agendas'));
+        $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
+
+        return view('admin.agenda.index', compact('agendas', 'periodes', 'periode_id'));
     }
 
     public function create()
     {
         $user = Auth::user();
+        $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
+        
         $query = JadwalPelajaran::with(['kelas', 'mata_pelajaran']);
 
         if ($user->role == 'guru') {
@@ -36,8 +47,13 @@ class AgendaController extends Controller
             });
         }
 
+        // Hanya tampilkan jadwal untuk periode aktif saat membuat agenda baru
+        if ($active_periode) {
+            $query->where('tahun_akademik_id', $active_periode->id);
+        }
+
         $jadwals = $query->get();
-        return view('admin.agenda.create', compact('jadwals'));
+        return view('admin.agenda.create', compact('jadwals', 'active_periode'));
     }
 
     public function store(Request $request)
@@ -54,6 +70,7 @@ class AgendaController extends Controller
         AgendaMengajar::create([
             'guru_id' => $jadwal->guru_id,
             'jadwal_id' => $request->jadwal_id,
+            'tahun_akademik_id' => $jadwal->tahun_akademik_id,
             'tanggal' => $request->tanggal,
             'materi' => $request->materi,
             'keterangan' => $request->keterangan,
@@ -65,6 +82,8 @@ class AgendaController extends Controller
     public function edit(AgendaMengajar $agenda)
     {
         $user = Auth::user();
+        $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
+
         $query = JadwalPelajaran::with(['kelas', 'mata_pelajaran']);
 
         if ($user->role == 'guru') {
@@ -72,6 +91,9 @@ class AgendaController extends Controller
                 $q->where('user_id', $user->id);
             });
         }
+
+        // Tampilkan jadwal sesuai periode agenda tersebut
+        $query->where('tahun_akademik_id', $agenda->tahun_akademik_id);
 
         $jadwals = $query->get();
         return view('admin.agenda.edit', compact('agenda', 'jadwals'));
@@ -91,6 +113,7 @@ class AgendaController extends Controller
         $agenda->update([
             'guru_id' => $jadwal->guru_id,
             'jadwal_id' => $request->jadwal_id,
+            'tahun_akademik_id' => $jadwal->tahun_akademik_id,
             'tanggal' => $request->tanggal,
             'materi' => $request->materi,
             'keterangan' => $request->keterangan,
