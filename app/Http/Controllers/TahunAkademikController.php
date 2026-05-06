@@ -22,7 +22,15 @@ class TahunAkademikController extends Controller
     {
         $request->validate([
             'tahun_ajaran' => 'required|string',
-            'semester' => 'required|in:Ganjil,Genap',
+            'semester' => [
+                'required',
+                'in:Ganjil,Genap',
+                \Illuminate\Validation\Rule::unique('tahun_akademik')->where(function ($query) use ($request) {
+                    return $query->where('tahun_ajaran', $request->tahun_ajaran);
+                })
+            ],
+        ], [
+            'semester.unique' => 'Tahun akademik dan semester tersebut sudah terdaftar.',
         ]);
 
         $data = $request->all();
@@ -47,7 +55,15 @@ class TahunAkademikController extends Controller
     {
         $request->validate([
             'tahun_ajaran' => 'required|string',
-            'semester' => 'required|in:Ganjil,Genap',
+            'semester' => [
+                'required',
+                'in:Ganjil,Genap',
+                \Illuminate\Validation\Rule::unique('tahun_akademik')->where(function ($query) use ($request) {
+                    return $query->where('tahun_ajaran', $request->tahun_ajaran);
+                })->ignore($id)
+            ],
+        ], [
+            'semester.unique' => 'Tahun akademik dan semester tersebut sudah terdaftar.',
         ]);
 
         $tahun_akademik = TahunAkademik::findOrFail($id);

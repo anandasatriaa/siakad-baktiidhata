@@ -17,6 +17,8 @@ return new class extends Migration
             $table->enum('semester', ['Ganjil', 'Genap']);
             $table->boolean('is_active')->default(false);
             $table->timestamps();
+            
+            $table->unique(['tahun_ajaran', 'semester']);
         });
     }
 
