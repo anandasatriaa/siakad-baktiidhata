@@ -12,7 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\NilaiExport;
 
-class AcademicGuruController extends Controller
+class AkademikGuruController extends Controller
 {
     private function getGuru()
     {

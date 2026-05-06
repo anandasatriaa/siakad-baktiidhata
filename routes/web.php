@@ -13,8 +13,8 @@ use App\Http\Controllers\KeterlambatanController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\JadwalController;
-use App\Http\Controllers\AcademicSiswaController;
-use App\Http\Controllers\AcademicGuruController;
+use App\Http\Controllers\AkademikSiswaController;
+use App\Http\Controllers\AkademikGuruController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\TahunAkademikController;
@@ -52,17 +52,17 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('agenda', AgendaController::class);
 
     // Akademik Guru Tambahan
-    Route::get('/jadwal-mengajar', [AcademicGuruController::class, 'jadwal'])->name('guru.jadwal-mengajar');
-    Route::get('/data-siswa-ajar', [AcademicGuruController::class, 'dataSiswa'])->name('guru.data-siswa-ajar');
-    Route::get('/rekap-nilai', [AcademicGuruController::class, 'rekapNilai'])->name('guru.rekap-nilai');
-    Route::get('/export-nilai-pdf/{jadwal_id}', [AcademicGuruController::class, 'exportPdf'])->name('guru.export-nilai-pdf');
-    Route::get('/export-nilai-excel/{jadwal_id}', [AcademicGuruController::class, 'exportExcel'])->name('guru.export-nilai-excel');
+    Route::get('/jadwal-mengajar', [AkademikGuruController::class, 'jadwal'])->name('guru.jadwal-mengajar');
+    Route::get('/data-siswa-ajar', [AkademikGuruController::class, 'dataSiswa'])->name('guru.data-siswa-ajar');
+    Route::get('/rekap-nilai', [AkademikGuruController::class, 'rekapNilai'])->name('guru.rekap-nilai');
+    Route::get('/export-nilai-pdf/{jadwal_id}', [AkademikGuruController::class, 'exportPdf'])->name('guru.export-nilai-pdf');
+    Route::get('/export-nilai-excel/{jadwal_id}', [AkademikGuruController::class, 'exportExcel'])->name('guru.export-nilai-excel');
 
     // Akademik Siswa
-    Route::get('/my-jadwal', [AcademicSiswaController::class, 'jadwal'])->name('siswa.my-jadwal');
-    Route::get('/my-absensi', [AcademicSiswaController::class, 'absensi'])->name('siswa.my-absensi');
-    Route::get('/my-keterlambatan', [AcademicSiswaController::class, 'keterlambatan'])->name('siswa.my-keterlambatan');
-    Route::get('/my-nilai', [AcademicSiswaController::class, 'nilai'])->name('siswa.my-nilai');
+    Route::get('/my-jadwal', [AkademikSiswaController::class, 'jadwal'])->name('siswa.my-jadwal');
+    Route::get('/my-absensi', [AkademikSiswaController::class, 'absensi'])->name('siswa.my-absensi');
+    Route::get('/my-keterlambatan', [AkademikSiswaController::class, 'keterlambatan'])->name('siswa.my-keterlambatan');
+    Route::get('/my-nilai', [AkademikSiswaController::class, 'nilai'])->name('siswa.my-nilai');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
