@@ -14,25 +14,49 @@ class NilaiController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'tahun_akademik']);
+        $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
+        $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
+
+        // Ambil mata pelajaran & kelas yang diampu (dikelompokkan agar tidak duplikat hari)
+        $query = JadwalPelajaran::with(['kelas', 'mata_pelajaran'])
+            ->select('mapel_id', 'kelas_id', 'tahun_akademik_id')
+            ->groupBy('mapel_id', 'kelas_id', 'tahun_akademik_id');
 
         if ($user->role == 'guru') {
             $query->whereHas('guru', function($q) use ($user) {
                 $q->where('user_id', $user->id);
             });
         }
+        
+        if ($periode_id) {
+            $query->where('tahun_akademik_id', $periode_id);
+        }
 
-        $jadwals = $query->get();
-        $selected_jadwal = $request->jadwal_id;
+        $ampu_mapel = $query->get();
+        $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
+        
+        $selected_mapel = $request->mapel_id;
+        $selected_kelas = $request->kelas_id;
         
         $siswas = [];
-        $jadwal_info = null;
-        if ($selected_jadwal) {
-            $jadwal_info = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'tahun_akademik'])->find($selected_jadwal);
-            if ($jadwal_info) {
-                $siswas = Siswa::where('kelas_id', $jadwal_info->kelas_id)->get();
+        $info = null;
+
+        if ($selected_mapel && $selected_kelas) {
+            // Cari info mapel & kelas dari koleksi ampu_mapel
+            $info = $ampu_mapel->first(function($item) use ($selected_mapel, $selected_kelas) {
+                return $item->mapel_id == $selected_mapel && $item->kelas_id == $selected_kelas;
+            });
+            
+            if ($info) {
+                // Ambil siswa melalui AnggotaKelas
+                $siswas = Siswa::whereHas('riwayatKelas', function($q) use ($selected_kelas, $periode_id) {
+                    $q->where('kelas_id', $selected_kelas)
+                      ->where('tahun_akademik_id', $periode_id);
+                })->get();
                 
-                $existing_nilai = Nilai::where('jadwal_id', $selected_jadwal)
+                $existing_nilai = Nilai::where('mapel_id', $selected_mapel)
+                    ->where('kelas_id', $selected_kelas)
+                    ->where('tahun_akademik_id', $periode_id)
                     ->whereIn('siswa_id', $siswas->pluck('id'))
                     ->get()
                     ->keyBy('siswa_id');
@@ -43,20 +67,19 @@ class NilaiController extends Controller
             }
         }
 
-        return view('admin.nilai.index', compact('jadwals', 'siswas', 'selected_jadwal', 'jadwal_info'));
+        return view('admin.nilai.index', compact('ampu_mapel', 'siswas', 'selected_mapel', 'selected_kelas', 'info', 'periodes', 'periode_id', 'active_periode'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'jadwal_id' => 'required|exists:jadwal_pelajaran,id',
+            'mapel_id' => 'required|exists:mata_pelajaran,id',
+            'kelas_id' => 'required|exists:kelas,id',
+            'tahun_akademik_id' => 'required|exists:tahun_akademik,id',
             'nilai' => 'required|array',
         ]);
 
-        $jadwal = JadwalPelajaran::find($request->jadwal_id);
-
         foreach ($request->nilai as $siswa_id => $data) {
-            // Simple calculation for nilai_akhir: (Tugas + UTS + UAS) / 3
             $tugas = $data['nilai_tugas'] ?? 0;
             $uts = $data['nilai_uts'] ?? 0;
             $uas = $data['nilai_uas'] ?? 0;
@@ -65,8 +88,9 @@ class NilaiController extends Controller
             Nilai::updateOrCreate(
                 [
                     'siswa_id' => $siswa_id,
-                    'jadwal_id' => $request->jadwal_id,
-                    'tahun_akademik_id' => $jadwal->tahun_akademik_id,
+                    'mapel_id' => $request->mapel_id,
+                    'kelas_id' => $request->kelas_id,
+                    'tahun_akademik_id' => $request->tahun_akademik_id,
                 ],
                 [
                     'nilai_tugas' => $tugas,

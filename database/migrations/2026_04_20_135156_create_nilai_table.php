@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('nilai', function (Blueprint $table) {
             $table->id();
             $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
-            $table->foreignId('jadwal_id')->constrained('jadwal_pelajaran')->cascadeOnDelete();
+            $table->foreignId('mapel_id')->constrained('mata_pelajaran')->cascadeOnDelete();
+            $table->foreignId('kelas_id')->constrained('kelas')->cascadeOnDelete();
             $table->foreignId('tahun_akademik_id')->constrained('tahun_akademik')->cascadeOnDelete();
             $table->decimal('nilai_tugas', 5, 2)->nullable();
             $table->decimal('nilai_uts', 5, 2)->nullable();
