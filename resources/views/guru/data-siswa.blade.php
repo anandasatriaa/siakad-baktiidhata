@@ -8,7 +8,7 @@
     @foreach ($siswas as $kelas_id => $group)
     <div class="card mb-4">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
-            <h4 class="card-title mb-0">Kelas: {{ $group->first()->kelas->nama_kelas }}</h4>
+            <h4 class="card-title mb-0">Kelas: {{ $group->first()->riwayatKelas->first()->kelas->nama_kelas }}</h4>
             <span class="badge bg-primary">{{ $group->count() }} Siswa</span>
         </div>
         <div class="card-body">

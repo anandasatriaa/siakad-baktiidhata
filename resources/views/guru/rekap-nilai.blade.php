@@ -11,13 +11,23 @@
         </div>
         <div class="card-body">
             <form action="{{ route('guru.rekap-nilai') }}" method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <label for="periode_id" class="form-label">Tahun Akademik</label>
+                    <select name="periode_id" id="periode_id" class="form-select" onchange="this.form.submit()">
+                        @foreach ($periodes as $p)
+                            <option value="{{ $p->id }}" {{ $periode_id == $p->id ? 'selected' : '' }}>
+                                {{ $p->tahun_ajaran }} - {{ $p->semester }} {{ $p->is_active ? '(Aktif)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="col-md-8">
                     <label for="jadwal_id" class="form-label">Jadwal (Mapel - Kelas)</label>
                     <select name="jadwal_id" id="jadwal_id" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Pilih Jadwal --</option>
                         @foreach ($jadwals as $j)
                             <option value="{{ $j->id }}" {{ $selected_jadwal == $j->id ? 'selected' : '' }}>
-                                {{ $j->mata_pelajaran->nama_mapel }} - {{ $j->kelas->nama_kelas }} ({{ $j->tahun_akademik->tahun_ajaran }} {{ $j->tahun_akademik->semester }})
+                                {{ $j->mata_pelajaran->nama_mapel }} - {{ $j->kelas->nama_kelas }}
                             </option>
                         @endforeach
                     </select>
