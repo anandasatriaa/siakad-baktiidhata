@@ -44,35 +44,40 @@ class AkademikGuruController extends Controller
         return view('guru.jadwal', compact('jadwals', 'days', 'periodes', 'periode_id', 'active_periode'));
     }
 
-    public function dataSiswa()
+    public function dataSiswa(Request $request)
     {
         $guru = $this->getGuru();
         $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
+        $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
         
         $query = JadwalPelajaran::query();
         if ($guru) {
             $query->where('guru_id', $guru->id);
         }
-        if ($active_periode) {
-            $query->where('tahun_akademik_id', $active_periode->id);
+        if ($periode_id) {
+            $query->where('tahun_akademik_id', $periode_id);
         }
 
         $jadwals = $query->with('kelas')->get();
         $kelas_ids = $jadwals->pluck('kelas_id')->unique();
         
-        // Fix: Query melalui AnggotaKelas karena Siswa tidak punya kelas_id langsung
-        $siswas = Siswa::whereHas('riwayatKelas', function($q) use ($kelas_ids, $active_periode) {
+        // Query melalui AnggotaKelas sesuai periode yang dipilih
+        $siswas = Siswa::whereHas('riwayatKelas', function($q) use ($kelas_ids, $periode_id) {
             $q->whereIn('kelas_id', $kelas_ids);
-            if ($active_periode) {
-                $q->where('tahun_akademik_id', $active_periode->id);
+            if ($periode_id) {
+                $q->where('tahun_akademik_id', $periode_id);
             }
-        })->with(['riwayatKelas' => function($q) use ($active_periode) {
-            if ($active_periode) $q->where('tahun_akademik_id', $active_periode->id);
-        }, 'riwayatKelas.kelas'])->get()->groupBy(function($s) {
-            return $s->riwayatKelas->first()->kelas_id ?? 'Tanpa Kelas';
+        })->with(['riwayatKelas' => function($q) use ($periode_id) {
+            if ($periode_id) $q->where('tahun_akademik_id', $periode_id);
+            $q->with('kelas');
+        }])->get()->groupBy(function($s) {
+            // Group berdasarkan nama kelas agar lebih informatif
+            return $s->riwayatKelas->first()->kelas->nama_kelas ?? 'Tanpa Kelas';
         });
 
-        return view('guru.data-siswa', compact('siswas', 'jadwals'));
+        $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
+
+        return view('guru.data-siswa', compact('siswas', 'jadwals', 'periodes', 'periode_id'));
     }
 
     public function rekapNilai(Request $request)
