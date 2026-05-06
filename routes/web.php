@@ -55,8 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/jadwal-mengajar', [AkademikGuruController::class, 'jadwal'])->name('guru.jadwal-mengajar');
     Route::get('/data-siswa-ajar', [AkademikGuruController::class, 'dataSiswa'])->name('guru.data-siswa-ajar');
     Route::get('/rekap-nilai', [AkademikGuruController::class, 'rekapNilai'])->name('guru.rekap-nilai');
-    Route::get('/export-nilai-pdf/{jadwal_id}', [AkademikGuruController::class, 'exportPdf'])->name('guru.export-nilai-pdf');
-    Route::get('/export-nilai-excel/{jadwal_id}', [AkademikGuruController::class, 'exportExcel'])->name('guru.export-nilai-excel');
+    Route::get('/export-nilai-pdf', [AkademikGuruController::class, 'exportPdf'])->name('guru.export-nilai-pdf');
+    Route::get('/export-nilai-excel', [AkademikGuruController::class, 'exportExcel'])->name('guru.export-nilai-excel');
 
     // Akademik Siswa
     Route::get('/my-jadwal', [AkademikSiswaController::class, 'jadwal'])->name('siswa.my-jadwal');

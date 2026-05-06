@@ -81,7 +81,10 @@ class AkademikGuruController extends Controller
         $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
         $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
 
-        $query = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'tahun_akademik']);
+        // Ambil mapel & kelas yang diampu (dikompel agar tidak duplikat hari)
+        $query = JadwalPelajaran::with(['kelas', 'mata_pelajaran'])
+            ->select('mapel_id', 'kelas_id', 'tahun_akademik_id')
+            ->groupBy('mapel_id', 'kelas_id', 'tahun_akademik_id');
 
         if ($guru) {
             $query->where('guru_id', $guru->id);
@@ -91,52 +94,88 @@ class AkademikGuruController extends Controller
             $query->where('tahun_akademik_id', $periode_id);
         }
 
-        $jadwals = $query->get();
+        $ampu_mapel = $query->get();
         $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
-        $selected_jadwal = $request->jadwal_id;
+        
+        $selected_mapel = $request->mapel_id;
+        $selected_kelas = $request->kelas_id;
 
         $nilais = [];
-        $jadwal_info = null;
-        if ($selected_jadwal) {
-            $jadwal_info = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'tahun_akademik'])->find($selected_jadwal);
+        $info = null;
+
+        if ($selected_mapel && $selected_kelas) {
+            $info = $ampu_mapel->first(function($item) use ($selected_mapel, $selected_kelas) {
+                return $item->mapel_id == $selected_mapel && $item->kelas_id == $selected_kelas;
+            });
             
-            // Mengambil semua siswa yang ada di kelas tersebut pada periode tersebut
-            $siswas_kelas = \App\Models\AnggotaKelas::with('siswa')
-                ->where('kelas_id', $jadwal_info->kelas_id)
-                ->where('tahun_akademik_id', $jadwal_info->tahun_akademik_id)
-                ->get();
+            if ($info) {
+                // Ambil semua siswa di kelas tersebut pada periode tersebut
+                $siswas_kelas = \App\Models\AnggotaKelas::with('siswa')
+                    ->where('kelas_id', $selected_kelas)
+                    ->where('tahun_akademik_id', $periode_id)
+                    ->get();
 
-            // Mengambil nilai yang sudah ada
-            $existing_nilais = Nilai::where('jadwal_id', $selected_jadwal)->get()->keyBy('siswa_id');
+                // Ambil nilai berdasarkan Mapel, Kelas, dan Periode
+                $existing_nilais = Nilai::where('mapel_id', $selected_mapel)
+                    ->where('kelas_id', $selected_kelas)
+                    ->where('tahun_akademik_id', $periode_id)
+                    ->get()
+                    ->keyBy('siswa_id');
 
-            // Menggabungkan data (agar siswa yang belum punya nilai tetap muncul di rekap)
-            foreach ($siswas_kelas as $ak) {
-                $nilai = $existing_nilais->get($ak->siswa_id);
-                $nilais[] = (object)[
-                    'siswa' => $ak->siswa,
-                    'nilai_tugas' => $nilai->nilai_tugas ?? null,
-                    'nilai_uts' => $nilai->nilai_uts ?? null,
-                    'nilai_uas' => $nilai->nilai_uas ?? null,
-                    'nilai_akhir' => $nilai->nilai_akhir ?? null,
-                ];
+                foreach ($siswas_kelas as $ak) {
+                    $nilai = $existing_nilais->get($ak->siswa_id);
+                    $nilais[] = (object)[
+                        'siswa' => $ak->siswa,
+                        'nilai_tugas' => $nilai->nilai_tugas ?? null,
+                        'nilai_uts' => $nilai->nilai_uts ?? null,
+                        'nilai_uas' => $nilai->nilai_uas ?? null,
+                        'nilai_akhir' => $nilai->nilai_akhir ?? null,
+                    ];
+                }
             }
         }
 
-        return view('guru.rekap-nilai', compact('jadwals', 'nilais', 'selected_jadwal', 'jadwal_info', 'periodes', 'periode_id'));
+        return view('guru.rekap-nilai', compact('ampu_mapel', 'nilais', 'selected_mapel', 'selected_kelas', 'info', 'periodes', 'periode_id'));
     }
 
-    public function exportPdf($jadwal_id)
+    public function exportPdf(Request $request)
     {
-        $jadwal = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'tahun_akademik', 'guru'])->findOrFail($jadwal_id);
-        $nilais = Nilai::with('siswa')->where('jadwal_id', $jadwal_id)->get();
+        $mapel_id = $request->mapel_id;
+        $kelas_id = $request->kelas_id;
+        $periode_id = $request->periode_id;
 
-        $pdf = Pdf::loadView('guru.export.nilai-pdf', compact('jadwal', 'nilais'));
-        return $pdf->download('Nilai_' . $jadwal->mata_pelajaran->nama_mapel . '_' . $jadwal->kelas->nama_kelas . '.pdf');
+        $info = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'tahun_akademik', 'guru'])
+            ->where('mapel_id', $mapel_id)
+            ->where('kelas_id', $kelas_id)
+            ->where('tahun_akademik_id', $periode_id)
+            ->firstOrFail();
+
+        $nilais = Nilai::with('siswa')
+            ->where('mapel_id', $mapel_id)
+            ->where('kelas_id', $kelas_id)
+            ->where('tahun_akademik_id', $periode_id)
+            ->get();
+
+        $pdf = Pdf::loadView('guru.export.nilai-pdf', [
+            'jadwal' => $info,
+            'nilais' => $nilais
+        ]);
+        
+        return $pdf->download('Rekap_Nilai_' . $info->mata_pelajaran->nama_mapel . '_' . $info->kelas->nama_kelas . '.pdf');
     }
 
-    public function exportExcel($jadwal_id)
+    public function exportExcel(Request $request)
     {
-        $jadwal = JadwalPelajaran::with(['kelas', 'mata_pelajaran'])->findOrFail($jadwal_id);
-        return Excel::download(new NilaiExport($jadwal_id), 'Nilai_' . $jadwal->mata_pelajaran->nama_mapel . '_' . $jadwal->kelas->nama_kelas . '.xlsx');
+        $mapel_id = $request->mapel_id;
+        $kelas_id = $request->kelas_id;
+        $periode_id = $request->periode_id;
+
+        $info = JadwalPelajaran::with(['kelas', 'mata_pelajaran'])
+            ->where('mapel_id', $mapel_id)
+            ->where('kelas_id', $kelas_id)
+            ->where('tahun_akademik_id', $periode_id)
+            ->firstOrFail();
+
+        return Excel::download(new NilaiExport($mapel_id, $kelas_id, $periode_id), 'Rekap_Nilai_' . $info->mata_pelajaran->nama_mapel . '_' . $info->kelas->nama_kelas . '.xlsx');
     }
 }

@@ -10,7 +10,7 @@
             <h4 class="card-title">Pilih Mata Pelajaran & Kelas</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('guru.rekap-nilai') }}" method="GET" class="row g-3">
+            <form action="{{ route('guru.rekap-nilai') }}" method="GET" id="filterForm" class="row g-3">
                 <div class="col-md-4">
                     <label for="periode_id" class="form-label">Tahun Akademik</label>
                     <select name="periode_id" id="periode_id" class="form-select" onchange="this.form.submit()">
@@ -22,29 +22,41 @@
                     </select>
                 </div>
                 <div class="col-md-8">
-                    <label for="jadwal_id" class="form-label">Jadwal (Mapel - Kelas)</label>
-                    <select name="jadwal_id" id="jadwal_id" class="form-select" onchange="this.form.submit()">
-                        <option value="">-- Pilih Jadwal --</option>
-                        @foreach ($jadwals as $j)
-                            <option value="{{ $j->id }}" {{ $selected_jadwal == $j->id ? 'selected' : '' }}>
-                                {{ $j->mata_pelajaran->nama_mapel }} - {{ $j->kelas->nama_kelas }}
+                    <label for="subject_class" class="form-label">Pilih Mata Pelajaran & Kelas</label>
+                    <select id="subject_class" class="form-select" onchange="updateFilters(this.value)">
+                        <option value="">-- Pilih Mapel & Kelas --</option>
+                        @foreach ($ampu_mapel as $am)
+                            <option value="{{ $am->mapel_id }}|{{ $am->kelas_id }}" {{ ($selected_mapel == $am->mapel_id && $selected_kelas == $am->kelas_id) ? 'selected' : '' }}>
+                                {{ $am->mata_pelajaran->nama_mapel }} - {{ $am->kelas->nama_kelas }}
                             </option>
                         @endforeach
                     </select>
+                    <input type="hidden" name="mapel_id" id="mapel_id" value="{{ $selected_mapel }}">
+                    <input type="hidden" name="kelas_id" id="kelas_id" value="{{ $selected_kelas }}">
                 </div>
             </form>
         </div>
     </div>
 
-    @if ($selected_jadwal && $jadwal_info)
+    <script>
+    function updateFilters(value) {
+        if (!value) return;
+        const parts = value.split('|');
+        document.getElementById('mapel_id').value = parts[0];
+        document.getElementById('kelas_id').value = parts[1];
+        document.getElementById('filterForm').submit();
+    }
+    </script>
+
+    @if ($selected_mapel && $selected_kelas && $info)
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h4 class="card-title">Rekap Nilai: {{ $jadwal_info->mata_pelajaran->nama_mapel }} - {{ $jadwal_info->kelas->nama_kelas }}</h4>
+            <h4 class="card-title">Rekap Nilai: {{ $info->mata_pelajaran->nama_mapel }} - {{ $info->kelas->nama_kelas }}</h4>
             <div class="btn-group">
-                <a href="{{ route('guru.export-nilai-pdf', $selected_jadwal) }}" class="btn btn-danger">
+                <a href="{{ route('guru.export-nilai-pdf', ['mapel_id' => $selected_mapel, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-danger">
                     <i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF
                 </a>
-                <a href="{{ route('guru.export-nilai-excel', $selected_jadwal) }}" class="btn btn-success">
+                <a href="{{ route('guru.export-nilai-excel', ['mapel_id' => $selected_mapel, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-success">
                     <i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel
                 </a>
             </div>
