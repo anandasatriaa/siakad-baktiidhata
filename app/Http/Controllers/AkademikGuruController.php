@@ -21,19 +21,27 @@ class AkademikGuruController extends Controller
         return Guru::where('user_id', $user->id)->first();
     }
 
-    public function jadwal()
+    public function jadwal(Request $request)
     {
         $guru = $this->getGuru();
+        $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
+        $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
+
         $query = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'tahun_akademik']);
 
         if ($guru) {
             $query->where('guru_id', $guru->id);
         }
 
+        if ($periode_id) {
+            $query->where('tahun_akademik_id', $periode_id);
+        }
+
         $jadwals = $query->get()->groupBy('hari');
+        $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
-        return view('guru.jadwal', compact('jadwals', 'days'));
+        return view('guru.jadwal', compact('jadwals', 'days', 'periodes', 'periode_id', 'active_periode'));
     }
 
     public function dataSiswa()

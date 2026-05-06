@@ -5,6 +5,28 @@
 
 @section('content')
 <section class="section">
+    <div class="card mb-4">
+        <div class="card-body">
+            <form action="{{ route('guru.jadwal-mengajar') }}" method="GET" class="row align-items-center">
+                <div class="col-md-4">
+                    <label for="periode_id" class="form-label fw-bold">Pilih Tahun Akademik</label>
+                    <select name="periode_id" id="periode_id" class="form-select" onchange="this.form.submit()">
+                        @foreach ($periodes as $p)
+                            <option value="{{ $p->id }}" {{ $periode_id == $p->id ? 'selected' : '' }}>
+                                {{ $p->tahun_ajaran }} - {{ $p->semester }} {{ $p->is_active ? '(Aktif)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-8 pt-4">
+                    @if($active_periode && $periode_id == $active_periode->id)
+                        <span class="badge bg-success">Menampilkan Jadwal Periode Aktif</span>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
         @foreach ($days as $day)
         <div class="col-md-6 col-lg-4 mb-4">
