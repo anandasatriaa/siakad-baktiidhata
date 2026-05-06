@@ -6,8 +6,11 @@
 @section('content')
 <section class="section">
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Filter Jadwal</h4>
+            @if($active_periode)
+                <span class="badge bg-light-success text-success">Periode Aktif: {{ $active_periode->tahun_ajaran }} - {{ $active_periode->semester }}</span>
+            @endif
         </div>
         <div class="card-body">
             <form action="{{ route('absensi.index') }}" method="GET" class="row g-3">
@@ -24,7 +27,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="tanggal" class="form-label">Tanggal</label>
-                    <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ $tanggal }}" onchange="this.form.submit()">
+                    <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ $tanggal }}" max="{{ date('Y-m-d') }}" onchange="this.form.submit()">
                 </div>
             </form>
         </div>
