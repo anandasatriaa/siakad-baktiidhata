@@ -199,7 +199,6 @@
                         <div class="text-center py-5">
                             <i class="bi bi-calendar-x fs-1 text-muted"></i>
                             <p class="mt-3 text-muted">Belum ada jadwal pelajaran yang tersedia.</p>
-                            <a href="{{ route('jadwal.create') }}" class="btn btn-primary mt-2">Buat Jadwal Baru</a>
                         </div>
                     @endforelse
                 </div>
