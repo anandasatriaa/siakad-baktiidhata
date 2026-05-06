@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('keterlambatan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+            $table->foreignId('tahun_akademik_id')->constrained('tahun_akademik')->cascadeOnDelete();
             $table->date('tanggal');
             $table->integer('lama_menit');
             $table->text('alasan')->nullable();

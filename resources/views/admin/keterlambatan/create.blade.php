@@ -15,11 +15,24 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-3">
+                            <label for="tahun_akademik_id">Tahun Akademik</label>
+                            <select id="tahun_akademik_id" class="form-select @error('tahun_akademik_id') is-invalid @enderror" name="tahun_akademik_id" required>
+                                @foreach ($periodes as $p)
+                                    <option value="{{ $p->id }}" {{ old('tahun_akademik_id', $active_periode->id ?? '') == $p->id ? 'selected' : '' }}>
+                                        {{ $p->tahun_ajaran }} - {{ $p->semester }} {{ $p->is_active ? '(Aktif)' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('tahun_akademik_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="form-group mb-3">
                             <label for="siswa_id">Pilih Siswa</label>
                             <select id="siswa_id" class="form-select @error('siswa_id') is-invalid @enderror" name="siswa_id" required>
                                 <option value="">-- Pilih Siswa --</option>
                                 @foreach ($siswas as $s)
-                                    <option value="{{ $s->id }}" {{ old('siswa_id') == $s->id ? 'selected' : '' }}>{{ $s->nama_lengkap }} ({{ $s->kelas->nama_kelas ?? '-' }})</option>
+                                    <option value="{{ $s->id }}" {{ old('siswa_id') == $s->id ? 'selected' : '' }}>
+                                        {{ $s->nama_lengkap }} ({{ $s->riwayatKelas->first()->kelas->nama_kelas ?? '-' }})
+                                    </option>
                                 @endforeach
                             </select>
                             @error('siswa_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
