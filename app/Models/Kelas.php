@@ -8,10 +8,15 @@ class Kelas extends Model
 {
     protected $table = 'kelas';
 
-    protected $fillable = ['nama_kelas', 'tingkat', 'wali_kelas_id'];
+    protected $fillable = ['nama_kelas', 'tingkat', 'wali_kelas_id', 'tahun_akademik_id'];
 
     public function wali_kelas()
     {
         return $this->belongsTo(User::class, 'wali_kelas_id');
+    }
+
+    public function tahunAkademik()
+    {
+        return $this->belongsTo(TahunAkademik::class, 'tahun_akademik_id');
     }
 }

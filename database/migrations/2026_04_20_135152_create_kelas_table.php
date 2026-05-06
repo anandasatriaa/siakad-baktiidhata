@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_kelas');
             $table->integer('tingkat'); // 10, 11, 12
+            $table->foreignId('tahun_akademik_id')->nullable()->constrained('tahun_akademik')->cascadeOnDelete();
             $table->foreignId('wali_kelas_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('absensi_harian', function (Blueprint $table) {
             $table->id();
             $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+            $table->foreignId('jadwal_id')->nullable()->constrained('jadwal_pelajaran')->cascadeOnDelete();
             $table->date('tanggal');
             $table->enum('status', ['Hadir', 'Sakit', 'Izin', 'Alpa']);
             $table->text('keterangan')->nullable();

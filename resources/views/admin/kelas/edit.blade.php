@@ -16,9 +16,23 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-3">
+                            <label for="tahun_akademik">Tahun Akademik</label>
+                            <input type="text" id="tahun_akademik" class="form-control" value="{{ $kelas->tahunAkademik->tahun_ajaran }} - {{ $kelas->tahunAkademik->semester }}" readonly disabled>
+                        </div>
+                        <div class="form-group mb-3">
                             <label for="nama_kelas">Nama Kelas</label>
                             <input type="text" id="nama_kelas" class="form-control @error('nama_kelas') is-invalid @enderror" name="nama_kelas" value="{{ old('nama_kelas', $kelas->nama_kelas) }}" required placeholder="Contoh: X RPL 1">
                             @error('nama_kelas') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="tingkat">Tingkat</label>
+                            <select id="tingkat" class="form-select @error('tingkat') is-invalid @enderror" name="tingkat" required>
+                                <option value="">-- Pilih Tingkat --</option>
+                                <option value="10" {{ old('tingkat', $kelas->tingkat) == '10' ? 'selected' : '' }}>10</option>
+                                <option value="11" {{ old('tingkat', $kelas->tingkat) == '11' ? 'selected' : '' }}>11</option>
+                                <option value="12" {{ old('tingkat', $kelas->tingkat) == '12' ? 'selected' : '' }}>12</option>
+                            </select>
+                            @error('tingkat') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         <div class="form-group mb-3">
                             <label for="wali_kelas_id">Wali Kelas</label>
