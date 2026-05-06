@@ -12,18 +12,31 @@ class LaporanController extends Controller
 {
     public function absensiKeterlambatan(Request $request)
     {
-        $kelas = Kelas::all();
+        $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
+        $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
+        
+        $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
+        $kelas = Kelas::where('tahun_akademik_id', $periode_id)->get();
+        
         $selected_kelas = $request->kelas_id;
         $tanggal_mulai = $request->tanggal_mulai ?? date('Y-m-01'); // Awal bulan
         $tanggal_selesai = $request->tanggal_selesai ?? date('Y-m-d');
 
-        $query_siswa = Siswa::with('kelas');
-        if ($selected_kelas) {
-            $query_siswa->where('kelas_id', $selected_kelas);
-        }
-        $siswas = $query_siswa->get();
+        // Query siswa melalui AnggotaKelas karena di tabel siswa tidak ada kelas_id
+        $query_anggota = \App\Models\AnggotaKelas::with(['siswa', 'kelas'])
+            ->where('tahun_akademik_id', $periode_id);
 
-        foreach ($siswas as $siswa) {
+        if ($selected_kelas) {
+            $query_anggota->where('kelas_id', $selected_kelas);
+        }
+
+        $anggota_kelas = $query_anggota->get();
+        $siswas = [];
+
+        foreach ($anggota_kelas as $ak) {
+            $siswa = $ak->siswa;
+            $siswa->nama_kelas = $ak->kelas->nama_kelas; // Simpan nama kelas untuk view
+
             // Get attendance summary
             $absensi = AbsensiHarian::where('siswa_id', $siswa->id)
                 ->whereBetween('tanggal', [$tanggal_mulai, $tanggal_selesai])
@@ -43,8 +56,10 @@ class LaporanController extends Controller
             
             $siswa->total_keterlambatan = $keterlambatan->count();
             $siswa->total_menit = $keterlambatan->sum('lama_menit');
+            
+            $siswas[] = $siswa;
         }
 
-        return view('admin.laporan.index', compact('kelas', 'siswas', 'selected_kelas', 'tanggal_mulai', 'tanggal_selesai'));
+        return view('admin.laporan.index', compact('kelas', 'siswas', 'selected_kelas', 'tanggal_mulai', 'tanggal_selesai', 'periodes', 'periode_id'));
     }
 }

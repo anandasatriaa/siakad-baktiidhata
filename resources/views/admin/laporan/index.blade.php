@@ -14,6 +14,18 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
+                            <label for="periode_id">Tahun Akademik</label>
+                            <select name="periode_id" id="periode_id" class="form-select" onchange="this.form.submit()">
+                                @foreach ($periodes as $p)
+                                    <option value="{{ $p->id }}" {{ $periode_id == $p->id ? 'selected' : '' }}>
+                                        {{ $p->tahun_ajaran }} - {{ $p->semester }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
                             <label for="kelas_id">Kelas</label>
                             <select name="kelas_id" id="kelas_id" class="form-select">
                                 <option value="">Semua Kelas</option>
@@ -25,21 +37,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label for="tanggal_mulai">Tanggal Mulai</label>
+                            <label for="tanggal_mulai">Dari Tanggal</label>
                             <input type="date" name="tanggal_mulai" id="tanggal_mulai" class="form-control" value="{{ $tanggal_mulai }}">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label for="tanggal_selesai">Tanggal Selesai</label>
+                            <label for="tanggal_selesai">Sampai Tanggal</label>
                             <input type="date" name="tanggal_selesai" id="tanggal_selesai" class="form-control" value="{{ $tanggal_selesai }}">
                         </div>
                     </div>
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-filter"></i> Filter
+                            <i class="bi bi-filter"></i> Filter Laporan
                         </button>
                     </div>
                 </div>
@@ -72,7 +84,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $siswa->nama_lengkap }}</td>
-                            <td>{{ $siswa->kelas->nama_kelas }}</td>
+                            <td>{{ $siswa->nama_kelas }}</td>
                             <td class="text-center">{{ $siswa->rekap_absensi['Hadir'] }}</td>
                             <td class="text-center">{{ $siswa->rekap_absensi['Sakit'] }}</td>
                             <td class="text-center">{{ $siswa->rekap_absensi['Izin'] }}</td>
