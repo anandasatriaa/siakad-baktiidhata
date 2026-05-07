@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('konten');
             $table->date('tanggal');
             $table->foreignId('penulis_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('tahun_akademik_id')->nullable()->constrained('tahun_akademik')->cascadeOnDelete();
             $table->timestamps();
         });
     }
