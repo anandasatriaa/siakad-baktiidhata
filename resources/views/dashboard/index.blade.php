@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('title', 'Dashboard')
-@section('subtitle', 'Selamat datang, ' . Auth::user()->name)
+@section('subtitle')
+    @if(isset($activePeriod))
+        Selamat datang, {{ Auth::user()->name }} | Periode: {{ $activePeriod->tahun_ajaran }} - {{ $activePeriod->semester }}
+    @else
+        Selamat datang, {{ Auth::user()->name }}
+    @endif
+@endsection
 
 @section('content')
     <div class="page-content">
@@ -37,7 +43,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <h6 class="text-muted font-semibold">Siswa</h6>
+                                            <h6 class="text-muted font-semibold">Siswa Aktif</h6>
                                             <h6 class="font-extrabold mb-0">{{ $stats['total_siswa'] }}</h6>
                                         </div>
                                     </div>
@@ -122,6 +128,9 @@
 
                     <!-- STATS FOR SISWA -->
                     @if (isset($siswa_stats))
+                        <div class="col-12 mb-2">
+                            <h6 class="text-muted">Statistik Kehadiran Semester Ini</h6>
+                        </div>
                         <div class="col-6 col-lg-3 col-md-6">
                             <div class="card">
                                 <div class="card-body px-3 py-3">
@@ -265,7 +274,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="3" class="text-center text-muted italic">Belum ada data absensi.</td>
+                                                        <td colspan="3" class="text-center text-muted italic">Belum ada data absensi pada periode ini.</td>
                                                     </tr>
                                                 @endforelse
                                             </tbody>
@@ -292,6 +301,9 @@
                                 <h5 class="font-bold">{{ Auth::user()->name }}</h5>
                                 <h6 class="text-muted mb-0">{{ strtoupper(str_replace('_', ' ', Auth::user()->role)) }}
                                 </h6>
+                                @if(isset($kelas_siswa))
+                                    <span class="badge bg-light-primary mt-2">{{ $kelas_siswa->nama_kelas }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
