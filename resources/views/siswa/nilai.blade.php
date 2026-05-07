@@ -5,6 +5,24 @@
 
 @section('content')
 <section class="section">
+    <div class="card mb-4">
+        <div class="card-body">
+            <form action="{{ route('siswa.my-nilai') }}" method="GET" class="row align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Pilih Tahun Akademik</label>
+                    <select name="periode_id" class="form-select" onchange="this.form.submit()">
+                        @foreach ($allPeriods as $p)
+                            <option value="{{ $p->id }}" {{ $selectedPeriodId == $p->id ? 'selected' : '' }}>
+                                {{ $p->tahun_ajaran }} - {{ $p->semester }}
+                                @if($p->is_active) (Aktif) @endif
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-header">
             <h4 class="card-title">Rapor Nilai Siswa</h4>
@@ -24,7 +42,7 @@
                     <tbody>
                         @forelse ($nilais as $n)
                         <tr>
-                            <td>{{ $n->jadwal->mata_pelajaran->nama_mapel }}</td>
+                            <td>{{ $n->mata_pelajaran->nama_mapel }}</td>
                             <td class="text-center">{{ $n->nilai_tugas ?? '-' }}</td>
                             <td class="text-center">{{ $n->nilai_uts ?? '-' }}</td>
                             <td class="text-center">{{ $n->nilai_uas ?? '-' }}</td>
@@ -32,7 +50,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="text-center text-muted">Belum ada data nilai.</td>
+                            <td colspan="5" class="text-center text-muted">Belum ada data nilai pada periode ini.</td>
                         </tr>
                         @endforelse
                     </tbody>
