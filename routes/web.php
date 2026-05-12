@@ -18,6 +18,7 @@ use App\Http\Controllers\AkademikGuruController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\TahunAkademikController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('pengumuman', PengumumanController::class);
     Route::resource('tahun-akademik', TahunAkademikController::class);
     Route::post('tahun-akademik/{id}/activate', [TahunAkademikController::class, 'activate'])->name('tahun-akademik.activate');
+    Route::resource('users', UserController::class);
 
     // Piket
     Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');

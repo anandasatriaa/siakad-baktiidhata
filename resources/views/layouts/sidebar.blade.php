@@ -182,6 +182,16 @@
                         <span>Pengumuman</span>
                     </a>
                 </li>
+
+                @if (in_array(Auth::user()->role, ['super_admin', 'admin']))
+                <li class="sidebar-title">Pengaturan</li>
+                <li class="sidebar-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                    <a href="{{ route('users.index') }}" class='sidebar-link'>
+                        <i class="bi bi-file-earmark-lock-fill"></i>
+                        <span>Manajemen Hak Akses</span>
+                    </a>
+                </li>
+                @endif
             </ul>
         </div>
         <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
