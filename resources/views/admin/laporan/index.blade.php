@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-filter"></i> Filter Laporan
+                            <i class="bi bi-filter icon-mid"></i> Filter Laporan
                         </button>
                     </div>
                 </div>

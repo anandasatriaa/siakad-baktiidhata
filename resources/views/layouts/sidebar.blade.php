@@ -188,7 +188,7 @@
                 <li class="sidebar-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
                     <a href="{{ route('users.index') }}" class='sidebar-link'>
                         <i class="bi bi-file-earmark-lock-fill"></i>
-                        <span>Manajemen Hak Akses</span>
+                        <span>Hak Akses</span>
                     </a>
                 </li>
                 @endif
