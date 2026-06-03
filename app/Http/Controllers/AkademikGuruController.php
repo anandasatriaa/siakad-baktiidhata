@@ -163,8 +163,16 @@ class AkademikGuruController extends Controller
 
         $pdf = Pdf::loadView('guru.export.nilai-pdf', [
             'jadwal' => $info,
-            'nilais' => $nilais
-        ]);
+            'nilais' => $nilais,
+            'logoPath' => public_path('assets/images/logo/logo-smkbaktiidhata.png'),
+            'sekolah' => [
+                'nama' => 'SMK BAKTI IDHATA',
+                'yayasan' => 'YAYASAN PENDIDIKAN BAKTI IDHATA',
+                'alamat' => 'Jl. Melati No. 25, Cilandak Barat, Jakarta Selatan',
+                'kontak' => 'Telp. (021) 7500000 | Email: info@smkbaktiidhata.sch.id',
+                'website' => 'www.smkbaktiidhata.sch.id',
+            ],
+        ])->setPaper('a4', 'portrait');
         
         return $pdf->download('Rekap_Nilai_' . $info->mata_pelajaran->nama_mapel . '_' . $info->kelas->nama_kelas . '.pdf');
     }
