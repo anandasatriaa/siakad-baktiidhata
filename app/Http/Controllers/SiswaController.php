@@ -10,6 +10,7 @@ use App\Models\TahunAkademik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class SiswaController extends Controller
 {
@@ -22,28 +23,33 @@ class SiswaController extends Controller
 
     public function create()
     {
-        $kelas = Kelas::all();
+        $kelas = $this->kelasPeriodeAktif();
         return view('admin.siswa.create', compact('kelas'));
     }
 
     public function store(Request $request)
     {
+        $tahunAkademik = $this->tahunAkademikAktif();
+
+        if (!$tahunAkademik) {
+            return back()
+                ->withInput()
+                ->withErrors(['kelas_id' => 'Tahun akademik aktif tidak ditemukan. Silakan aktifkan tahun akademik terlebih dahulu.']);
+        }
+
         $request->validate([
             'nis' => 'required|unique:siswa,nis',
             'nama_lengkap' => 'required',
-            'kelas_id' => 'required|exists:kelas,id',
+            'kelas_id' => [
+                'required',
+                Rule::exists('kelas', 'id')->where('tahun_akademik_id', $tahunAkademik->id),
+            ],
             'jenis_kelamin' => 'required|in:L,P',
             'no_hp' => 'nullable',
             'alamat' => 'nullable',
         ]);
 
-        DB::transaction(function () use ($request) {
-            $tahunAkademik = TahunAkademik::where('is_active', true)->first();
-            
-            if (!$tahunAkademik) {
-                throw new \Exception('Tahun akademik aktif tidak ditemukan. Silakan aktifkan tahun akademik terlebih dahulu.');
-            }
-
+        DB::transaction(function () use ($request, $tahunAkademik) {
             $user = User::create([
                 'name' => $request->nama_lengkap,
                 'email' => $request->nis . '@smkbaktiidhata.sch.id',
@@ -73,28 +79,33 @@ class SiswaController extends Controller
 
     public function edit(Siswa $siswa)
     {
-        $kelas = Kelas::all();
+        $kelas = $this->kelasPeriodeAktif();
         return view('admin.siswa.edit', compact('siswa', 'kelas'));
     }
 
     public function update(Request $request, Siswa $siswa)
     {
+        $tahunAkademik = $this->tahunAkademikAktif();
+
+        if (!$tahunAkademik) {
+            return back()
+                ->withInput()
+                ->withErrors(['kelas_id' => 'Tahun akademik aktif tidak ditemukan. Silakan aktifkan tahun akademik terlebih dahulu.']);
+        }
+
         $request->validate([
             'nis' => 'required|unique:siswa,nis,' . $siswa->id,
             'nama_lengkap' => 'required',
-            'kelas_id' => 'required|exists:kelas,id',
+            'kelas_id' => [
+                'required',
+                Rule::exists('kelas', 'id')->where('tahun_akademik_id', $tahunAkademik->id),
+            ],
             'jenis_kelamin' => 'required|in:L,P',
             'no_hp' => 'nullable',
             'alamat' => 'nullable',
         ]);
 
-        DB::transaction(function () use ($request, $siswa) {
-            $tahunAkademik = TahunAkademik::where('is_active', true)->first();
-
-            if (!$tahunAkademik) {
-                throw new \Exception('Tahun akademik aktif tidak ditemukan.');
-            }
-
+        DB::transaction(function () use ($request, $siswa, $tahunAkademik) {
             $siswa->user->update([
                 'name' => $request->nama_lengkap,
                 'email' => $request->nis . '@smkbaktiidhata.sch.id',
@@ -137,5 +148,17 @@ class SiswaController extends Controller
         });
 
         return redirect()->route('siswa.index')->with('success', 'Data Siswa berhasil dihapus');
+    }
+
+    private function tahunAkademikAktif()
+    {
+        return TahunAkademik::where('is_active', true)->first();
+    }
+
+    private function kelasPeriodeAktif()
+    {
+        return Kelas::whereHas('tahunAkademik', function ($query) {
+            $query->where('is_active', true);
+        })->orderBy('nama_kelas')->get();
     }
 }
