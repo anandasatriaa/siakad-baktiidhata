@@ -8,6 +8,8 @@ use App\Models\MataPelajaran;
 use App\Models\Guru;
 use App\Models\TahunAkademik;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class JadwalController extends Controller
 {
@@ -42,28 +44,47 @@ class JadwalController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'kelas_id' => 'required|exists:kelas,id',
             'tahun_akademik_id' => 'required|exists:tahun_akademik,id',
             'schedules' => 'required|array|min:1',
             'schedules.*.hari' => 'required',
-            'schedules.*.jam_mulai' => 'required',
-            'schedules.*.jam_selesai' => 'required|after:schedules.*.jam_mulai',
+            'schedules.*.jam_mulai' => 'required|date_format:H:i',
+            'schedules.*.jam_selesai' => 'required|date_format:H:i',
             'schedules.*.mapel_id' => 'required|exists:mata_pelajaran,id',
             'schedules.*.guru_id' => 'required|exists:guru,id',
         ]);
 
-        foreach ($request->schedules as $item) {
-            JadwalPelajaran::create([
-                'kelas_id' => $request->kelas_id,
-                'tahun_akademik_id' => $request->tahun_akademik_id,
-                'hari' => $item['hari'],
-                'jam_mulai' => $item['jam_mulai'],
-                'jam_selesai' => $item['jam_selesai'],
-                'mapel_id' => $item['mapel_id'],
-                'guru_id' => $item['guru_id'],
-            ]);
-        }
+        $validator->after(function ($validator) use ($request) {
+            foreach ($request->input('schedules', []) as $index => $item) {
+                if (empty($item['jam_mulai']) || empty($item['jam_selesai'])) {
+                    continue;
+                }
+
+                if (strtotime($item['jam_selesai']) <= strtotime($item['jam_mulai'])) {
+                    $validator->errors()->add(
+                        "schedules.$index.jam_selesai",
+                        'Jam selesai harus lebih besar dari jam mulai pada baris ' . ($index + 1) . '.'
+                    );
+                }
+            }
+        });
+
+        $validator->validate();
+
+        DB::transaction(function () use ($request) {
+            foreach ($request->schedules as $item) {
+                JadwalPelajaran::create([
+                    'kelas_id' => $request->kelas_id,
+                    'tahun_akademik_id' => $request->tahun_akademik_id,
+                    'hari' => $item['hari'],
+                    'jam_mulai' => $item['jam_mulai'],
+                    'jam_selesai' => $item['jam_selesai'],
+                    'mapel_id' => $item['mapel_id'],
+                    'guru_id' => $item['guru_id'],
+                ]);
+            }
+        });
 
         return redirect()->route('jadwal.index')->with('success', 'Jadwal pelajaran berhasil ditambahkan');
     }
