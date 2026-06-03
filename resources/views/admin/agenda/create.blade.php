@@ -15,11 +15,23 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-3">
+                            <label for="tahun_akademik_id">Tahun Akademik / Semester</label>
+                            <select id="tahun_akademik_id" class="form-select @error('tahun_akademik_id') is-invalid @enderror" name="tahun_akademik_id" required>
+                                <option value="">-- Pilih Tahun Akademik --</option>
+                                @foreach ($periodes as $p)
+                                    <option value="{{ $p->id }}" {{ old('tahun_akademik_id', $active_periode?->id) == $p->id ? 'selected' : '' }}>
+                                        {{ $p->tahun_ajaran }} - {{ $p->semester }} {{ $p->is_active ? '(Aktif)' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('tahun_akademik_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="form-group mb-3">
                             <label for="jadwal_id">Pilih Jadwal</label>
                             <select id="jadwal_id" class="form-select @error('jadwal_id') is-invalid @enderror" name="jadwal_id" required>
                                 <option value="">-- Pilih Jadwal --</option>
                                 @foreach ($jadwals as $j)
-                                    <option value="{{ $j->id }}" {{ old('jadwal_id') == $j->id ? 'selected' : '' }}>
+                                    <option value="{{ $j->id }}" data-periode="{{ $j->tahun_akademik_id }}" {{ old('jadwal_id') == $j->id ? 'selected' : '' }}>
                                         {{ $j->mata_pelajaran->nama_mapel }} - {{ $j->kelas->nama_kelas }} ({{ $j->hari }}, {{ $j->jam_mulai }})
                                     </option>
                                 @endforeach
@@ -53,4 +65,35 @@
         </div>
     </div>
 </section>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const periodeSelect = document.getElementById('tahun_akademik_id');
+        const jadwalSelect = document.getElementById('jadwal_id');
+        const jadwalOptions = Array.from(jadwalSelect.options);
+
+        function filterJadwal() {
+            const selectedPeriode = periodeSelect.value;
+
+            jadwalOptions.forEach(option => {
+                if (!option.value) {
+                    option.hidden = false;
+                    return;
+                }
+
+                const isVisible = option.dataset.periode === selectedPeriode;
+                option.hidden = !isVisible;
+
+                if (!isVisible && option.selected) {
+                    jadwalSelect.value = '';
+                }
+            });
+        }
+
+        periodeSelect.addEventListener('change', filterJadwal);
+        filterJadwal();
+    });
+</script>
+@endpush
 @endsection
