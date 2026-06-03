@@ -10,12 +10,12 @@
             <h4 class="card-title">Filter Laporan</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('laporan.absensi-keterlambatan') }}" method="GET">
+            <form action="{{ route('laporan.absensi-keterlambatan') }}" method="GET" id="laporan-filter-form">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="periode_id">Tahun Akademik</label>
-                            <select name="periode_id" id="periode_id" class="form-select" onchange="this.form.submit()">
+                            <select name="periode_id" id="periode_id" class="form-select auto-submit-filter">
                                 @foreach ($periodes as $p)
                                     <option value="{{ $p->id }}" {{ $periode_id == $p->id ? 'selected' : '' }}>
                                         {{ $p->tahun_ajaran }} - {{ $p->semester }}
@@ -27,7 +27,7 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="kelas_id">Kelas</label>
-                            <select name="kelas_id" id="kelas_id" class="form-select">
+                            <select name="kelas_id" id="kelas_id" class="form-select auto-submit-filter">
                                 <option value="">Semua Kelas</option>
                                 @foreach ($kelas as $k)
                                     <option value="{{ $k->id }}" {{ $selected_kelas == $k->id ? 'selected' : '' }}>
@@ -40,19 +40,14 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="tanggal_mulai">Dari Tanggal</label>
-                            <input type="date" name="tanggal_mulai" id="tanggal_mulai" class="form-control" value="{{ $tanggal_mulai }}">
+                            <input type="date" name="tanggal_mulai" id="tanggal_mulai" class="form-control auto-submit-filter" value="{{ $tanggal_mulai }}">
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="tanggal_selesai">Sampai Tanggal</label>
-                            <input type="date" name="tanggal_selesai" id="tanggal_selesai" class="form-control" value="{{ $tanggal_selesai }}">
+                            <input type="date" name="tanggal_selesai" id="tanggal_selesai" class="form-control auto-submit-filter" value="{{ $tanggal_selesai }}">
                         </div>
-                    </div>
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-filter icon-mid"></i> Filter Laporan
-                        </button>
                     </div>
                 </div>
             </form>
@@ -110,4 +105,18 @@
         </div>
     </div>
 </section>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('laporan-filter-form');
+
+        document.querySelectorAll('.auto-submit-filter').forEach(function (field) {
+            field.addEventListener('change', function () {
+                form.submit();
+            });
+        });
+    });
+</script>
+@endpush
 @endsection
