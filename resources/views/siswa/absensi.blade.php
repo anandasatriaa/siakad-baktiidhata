@@ -86,7 +86,7 @@
                 <table class="table table-hover table-lg">
                     <thead>
                         <tr>
-                            <th>Hari/Tanggal</th>
+                            <th>Tanggal</th>
                             <th>Mata Pelajaran</th>
                             <th>Status</th>
                             <th>Keterangan</th>
@@ -96,8 +96,7 @@
                         @forelse ($absensis as $a)
                         <tr>
                             <td>
-                                <div>{{ $a->jadwal->hari ?? \Carbon\Carbon::parse($a->tanggal)->isoFormat('dddd') }}</div>
-                                <small class="text-muted">{{ \Carbon\Carbon::parse($a->tanggal)->format('d M Y') }}</small>
+                                {{ \Carbon\Carbon::parse($a->tanggal)->format('d M Y') }}
                             </td>
                             <td>
                                 <div class="fw-bold">{{ $a->jadwal->mata_pelajaran->nama_mapel ?? '-' }}</div>
