@@ -49,15 +49,25 @@
 
                         <div class="form-group mb-3">
                             <label for="password">Password Baru (Opsional)</label>
-                            <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror">
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <div class="input-group has-validation">
+                                <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password" style="border-color: #dce7f1;">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="password_confirmation">Konfirmasi Password Baru</label>
-                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control">
+                            <div class="input-group">
+                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password_confirmation" style="border-color: #dce7f1;">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="d-flex justify-content-end gap-2">
@@ -71,3 +81,25 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    document.querySelectorAll('.toggle-password').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let targetId = this.getAttribute('data-target');
+            let input = document.querySelector(targetId);
+            let icon = this.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
+    });
+</script>
+@endpush

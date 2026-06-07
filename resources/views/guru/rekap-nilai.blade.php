@@ -46,6 +46,38 @@
         document.getElementById('kelas_id').value = parts[1];
         document.getElementById('filterForm').submit();
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnPdf = document.getElementById('btnExportPdf');
+        const btnExcel = document.getElementById('btnExportExcel');
+
+        if (btnPdf) {
+            btnPdf.addEventListener('click', function () {
+                handleDownloadLoading(this, '<i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF');
+            });
+        }
+
+        if (btnExcel) {
+            btnExcel.addEventListener('click', function () {
+                handleDownloadLoading(this, '<i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel');
+            });
+        }
+
+        function handleDownloadLoading(btn, originalHtml) {
+            if (btn.classList.contains('disabled')) return;
+
+            btn.classList.add('disabled');
+            btn.style.pointerEvents = 'none';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Loading...';
+
+            // Restore original state after 4 seconds
+            setTimeout(function () {
+                btn.classList.remove('disabled');
+                btn.style.pointerEvents = 'auto';
+                btn.innerHTML = originalHtml;
+            }, 4000);
+        }
+    });
     </script>
 
     @if ($selected_mapel && $selected_kelas && $info)
@@ -53,10 +85,10 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Rekap Nilai: {{ $info->mata_pelajaran->nama_mapel }} - {{ $info->kelas->nama_kelas }}</h4>
             <div class="btn-group">
-                <a href="{{ route('guru.export-nilai-pdf', ['mapel_id' => $selected_mapel, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-danger">
+                <a href="{{ route('guru.export-nilai-pdf', ['mapel_id' => $selected_mapel, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-danger" id="btnExportPdf">
                     <i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF
                 </a>
-                <a href="{{ route('guru.export-nilai-excel', ['mapel_id' => $selected_mapel, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-success">
+                <a href="{{ route('guru.export-nilai-excel', ['mapel_id' => $selected_mapel, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-success" id="btnExportExcel">
                     <i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel
                 </a>
             </div>
