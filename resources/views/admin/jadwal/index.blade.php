@@ -5,49 +5,109 @@
 
 @section('content')
 <style>
-    .accordion-item {
+    .accordion-custom {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+    .accordion-custom .accordion-item {
         border: none !important;
-        margin-bottom: 1.5rem !important;
-        border-radius: 15px !important;
+        border-radius: 16px !important;
+        background: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .accordion-button {
-        border-radius: 15px !important;
+    .accordion-custom .accordion-item:hover {
+        box-shadow: 0 8px 30px rgba(67, 94, 190, 0.1);
+        transform: translateY(-2px);
+    }
+    .accordion-custom .accordion-button {
+        padding: 1.5rem;
+        font-weight: 600;
+        color: #2b3445;
+        background-color: transparent;
+        box-shadow: none !important;
+        border-radius: 16px !important;
         transition: all 0.3s ease;
-        padding: 1.25rem 1.5rem;
     }
-    .accordion-button:not(.collapsed) {
-        background-color: #435ebe !important;
-        color: white !important;
-        box-shadow: 0 10px 20px rgba(67, 94, 190, 0.2);
+    .accordion-custom .accordion-button:not(.collapsed) {
+        background: linear-gradient(135deg, #435ebe 0%, #3a51a3 100%);
+        color: #ffffff;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
     }
-    .accordion-button:not(.collapsed) .text-dark,
-    .accordion-button:not(.collapsed) .text-primary,
-    .accordion-button:not(.collapsed) .text-muted {
-        color: white !important;
-    }
-    .accordion-button:not(.collapsed) .badge {
-        background-color: rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-    }
-    .accordion-button:after {
+    .accordion-custom .accordion-button::after {
         background-size: 1.25rem;
+        transition: transform 0.3s ease;
     }
-    .class-icon-wrapper {
-        width: 45px;
-        height: 45px;
-        border-radius: 12px;
+    .accordion-custom .accordion-button:not(.collapsed)::after {
+        filter: brightness(0) invert(1);
+    }
+    .accordion-custom .badge-count {
+        background: rgba(67, 94, 190, 0.1);
+        color: #435ebe;
+        font-weight: 700;
+        padding: 0.5rem 1rem;
+        border-radius: 50rem;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(67, 94, 190, 0.2);
+    }
+    .accordion-custom .accordion-button:not(.collapsed) .badge-count {
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .accordion-custom .wali-kelas {
+        font-size: 0.85rem;
+        color: #6c757d;
         display: flex;
         align-items: center;
-        justify-content: center;
-        margin-right: 1rem;
-        transition: all 0.3s ease;
+        gap: 0.4rem;
+        transition: color 0.3s ease;
     }
-    .accordion-button.collapsed .class-icon-wrapper {
-        background-color: rgba(67, 94, 190, 0.1);
+    .accordion-custom .accordion-button:not(.collapsed) .wali-kelas {
+        color: rgba(255, 255, 255, 0.8);
     }
-    .accordion-button:not(.collapsed) .class-icon-wrapper {
-        background-color: rgba(255, 255, 255, 0.2);
+    .accordion-custom .accordion-body {
+        padding: 0;
+        background-color: #fafbfd;
+    }
+    .day-divider {
+        background: linear-gradient(90deg, #f1f3f8 0%, #ffffff 100%);
+        color: #435ebe;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #edf2f7;
+        border-left: 4px solid #435ebe;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .schedule-table th {
+        background-color: transparent;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #8f9bb3;
+        font-weight: 700;
+        letter-spacing: 1px;
+        padding: 1rem 1.5rem;
+        border-bottom: 2px solid #edf2f7;
+    }
+    .schedule-table td {
+        padding: 1.25rem 1.5rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf2f7;
+        color: #2b3445;
+        font-size: 0.95rem;
+    }
+    .schedule-table tr:hover td {
+        background-color: #ffffff;
+    }
+    .schedule-table tr:last-child td {
+        border-bottom: none;
     }
 </style>
 <section class="section">
@@ -72,40 +132,28 @@
                     </div>
                 </div>
 
-                <div class="accordion" id="accordionJadwal">
+                <div class="accordion accordion-custom" id="accordionJadwal">
                     @forelse ($jadwals as $kelasNama => $kelasJadwal)
-                        <div class="accordion-item mb-3 border shadow-sm rounded overflow-hidden">
+                        <div class="accordion-item">
                             <h2 class="accordion-header" id="heading{{ Str::slug($kelasNama) }}">
-                                <button class="accordion-button collapsed py-3" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#collapse{{ Str::slug($kelasNama) }}"
-                                    aria-expanded="false" aria-controls="collapse{{ Str::slug($kelasNama) }}">
-                                    <div class="d-flex align-items-center w-100 me-3">
-                                        <div class="class-icon-wrapper">
-                                            <i class="bi bi-door-open-fill fs-4 text-primary"></i>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h5 class="mb-0 fw-bold text-dark">{{ $kelasNama }}</h5>
-                                                    @if($kelasJadwal->first()->kelas->wali_kelas)
-                                                        <small class="text-muted">
-                                                            <i class="bi bi-person-badge me-1"></i> Wali Kelas: {{ $kelasJadwal->first()->kelas->wali_kelas->name }}
-                                                        </small>
-                                                    @endif
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ Str::slug($kelasNama) }}" aria-expanded="false" aria-controls="collapse{{ Str::slug($kelasNama) }}">
+                                    <div class="d-flex justify-content-between align-items-center w-100 me-3">
+                                        <div class="d-flex flex-column gap-1">
+                                            <span class="fs-5 fw-bold">{{ $kelasNama }}</span>
+                                            @if($kelasJadwal->first()->kelas->wali_kelas)
+                                                <div class="wali-kelas">
+                                                    <i class="bi bi-person-badge"></i> Wali Kelas: {{ $kelasJadwal->first()->kelas->wali_kelas->name }}
                                                 </div>
-                                                <div class="text-end">
-                                                    <span class="badge bg-primary rounded-pill px-3 shadow-sm">
-                                                        <i class="bi bi-book me-1"></i> {{ $kelasJadwal->count() }} Mata Pelajaran
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            @endif
                                         </div>
+                                        <span class="badge-count shadow-sm">
+                                            {{ $kelasJadwal->count() }} Mata Pelajaran
+                                        </span>
                                     </div>
                                 </button>
                             </h2>
-                            <div id="collapse{{ Str::slug($kelasNama) }}" class="accordion-collapse collapse"
-                                aria-labelledby="heading{{ Str::slug($kelasNama) }}" data-bs-parent="#accordionJadwal">
-                                <div class="accordion-body p-0">
+                            <div id="collapse{{ Str::slug($kelasNama) }}" class="accordion-collapse collapse" aria-labelledby="heading{{ Str::slug($kelasNama) }}" data-bs-parent="#accordionJadwal">
+                                <div class="accordion-body">
                                     @php
                                         $daysOrder = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
                                         $groupedByDay = $kelasJadwal
@@ -116,13 +164,11 @@
                                     @endphp
 
                                     @foreach ($groupedByDay as $hari => $items)
-                                        <div class="px-4 py-2 bg-light border-top border-bottom">
-                                            <h6 class="mb-0 fw-bold text-secondary text-uppercase small tracking-wider">
-                                                <i class="bi bi-calendar3 me-2"></i> {{ $hari }}
-                                            </h6>
+                                        <div class="day-divider">
+                                            <i class="bi bi-calendar-event me-2"></i> {{ $hari }}
                                         </div>
                                         <div class="table-responsive">
-                                            <table class="table table-hover mb-0">
+                                            <table class="table schedule-table mb-0">
                                                 <thead class="table-light">
                                                     <tr class="small text-uppercase text-muted">
                                                         <th width="150" class="ps-4">Jam</th>
