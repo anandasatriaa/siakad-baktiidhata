@@ -13,7 +13,7 @@
             <form action="{{ route('guru.store') }}" method="POST">
                 @csrf
                 <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan '<strong>NIP</strong>' atau '<strong>NIK</strong>' sebagai email dan password default adalah '<strong>smkbaktiidhata</strong>'.
+                    <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan '<strong>NIK@smkbaktiidhata.sch.id</strong>' sebagai email dan password default adalah '<strong>smkbaktiidhata</strong>'.
                 </div>
                 
                 <div class="row">

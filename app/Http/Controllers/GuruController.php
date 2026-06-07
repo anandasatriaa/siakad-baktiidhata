@@ -25,6 +25,7 @@ class GuruController extends Controller
     {
         $request->validate([
             'nip' => 'nullable|unique:guru,nip',
+            'nik' => 'required|numeric|unique:guru,nik',
             'nama' => 'required',
             'jenis_kelamin' => 'required|in:L,P',
             'status_kepegawaian' => 'nullable|in:GTY/PTY,Guru Honor Sekolah',
@@ -38,7 +39,7 @@ class GuruController extends Controller
         ]);
 
         DB::transaction(function () use ($request) {
-            $emailPrefix = $request->nip ?? $request->nik ?? time();
+            $emailPrefix = $request->nik;
             $fullName = trim(($request->gelar_depan ? $request->gelar_depan . ' ' : '') . $request->nama . ($request->gelar_belakang ? ', ' . $request->gelar_belakang : ''));
             
             $user = User::create([
@@ -65,6 +66,7 @@ class GuruController extends Controller
     {
         $request->validate([
             'nip' => 'nullable|unique:guru,nip,' . $guru->id,
+            'nik' => 'required|numeric|unique:guru,nik,' . $guru->id,
             'nama' => 'required',
             'jenis_kelamin' => 'required|in:L,P',
             'status_kepegawaian' => 'nullable|in:GTY/PTY,Guru Honor Sekolah',
@@ -78,7 +80,7 @@ class GuruController extends Controller
         ]);
 
         DB::transaction(function () use ($request, $guru) {
-            $emailPrefix = $request->nip ?? $request->nik ?? time();
+            $emailPrefix = $request->nik;
             $fullName = trim(($request->gelar_depan ? $request->gelar_depan . ' ' : '') . $request->nama . ($request->gelar_belakang ? ', ' . $request->gelar_belakang : ''));
             
             $guru->user->update([
