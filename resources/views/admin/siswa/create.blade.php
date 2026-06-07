@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="alert alert-info">
-                            <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan '<strong>NIS</strong>' sebagai email dan password default adalah '<strong>smkbaktiidhata</strong>'.
+                            <i class="bi bi-info-circle"></i> Akun login akan dibuatkan otomatis menggunakan '<strong>NIS@smkbaktiidhata.sch.id</strong>' sebagai email dan password default adalah '<strong>smkbaktiidhata</strong>'.
                         </div>
                         <div class="form-group mb-3">
                             <label for="no_hp">No. HP</label>

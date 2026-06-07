@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-center align-items-center flex-column">
                         <div class="avatar avatar-2xl mb-3">
-                            <img src="{{ asset('assets/images/faces/1.jpg') }}" alt="Avatar" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                            <img src="{{ asset('assets/images/faces/user-default.png') }}" alt="Avatar" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
                         </div>
 
                         <h3 class="mt-3">{{ Auth::user()->name }}</h3>
