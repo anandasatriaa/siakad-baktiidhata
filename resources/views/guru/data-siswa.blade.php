@@ -33,7 +33,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover mb-0">
+                <table class="table table-hover mb-0 datatable-siswa">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -67,3 +67,13 @@
     @endif
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.datatable-siswa').forEach(function(table) {
+            new simpleDatatables.DataTable(table);
+        });
+    });
+</script>
+@endpush
