@@ -41,7 +41,7 @@
                             <select id="tahun_akademik_id" class="form-select @error('tahun_akademik_id') is-invalid @enderror" name="tahun_akademik_id" required>
                                 <option value="">-- Pilih Tahun Akademik --</option>
                                 @foreach ($tahun_akademiks as $ta)
-                                    <option value="{{ $ta->id }}" {{ old('tahun_akademik_id') == $ta->id ? 'selected' : '' }}>
+                                    <option value="{{ $ta->id }}" {{ old('tahun_akademik_id', optional($tahun_akademiks->firstWhere('is_active', true))->id) == $ta->id ? 'selected' : '' }}>
                                         {{ $ta->tahun_ajaran }} - {{ $ta->semester }} {{ $ta->is_active ? '(Aktif)' : '' }}
                                     </option>
                                 @endforeach
