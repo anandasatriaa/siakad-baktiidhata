@@ -15,7 +15,7 @@
         </tr>
         <tr>
             <th style="font-weight: bold;">Guru Pengajar</th>
-            <th colspan="2">: {{ $jadwal->guru->nama_lengkap }}</th>
+            <th colspan="2">: {{ $jadwal->guru->nama }}</th>
             <th style="font-weight: bold;">Tahun Akademik</th>
             <th colspan="3">: {{ $jadwal->tahun_akademik->tahun_ajaran }} ({{ $jadwal->tahun_akademik->semester }})</th>
         </tr>

@@ -42,7 +42,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ \Carbon\Carbon::parse($a->tanggal)->format('d/m/Y') }}</td>
-                            <td>{{ $a->guru->nama_lengkap }}</td>
+                            <td>{{ $a->guru->nama }}</td>
                             <td>{{ $a->jadwal->mata_pelajaran->nama_mapel }} - {{ $a->jadwal->kelas->nama_kelas }}</td>
                             <td>{{ $a->materi }}</td>
                             <td>

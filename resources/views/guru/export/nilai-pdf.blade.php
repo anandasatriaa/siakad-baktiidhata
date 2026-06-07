@@ -215,7 +215,7 @@
         <tr>
             <td class="label">Guru Pengajar</td>
             <td class="separator">:</td>
-            <td class="value">{{ $jadwal->guru->nama_lengkap }}</td>
+            <td class="value">{{ $jadwal->guru->nama }}</td>
             <td class="label">Semester</td>
             <td class="separator">:</td>
             <td>{{ $jadwal->tahun_akademik->semester }}</td>
@@ -299,7 +299,7 @@
                     <p>Jakarta, {{ now()->translatedFormat('d F Y') }}</p>
                     <p>Guru Mata Pelajaran</p>
                     <div class="signature-space"></div>
-                    <p class="signature-name">{{ $jadwal->guru->nama_lengkap }}</p>
+                    <p class="signature-name">{{ $jadwal->guru->nama }}</p>
                     <p>NIP. {{ $jadwal->guru->nip ?? '-' }}</p>
                 </div>
             </td>

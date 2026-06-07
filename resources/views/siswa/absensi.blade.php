@@ -100,7 +100,7 @@
                             </td>
                             <td>
                                 <div class="fw-bold">{{ $a->jadwal->mata_pelajaran->nama_mapel ?? '-' }}</div>
-                                <small class="text-muted">{{ $a->jadwal->guru->nama_lengkap ?? '-' }}</small>
+                                <small class="text-muted">{{ $a->jadwal->guru->nama ?? '-' }}</small>
                             </td>
                             <td>
                                 @if($a->status == 'Hadir')

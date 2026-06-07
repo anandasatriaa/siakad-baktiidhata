@@ -42,7 +42,7 @@
                                         </div>
                                         <div class="mt-1">
                                             <span class="d-block fw-bold">{{ $j->mata_pelajaran->nama_mapel }}</span>
-                                            <span class="text-muted small"><i class="bi bi-person"></i> {{ $j->guru->nama_lengkap }}</span>
+                                            <span class="text-muted small"><i class="bi bi-person"></i> {{ $j->guru->nama }}</span>
                                         </div>
                                     </td>
                                 </tr>

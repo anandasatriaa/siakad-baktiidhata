@@ -218,7 +218,7 @@
                                                     @endif
                                                     @if (isset($today_schedule_siswa))
                                                         <td class="col-auto">
-                                                            <p class=" mb-0">{{ $s->guru->nama_lengkap }}</p>
+                                                            <p class=" mb-0">{{ $s->guru->nama }}</p>
                                                         </td>
                                                     @endif
                                                 </tr>

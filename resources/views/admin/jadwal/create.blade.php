@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Tambah Jadwal Pelajaran')
-@section('subtitle', 'Buat banyak jadwal pelajaran sekaligus per kelas')
+@section('subtitle', 'Buat jadwal pelajaran per kelas')
 
 @section('content')
 <section class="section">
@@ -100,7 +100,7 @@
                                     <select name="schedules[0][guru_id]" class="form-select form-select-sm" required>
                                         <option value="">-- Pilih Guru --</option>
                                         @foreach ($gurus as $g)
-                                            <option value="{{ $g->id }}">{{ $g->nama_lengkap }}</option>
+                                            <option value="{{ $g->id }}">{{ $g->nama }}</option>
                                         @endforeach
                                     </select>
                                 </td>

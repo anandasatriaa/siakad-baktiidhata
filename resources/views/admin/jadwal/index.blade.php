@@ -152,11 +152,11 @@
                                                                     <div class="avatar avatar-sm me-2">
                                                                         <div class="avatar-content bg-info text-white shadow-sm"
                                                                             style="width: 28px; height: 28px; font-size: 11px;">
-                                                                            {{ strtoupper(substr($j->guru->nama_lengkap, 0, 1)) }}
+                                                                            {{ strtoupper(substr($j->guru->nama, 0, 1)) }}
                                                                         </div>
                                                                     </div>
                                                                     <span
-                                                                        class="small fw-medium">{{ $j->guru->nama_lengkap }}</span>
+                                                                        class="small fw-medium">{{ $j->guru->nama }}</span>
                                                                 </div>
                                                             </td>
                                                             <td>
