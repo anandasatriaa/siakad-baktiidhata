@@ -17,20 +17,23 @@
                 <table class="table table-hover mb-0" id="table">
                     <thead>
                         <tr>
-                            <th>NIP</th>
+                            <th>NIP / NUPTK</th>
                             <th>Nama Lengkap</th>
                             <th>Jenis Kelamin</th>
-                            <th>No. HP</th>
+                            <th>Jenis PTK</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($gurus as $guru)
                         <tr>
-                            <td>{{ $guru->nip ?? '-' }}</td>
-                            <td>{{ $guru->nama_lengkap }}</td>
+                            <td>
+                                <div>NIP: {{ $guru->nip ?? '-' }}</div>
+                                <div>NUPTK: {{ $guru->nuptk ?? '-' }}</div>
+                            </td>
+                            <td>{{ $guru->gelar_depan ? $guru->gelar_depan . ' ' : '' }}{{ $guru->nama }}{{ $guru->gelar_belakang ? ', ' . $guru->gelar_belakang : '' }}</td>
                             <td>{{ $guru->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                            <td>{{ $guru->no_hp ?? '-' }}</td>
+                            <td>{{ $guru->jenis_ptk ?? '-' }}</td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('guru.edit', $guru->id) }}" class="btn btn-sm btn-warning">

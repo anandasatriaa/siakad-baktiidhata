@@ -24,29 +24,33 @@ class GuruController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nip' => 'required|unique:guru,nip',
-            'nama_lengkap' => 'required',
+            'nip' => 'nullable|unique:guru,nip',
+            'nama' => 'required',
             'jenis_kelamin' => 'required|in:L,P',
-            'no_hp' => 'nullable',
-            'alamat' => 'nullable',
+            'status_kepegawaian' => 'nullable|in:GTY/PTY,Guru Honor Sekolah',
+            'jenis_ptk' => 'nullable|in:Kepala Sekolah,Guru,Tenaga Kependidikan',
+            'tanggal_lahir' => 'nullable|date',
+            'tmt_kerja' => 'nullable|date',
+            'jam_tugas_tambahan' => 'nullable|integer',
+            'jjm' => 'nullable|integer',
+            'total_jjm' => 'nullable|integer',
+            'jumlah_siswa' => 'nullable|integer',
         ]);
 
         DB::transaction(function () use ($request) {
+            $emailPrefix = $request->nip ?? $request->nik ?? time();
+            $fullName = trim(($request->gelar_depan ? $request->gelar_depan . ' ' : '') . $request->nama . ($request->gelar_belakang ? ', ' . $request->gelar_belakang : ''));
+            
             $user = User::create([
-                'name' => $request->nama_lengkap,
-                'email' => $request->nip . '@smkbaktiidhata.sch.id',
+                'name' => $fullName,
+                'email' => $emailPrefix . '@smkbaktiidhata.sch.id',
                 'password' => Hash::make('smkbaktiidhata'),
                 'role' => 'guru',
             ]);
 
-            Guru::create([
-                'user_id' => $user->id,
-                'nip' => $request->nip,
-                'nama_lengkap' => $request->nama_lengkap,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'no_hp' => $request->no_hp,
-                'alamat' => $request->alamat,
-            ]);
+            $data = $request->all();
+            $data['user_id'] = $user->id;
+            Guru::create($data);
         });
 
         return redirect()->route('guru.index')->with('success', 'Data Guru berhasil ditambahkan');
@@ -60,17 +64,26 @@ class GuruController extends Controller
     public function update(Request $request, Guru $guru)
     {
         $request->validate([
-            'nip' => 'required|unique:guru,nip,' . $guru->id,
-            'nama_lengkap' => 'required',
+            'nip' => 'nullable|unique:guru,nip,' . $guru->id,
+            'nama' => 'required',
             'jenis_kelamin' => 'required|in:L,P',
-            'no_hp' => 'nullable',
-            'alamat' => 'nullable',
+            'status_kepegawaian' => 'nullable|in:GTY/PTY,Guru Honor Sekolah',
+            'jenis_ptk' => 'nullable|in:Kepala Sekolah,Guru,Tenaga Kependidikan',
+            'tanggal_lahir' => 'nullable|date',
+            'tmt_kerja' => 'nullable|date',
+            'jam_tugas_tambahan' => 'nullable|integer',
+            'jjm' => 'nullable|integer',
+            'total_jjm' => 'nullable|integer',
+            'jumlah_siswa' => 'nullable|integer',
         ]);
 
         DB::transaction(function () use ($request, $guru) {
+            $emailPrefix = $request->nip ?? $request->nik ?? time();
+            $fullName = trim(($request->gelar_depan ? $request->gelar_depan . ' ' : '') . $request->nama . ($request->gelar_belakang ? ', ' . $request->gelar_belakang : ''));
+            
             $guru->user->update([
-                'name' => $request->nama_lengkap,
-                'email' => $request->nip . '@smkbaktiidhata.sch.id',
+                'name' => $fullName,
+                'email' => $emailPrefix . '@smkbaktiidhata.sch.id',
             ]);
 
             if ($request->filled('password')) {
@@ -79,13 +92,7 @@ class GuruController extends Controller
                 ]);
             }
 
-            $guru->update([
-                'nip' => $request->nip,
-                'nama_lengkap' => $request->nama_lengkap,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'no_hp' => $request->no_hp,
-                'alamat' => $request->alamat,
-            ]);
+            $guru->update($request->all());
         });
 
         return redirect()->route('guru.index')->with('success', 'Data Guru berhasil diperbarui');
@@ -94,7 +101,9 @@ class GuruController extends Controller
     public function destroy(Guru $guru)
     {
         DB::transaction(function () use ($guru) {
-            $guru->user->delete();
+            if ($guru->user) {
+                $guru->user->delete();
+            }
             $guru->delete();
         });
 

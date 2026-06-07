@@ -16,18 +16,16 @@ class GuruSeeder extends Seeder
         \App\Models\Guru::create([
             'user_id' => $guruUser1->id,
             'nip' => '198001012005011003',
-            'nama_lengkap' => 'Guru Budi, M.Kom',
+            'nama' => 'Guru Budi, M.Kom',
             'jenis_kelamin' => 'L',
-            'no_hp' => '081234567890',
         ]);
         
         $guruUser2 = \App\Models\User::where('email', 'piket@smkbaktiidhata.sch.id')->first();
         \App\Models\Guru::create([
             'user_id' => $guruUser2->id,
             'nip' => '198502022010012004',
-            'nama_lengkap' => 'Guru Piket Ayu, S.Pd',
+            'nama' => 'Guru Piket Ayu, S.Pd',
             'jenis_kelamin' => 'P',
-            'no_hp' => '089876543210',
         ]);
     }
 }
