@@ -37,13 +37,13 @@
                 <!-- KEPALA SEKOLAH / ADMIN -->
                 @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
                     <li class="sidebar-title">Data Master</li>
-                    <li class="sidebar-item {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
+                    <li class="sidebar-item {{ (request()->routeIs('siswa.*') && !request()->routeIs('siswa.my-*')) ? 'active' : '' }}">
                         <a href="{{ route('siswa.index') }}" class='sidebar-link'>
                             <i class="bi bi-stack"></i>
                             <span>Data Siswa</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->routeIs('guru.*') ? 'active' : '' }}">
+                    <li class="sidebar-item {{ (request()->routeIs('guru.*') && !request()->routeIs('guru.rekap-nilai', 'guru.jadwal-mengajar', 'guru.data-siswa-ajar', 'guru.export-nilai-pdf', 'guru.export-nilai-excel')) ? 'active' : '' }}">
                         <a href="{{ route('guru.index') }}" class='sidebar-link'>
                             <i class="bi bi-person-badge-fill"></i>
                             <span>Data Guru</span>
