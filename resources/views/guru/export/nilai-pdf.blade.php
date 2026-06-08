@@ -200,33 +200,33 @@
     </div>
 
     <div class="document-title">
-        <h1>Rekapitulasi Nilai Peserta Didik</h1>
+        <h1>Rekapitulasi Nilai Peserta Didik (Rapor)</h1>
     </div>
 
     <table class="identity">
         <tr>
-            <td class="label">Mata Pelajaran</td>
+            <td class="label">Nama Peserta Didik</td>
             <td class="separator">:</td>
-            <td class="value">{{ $jadwal->mata_pelajaran->nama_mapel }}</td>
+            <td class="value">{{ $siswa->nama_lengkap }}</td>
             <td class="label">Kelas</td>
             <td class="separator">:</td>
-            <td>{{ $jadwal->kelas->nama_kelas }}</td>
+            <td>{{ $kelas->nama_kelas }}</td>
         </tr>
         <tr>
-            <td class="label">Guru Pengajar</td>
+            <td class="label">NIS / NISN</td>
             <td class="separator">:</td>
-            <td class="value">{{ $jadwal->guru->nama }}</td>
+            <td class="value">{{ $siswa->nis }} / {{ $siswa->nisn ?? '-' }}</td>
             <td class="label">Semester</td>
             <td class="separator">:</td>
-            <td>{{ $jadwal->tahun_akademik->semester }}</td>
+            <td>{{ $tahun_akademik->semester }}</td>
         </tr>
         <tr>
-            <td class="label">Tahun Akademik</td>
+            <td class="label">Sekolah</td>
             <td class="separator">:</td>
-            <td class="value">{{ $jadwal->tahun_akademik->tahun_ajaran }}</td>
-            <td class="label">Tanggal Cetak</td>
+            <td class="value">{{ $sekolah['nama'] ?? 'SMK BAKTI IDHATA' }}</td>
+            <td class="label">Tahun Pelajaran</td>
             <td class="separator">:</td>
-            <td>{{ now()->translatedFormat('d F Y') }}</td>
+            <td>{{ $tahun_akademik->tahun_ajaran }}</td>
         </tr>
     </table>
 
@@ -234,8 +234,7 @@
         <thead>
             <tr>
                 <th width="28">No</th>
-                <th width="82">NIS</th>
-                <th>Nama Peserta Didik</th>
+                <th>Mata Pelajaran</th>
                 <th width="58">Tugas</th>
                 <th width="58">UTS</th>
                 <th width="58">UAS</th>
@@ -263,8 +262,7 @@
                 @endphp
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $n->siswa->nis }}</td>
-                    <td>{{ $n->siswa->nama_lengkap }}</td>
+                    <td>{{ $n->mata_pelajaran->nama_mapel ?? '-' }}</td>
                     <td class="text-center">{{ $n->nilai_tugas ?? '-' }}</td>
                     <td class="text-center">{{ $n->nilai_uts ?? '-' }}</td>
                     <td class="text-center">{{ $n->nilai_uas ?? '-' }}</td>
@@ -273,7 +271,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8" class="text-center">Belum ada data nilai untuk mata pelajaran dan kelas ini.</td>
+                    <td colspan="7" class="text-center">Belum ada data nilai untuk mata pelajaran dan kelas ini.</td>
                 </tr>
             @endforelse
         </tbody>
@@ -288,19 +286,18 @@
             <td>
                 <div class="signature-box">
                     <p>Mengetahui,</p>
-                    <p>Wali Kelas</p>
+                    <p>Orang Tua / Wali</p>
                     <div class="signature-space"></div>
                     <p class="signature-name">&nbsp;</p>
-                    <p>NIP. -</p>
                 </div>
             </td>
             <td>
                 <div class="signature-box signature-right">
                     <p>Jakarta, {{ now()->translatedFormat('d F Y') }}</p>
-                    <p>Guru Mata Pelajaran</p>
+                    <p>Wali Kelas</p>
                     <div class="signature-space"></div>
-                    <p class="signature-name">{{ $jadwal->guru->nama }}</p>
-                    <p>NIP. {{ $jadwal->guru->nip ?? '-' }}</p>
+                    <p class="signature-name">{{ $nama_wali }}</p>
+                    <p>NIP. {{ $nip_wali ?? '-' }}</p>
                 </div>
             </td>
         </tr>

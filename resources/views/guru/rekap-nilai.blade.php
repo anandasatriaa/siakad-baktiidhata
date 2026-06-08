@@ -7,7 +7,7 @@
 <section class="section">
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title">Pilih Mata Pelajaran & Kelas</h4>
+            <h4 class="card-title">Pilih Kelas</h4>
         </div>
         <div class="card-body">
             <form action="{{ route('guru.rekap-nilai') }}" method="GET" id="filterForm" class="row g-3">
@@ -22,53 +22,45 @@
                     </select>
                 </div>
                 <div class="col-md-8">
-                    <label for="subject_class" class="form-label">Pilih Mata Pelajaran & Kelas</label>
-                    <select id="subject_class" class="form-select" onchange="updateFilters(this.value)">
-                        <option value="">-- Pilih Mapel & Kelas --</option>
-                        @foreach ($ampu_mapel as $am)
-                            <option value="{{ $am->mapel_id }}|{{ $am->kelas_id }}" {{ ($selected_mapel == $am->mapel_id && $selected_kelas == $am->kelas_id) ? 'selected' : '' }}>
-                                {{ $am->mata_pelajaran->nama_mapel }} - {{ $am->kelas->nama_kelas }}
+                    <label for="kelas_id" class="form-label">Pilih Kelas</label>
+                    <select name="kelas_id" id="kelas_id" class="form-select" onchange="this.form.submit()">
+                        <option value="">-- Pilih Kelas --</option>
+                        @foreach ($daftar_kelas as $kelas)
+                            @php
+                                $isWali = in_array($kelas->id, $kelas_wali_ids);
+                            @endphp
+                            <option value="{{ $kelas->id }}" {{ $selected_kelas == $kelas->id ? 'selected' : '' }}>
+                                {{ $kelas->nama_kelas }} {{ $isWali ? '(Wali Kelas)' : '' }}
                             </option>
                         @endforeach
                     </select>
-                    <input type="hidden" name="mapel_id" id="mapel_id" value="{{ $selected_mapel }}">
-                    <input type="hidden" name="kelas_id" id="kelas_id" value="{{ $selected_kelas }}">
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-    function updateFilters(value) {
-        if (!value) return;
-        const parts = value.split('|');
-        document.getElementById('mapel_id').value = parts[0];
-        document.getElementById('kelas_id').value = parts[1];
-        document.getElementById('filterForm').submit();
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
-        const btnPdf = document.getElementById('btnExportPdf');
-        const btnExcel = document.getElementById('btnExportExcel');
+        const exportBtns = document.querySelectorAll('.btn-export');
 
-        if (btnPdf) {
-            btnPdf.addEventListener('click', function () {
-                handleDownloadLoading(this, '<i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF');
+        exportBtns.forEach(function(btn) {
+            btn.addEventListener('click', function () {
+                let originalHtml = this.innerHTML;
+                if (this.classList.contains('btn-danger')) {
+                    originalHtml = '<i class="bi bi-file-earmark-pdf"></i>';
+                } else {
+                    originalHtml = '<i class="bi bi-file-earmark-excel"></i>';
+                }
+                handleDownloadLoading(this, originalHtml);
             });
-        }
-
-        if (btnExcel) {
-            btnExcel.addEventListener('click', function () {
-                handleDownloadLoading(this, '<i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel');
-            });
-        }
+        });
 
         function handleDownloadLoading(btn, originalHtml) {
             if (btn.classList.contains('disabled')) return;
 
             btn.classList.add('disabled');
             btn.style.pointerEvents = 'none';
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Loading...';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
 
             // Restore original state after 4 seconds
             setTimeout(function () {
@@ -80,18 +72,10 @@
     });
     </script>
 
-    @if ($selected_mapel && $selected_kelas && $info)
+    @if ($selected_kelas && $info_kelas)
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h4 class="card-title">Rekap Nilai: {{ $info->mata_pelajaran->nama_mapel }} - {{ $info->kelas->nama_kelas }}</h4>
-            <div class="btn-group">
-                <a href="{{ route('guru.export-nilai-pdf', ['mapel_id' => $selected_mapel, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-danger" id="btnExportPdf">
-                    <i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF
-                </a>
-                <a href="{{ route('guru.export-nilai-excel', ['mapel_id' => $selected_mapel, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-success" id="btnExportExcel">
-                    <i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel
-                </a>
-            </div>
+            <h4 class="card-title">Rekap Nilai Kelas: {{ $info_kelas->nama_kelas }}</h4>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -101,26 +85,37 @@
                             <th>No</th>
                             <th>NIS</th>
                             <th>Nama Siswa</th>
-                            <th class="text-center">Tugas</th>
-                            <th class="text-center">UTS</th>
-                            <th class="text-center">UAS</th>
-                            <th class="text-center bg-light">Nilai Akhir</th>
+                            @foreach ($mapels as $mapel)
+                            <th class="text-center">{{ $mapel->nama_mapel }}</th>
+                            @endforeach
+                            @if ($is_wali_kelas)
+                            <th class="text-center bg-light">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($nilais as $n)
+                        @forelse ($nilais_matrix as $row)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $n->siswa->nis }}</td>
-                            <td>{{ $n->siswa->nama_lengkap }}</td>
-                            <td class="text-center">{{ $n->nilai_tugas ?? '-' }}</td>
-                            <td class="text-center">{{ $n->nilai_uts ?? '-' }}</td>
-                            <td class="text-center">{{ $n->nilai_uas ?? '-' }}</td>
-                            <td class="text-center fw-bold">{{ $n->nilai_akhir ?? '-' }}</td>
+                            <td>{{ $row->siswa->nis }}</td>
+                            <td>{{ $row->siswa->nama_lengkap }}</td>
+                            @foreach ($mapels as $mapel)
+                            <td class="text-center">{{ $row->nilai_per_mapel[$mapel->id] ?? '-' }}</td>
+                            @endforeach
+                            @if ($is_wali_kelas)
+                            <td class="text-center">
+                                <a href="{{ route('guru.export-nilai-pdf', ['siswa_id' => $row->siswa->id, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-sm btn-danger btn-export" title="Export PDF">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </a>
+                                <a href="{{ route('guru.export-nilai-excel', ['siswa_id' => $row->siswa->id, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-sm btn-success btn-export" title="Export Excel">
+                                    <i class="bi bi-file-earmark-excel"></i>
+                                </a>
+                            </td>
+                            @endif
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted">Data nilai belum diinput.</td>
+                            <td colspan="{{ 3 + count($mapels) + ($is_wali_kelas ? 1 : 0) }}" class="text-center text-muted">Data nilai belum diinput.</td>
                         </tr>
                         @endforelse
                     </tbody>
