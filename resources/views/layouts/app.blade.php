@@ -114,7 +114,7 @@
                             <p>{{ date('Y') }} &copy; SIAKAD SMK Bakti Idhata</p>
                         </div>
                         <div class="float-end">
-                            <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span> by Yuni</p>
+                            <p>Yunita Kurnaesih</p>
                         </div>
                     </div>
                 </footer>
