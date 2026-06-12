@@ -17,7 +17,8 @@ class AkademikGuruController extends Controller
     private function getGuru()
     {
         $user = Auth::user();
-        if ($user->role == 'super_admin') return null;
+        if ($user->role == 'super_admin')
+            return null;
         return Guru::where('user_id', $user->id)->first();
     }
 
@@ -49,7 +50,7 @@ class AkademikGuruController extends Controller
         $guru = $this->getGuru();
         $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
         $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
-        
+
         $query = JadwalPelajaran::query();
         if ($guru) {
             $query->where('guru_id', $guru->id);
@@ -60,20 +61,47 @@ class AkademikGuruController extends Controller
 
         $jadwals = $query->with('kelas')->get();
         $kelas_ids = $jadwals->pluck('kelas_id')->unique();
-        
+
         // Query melalui AnggotaKelas sesuai periode yang dipilih
-        $siswas = Siswa::whereHas('riwayatKelas', function($q) use ($kelas_ids, $periode_id) {
+        $siswas = Siswa::whereHas('riwayatKelas', function ($q) use ($kelas_ids, $periode_id) {
             $q->whereIn('kelas_id', $kelas_ids);
             if ($periode_id) {
                 $q->where('tahun_akademik_id', $periode_id);
             }
-        })->with(['riwayatKelas' => function($q) use ($periode_id) {
-            if ($periode_id) $q->where('tahun_akademik_id', $periode_id);
-            $q->with('kelas');
-        }])->get()->groupBy(function($s) {
-            // Group berdasarkan nama kelas agar lebih informatif
-            return $s->riwayatKelas->first()->kelas->nama_kelas ?? 'Tanpa Kelas';
-        });
+        })->with([
+                    'riwayatKelas' => function ($q) use ($periode_id) {
+                        if ($periode_id)
+                            $q->where('tahun_akademik_id', $periode_id);
+                        $q->with('kelas');
+                    }
+                ])
+            ->withExists([
+                'keterlambatan as telat_hari_ini' => function ($q) {
+                    $q->whereDate('tanggal', today());
+                }
+            ])
+            ->withSum([
+                'keterlambatan as menit_telat_hari_ini' => function ($q) {
+                    $q->whereDate('tanggal', today());
+                }
+            ], 'lama_menit')
+            ->withCount([
+                'keterlambatan as total_telat_periode' => function ($q) use ($periode_id) {
+                    if ($periode_id) {
+                        $q->where('tahun_akademik_id', $periode_id);
+                    }
+                }
+            ])
+            ->withSum([
+                'keterlambatan as total_menit_telat_periode' => function ($q) use ($periode_id) {
+                    if ($periode_id) {
+                        $q->where('tahun_akademik_id', $periode_id);
+                    }
+                }
+            ], 'lama_menit')
+            ->get()->groupBy(function ($s) {
+                return $s->riwayatKelas->first()->kelas->nama_kelas ?? 'Tanpa Kelas';
+            });
 
         $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
 
@@ -105,7 +133,7 @@ class AkademikGuruController extends Controller
         $daftar_kelas = \App\Models\Kelas::whereIn('id', $all_kelas_ids)->get();
 
         $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
-        
+
         $selected_kelas = $request->kelas_id;
 
         $nilais_matrix = [];
@@ -142,13 +170,13 @@ class AkademikGuruController extends Controller
             foreach ($siswas_kelas as $ak) {
                 $siswa_nilais = $all_nilais->get($ak->siswa_id, collect());
                 $nilai_per_mapel = [];
-                
+
                 foreach ($mapels as $mapel) {
                     $n = $siswa_nilais->firstWhere('mapel_id', $mapel->id);
                     $nilai_per_mapel[$mapel->id] = $n ? $n->nilai_akhir : null;
                 }
 
-                $nilais_matrix[] = (object)[
+                $nilais_matrix[] = (object) [
                     'siswa' => $ak->siswa,
                     'nilai_per_mapel' => $nilai_per_mapel,
                 ];
@@ -198,7 +226,7 @@ class AkademikGuruController extends Controller
                 'website' => 'www.smkbaktiidhata.sch.id',
             ],
         ])->setPaper('a4', 'portrait');
-        
+
         return $pdf->download('Rapor_' . $siswa->nama_lengkap . '_' . $kelas->nama_kelas . '.pdf');
     }
 

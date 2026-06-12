@@ -41,6 +41,8 @@
                             <th>Nama Lengkap</th>
                             <th>Jenis Kelamin</th>
                             <th>No. HP</th>
+                            <th>Telat Hari Ini</th>
+                            <th>Total Telat (Menit)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,6 +53,20 @@
                             <td>{{ $s->nama_lengkap }}</td>
                             <td>{{ $s->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                             <td>{{ $s->no_hp ?? '-' }}</td>
+                            <td>
+                                @if($s->telat_hari_ini)
+                                    <span class="badge bg-danger">Ya ({{ $s->menit_telat_hari_ini }} Menit)</span>
+                                @else
+                                    <span class="badge bg-success">Tidak</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($s->total_telat_periode > 0)
+                                    <span class="badge bg-warning text-dark">{{ $s->total_telat_periode }} Kali ({{ $s->total_menit_telat_periode }} Menit)</span>
+                                @else
+                                    <span class="badge bg-success">0 Kali</span>
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
