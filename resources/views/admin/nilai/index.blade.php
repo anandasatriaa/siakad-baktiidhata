@@ -68,10 +68,11 @@
                             <tr>
                                 <th>NIS</th>
                                 <th>Nama Lengkap</th>
-                                <th style="width: 15%;">Nilai Tugas</th>
-                                <th style="width: 15%;">Nilai UTS</th>
-                                <th style="width: 15%;">Nilai UAS</th>
-                                <th style="width: 15%;">Nilai Akhir</th>
+                                <th style="width: 10%;">Nilai Tugas</th>
+                                <th style="width: 10%;">Nilai UTS</th>
+                                <th style="width: 10%;">Nilai UAS</th>
+                                <th style="width: 10%;">Nilai Akhir</th>
+                                <th style="width: 30%;">Capaian Kompetensi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,10 +92,13 @@
                                 <td>
                                     <input type="text" class="form-control bg-light nilai-akhir" value="{{ $siswa->nilai->nilai_akhir ?? '-' }}" readonly>
                                 </td>
+                                <td>
+                                    <textarea name="nilai[{{ $siswa->id }}][capaian_kompetensi]" class="form-control" rows="2" placeholder="Capaian Kompetensi">{{ $siswa->nilai->capaian_kompetensi ?? '' }}</textarea>
+                                </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center text-muted">Tidak ada siswa di kelas ini.</td>
+                                <td colspan="7" class="text-center text-muted">Tidak ada siswa di kelas ini.</td>
                             </tr>
                             @endforelse
                         </tbody>

@@ -234,44 +234,25 @@
         <thead>
             <tr>
                 <th width="28">No</th>
-                <th>Mata Pelajaran</th>
-                <th width="58">Tugas</th>
-                <th width="58">UTS</th>
-                <th width="58">UAS</th>
-                <th width="70">Nilai Akhir</th>
-                <th width="70">Predikat</th>
+                <th width="150">Mata Pelajaran</th>
+                <th width="60">Nilai Akhir</th>
+                <th>Capaian Kompetensi</th>
             </tr>
         </thead>
         <tbody>
             @forelse($nilais as $n)
                 @php
                     $nilaiAkhir = $n->nilai_akhir;
-                    $predikat = '-';
-
-                    if ($nilaiAkhir !== null) {
-                        if ($nilaiAkhir >= 90) {
-                            $predikat = 'A';
-                        } elseif ($nilaiAkhir >= 80) {
-                            $predikat = 'B';
-                        } elseif ($nilaiAkhir >= 70) {
-                            $predikat = 'C';
-                        } else {
-                            $predikat = 'D';
-                        }
-                    }
                 @endphp
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
                     <td>{{ $n->mata_pelajaran->nama_mapel ?? '-' }}</td>
-                    <td class="text-center">{{ $n->nilai_tugas ?? '-' }}</td>
-                    <td class="text-center">{{ $n->nilai_uts ?? '-' }}</td>
-                    <td class="text-center">{{ $n->nilai_uas ?? '-' }}</td>
                     <td class="text-center score-final">{{ $nilaiAkhir ?? '-' }}</td>
-                    <td class="text-center">{{ $predikat }}</td>
+                    <td style="text-align: justify;">{{ $n->capaian_kompetensi ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="text-center">Belum ada data nilai untuk mata pelajaran dan kelas ini.</td>
+                    <td colspan="4" class="text-center">Belum ada data nilai untuk mata pelajaran dan kelas ini.</td>
                 </tr>
             @endforelse
         </tbody>

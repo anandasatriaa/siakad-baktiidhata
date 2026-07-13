@@ -16,7 +16,8 @@ class Nilai extends Model
         'nilai_tugas', 
         'nilai_uts', 
         'nilai_uas', 
-        'nilai_akhir'
+        'nilai_akhir',
+        'capaian_kompetensi'
     ];
 
     public function siswa() { return $this->belongsTo(Siswa::class); }

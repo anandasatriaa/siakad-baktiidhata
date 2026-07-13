@@ -97,6 +97,7 @@ class NilaiController extends Controller
                     'nilai_uts' => $uts,
                     'nilai_uas' => $uas,
                     'nilai_akhir' => $akhir,
+                    'capaian_kompetensi' => $data['capaian_kompetensi'] ?? null,
                 ]
             );
         }
