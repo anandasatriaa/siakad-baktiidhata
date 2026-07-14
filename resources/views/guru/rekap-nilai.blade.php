@@ -104,6 +104,9 @@
                             @endforeach
                             @if ($is_wali_kelas)
                             <td class="text-center">
+                                <a href="{{ route('guru.input-rapor', ['siswa_id' => $row->siswa->id, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-sm btn-primary" title="Input Catatan Rapor">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
                                 <a href="{{ route('guru.export-nilai-pdf', ['siswa_id' => $row->siswa->id, 'kelas_id' => $selected_kelas, 'periode_id' => $periode_id]) }}" class="btn btn-sm btn-danger btn-export" title="Export PDF">
                                     <i class="bi bi-file-earmark-pdf"></i>
                                 </a>

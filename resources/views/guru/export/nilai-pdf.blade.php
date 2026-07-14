@@ -5,80 +5,54 @@
     <title>Rekap Nilai Siswa</title>
     <style>
         @page {
-            margin: 24px 32px 32px;
+            margin-top: 160px;
+            margin-bottom: 60px;
+            margin-left: 45px;
+            margin-right: 45px;
         }
 
         body {
-            color: #111827;
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 11px;
+            color: #000;
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
             line-height: 1.35;
         }
 
-        .kop {
-            position: relative;
-            min-height: 86px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #111827;
+        header {
+            position: fixed;
+            top: -135px;
+            left: 0px;
+            right: 0px;
+            height: 115px;
+            border-bottom: 2px solid #000;
         }
 
-        .kop::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            bottom: -7px;
-            left: 0;
-            border-bottom: 1px solid #111827;
+        footer {
+            position: fixed; 
+            bottom: -40px; 
+            left: 0px; 
+            right: 0px;
+            height: 25px; 
+            font-size: 10pt;
+            font-style: italic;
+            border-top: 2px solid #000;
+            padding-top: 5px;
         }
-
-        .logo {
-            position: absolute;
-            top: 2px;
-            left: 0;
-            width: 78px;
-            height: 78px;
-            object-fit: contain;
-        }
-
-        .kop-text {
-            padding: 0 20px 0 96px;
-            text-align: center;
-        }
-
-        .yayasan {
-            margin: 0 0 2px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: .4px;
-            text-transform: uppercase;
-        }
-
-        .school-name {
-            margin: 0;
-            font-size: 21px;
-            font-weight: 800;
-            letter-spacing: .8px;
-            text-transform: uppercase;
-        }
-
-        .school-meta {
-            margin: 2px 0 0;
-            font-size: 10px;
+        
+        .page-number:after { 
+            content: counter(page); 
         }
 
         .document-title {
-            margin: 24px 0 14px;
+            margin: 4px 0 14px;
             text-align: center;
         }
 
         .document-title h1 {
             display: inline-block;
             margin: 0;
-            padding-bottom: 3px;
-            border-bottom: 1px solid #111827;
-            font-size: 14px;
-            letter-spacing: .5px;
-            text-transform: uppercase;
+            font-size: 16pt;
+            font-weight: bold;
         }
 
         .identity {
@@ -88,23 +62,27 @@
         }
 
         .identity td {
-            padding: 3px 4px;
+            padding: 2px 0;
+            line-height: 1.5;
             vertical-align: top;
         }
 
         .identity .label {
-            width: 110px;
-            color: #374151;
-            font-weight: 700;
+            width: 15%;
         }
 
         .identity .separator {
-            width: 8px;
+            width: 2%;
             text-align: center;
         }
 
         .identity .value {
-            width: 230px;
+            width: 38%;
+            padding-left: 15px;
+        }
+        
+        .identity td:nth-child(6) {
+            padding-left: 15px;
         }
 
         .data {
@@ -119,14 +97,14 @@
         }
 
         .data th {
-            background: #e5e7eb;
-            font-size: 10px;
+            background: #e4e6eb;
+            font-size: 10pt;
+            font-weight: bold;
             text-align: center;
-            text-transform: uppercase;
         }
 
         .data tbody tr:nth-child(even) td {
-            background: #f9fafb;
+            background: transparent;
         }
 
         .text-center {
@@ -154,17 +132,13 @@
         }
 
         .signature-table td {
-            width: 50%;
+            width: 33.33%;
             vertical-align: top;
         }
 
         .signature-box {
-            width: 220px;
+            width: 100%;
             text-align: center;
-        }
-
-        .signature-right {
-            margin-left: auto;
         }
 
         .signature-space {
@@ -181,54 +155,58 @@
     </style>
 </head>
 <body>
-    <div class="kop">
-        @if (!empty($logoPath) && file_exists($logoPath))
-            <img class="logo" src="{{ $logoPath }}" alt="Logo Sekolah">
-        @endif
+    <footer>
+        <table style="width: 100%">
+            <tr>
+                <td style="text-align: left;">| {{ $kelas->nama_kelas }} | {{ strtoupper($siswa->nama_lengkap) }} | {{ $siswa->nis }}</td>
+                <td style="text-align: right;">Halaman: <span class="page-number"></span></td>
+            </tr>
+        </table>
+    </footer>
 
-        <div class="kop-text">
-            <p class="yayasan">{{ $sekolah['yayasan'] ?? 'Yayasan Pendidikan' }}</p>
-            <h2 class="school-name">{{ $sekolah['nama'] ?? 'Nama Sekolah' }}</h2>
-            <p class="school-meta">{{ $sekolah['alamat'] ?? 'Alamat sekolah' }}</p>
-            <p class="school-meta">
-                {{ $sekolah['kontak'] ?? 'Kontak sekolah' }}
-                @if (!empty($sekolah['website']))
-                    | {{ $sekolah['website'] }}
-                @endif
-            </p>
+    <header>
+        <table class="identity">
+            <tr>
+                <td class="label">Nama</td>
+                <td class="separator">:</td>
+                <td class="value">{{ strtoupper($siswa->nama_lengkap) }}</td>
+                <td class="label" style="width: 15%;">Kelas</td>
+                <td class="separator">:</td>
+                <td style="width: 28%;">{{ strtoupper($kelas->nama_kelas) }}</td>
+            </tr>
+            <tr>
+                <td class="label">NIS / NISN</td>
+                <td class="separator">:</td>
+                <td class="value">{{ $siswa->nis }} / {{ $siswa->nisn ?? '-' }}</td>
+                <td class="label">Fase</td>
+                <td class="separator">:</td>
+                <td>{{ $kelas->tingkat == 10 ? 'E' : 'F' }}</td>
+            </tr>
+            <tr>
+                <td class="label">Nama Sekolah</td>
+                <td class="separator">:</td>
+                <td class="value">{{ strtoupper($sekolah['nama'] ?? 'SMKS BAKTI IDHATA') }}</td>
+                <td class="label">Semester</td>
+                <td class="separator">:</td>
+                <td>{{ ucfirst($tahun_akademik->semester) }}</td>
+            </tr>
+            <tr>
+                <td class="label">Alamat</td>
+                <td class="separator">:</td>
+                <td class="value">{{ strtoupper($sekolah['alamat'] ?? 'JL. MELATI NO. 25 CILANDAK') }}</td>
+                <td class="label">Tahun Pelajaran</td>
+                <td class="separator">:</td>
+                <td>{{ $tahun_akademik->tahun_ajaran }}</td>
+            </tr>
+        </table>
+
+    </header>
+
+    <main>
+
+        <div class="document-title">
+            <h1>LAPORAN HASIL BELAJAR</h1>
         </div>
-    </div>
-
-    <div class="document-title">
-        <h1>Rekapitulasi Nilai Peserta Didik (Rapor)</h1>
-    </div>
-
-    <table class="identity">
-        <tr>
-            <td class="label">Nama Peserta Didik</td>
-            <td class="separator">:</td>
-            <td class="value">{{ $siswa->nama_lengkap }}</td>
-            <td class="label">Kelas</td>
-            <td class="separator">:</td>
-            <td>{{ $kelas->nama_kelas }}</td>
-        </tr>
-        <tr>
-            <td class="label">NIS / NISN</td>
-            <td class="separator">:</td>
-            <td class="value">{{ $siswa->nis }} / {{ $siswa->nisn ?? '-' }}</td>
-            <td class="label">Semester</td>
-            <td class="separator">:</td>
-            <td>{{ $tahun_akademik->semester }}</td>
-        </tr>
-        <tr>
-            <td class="label">Sekolah</td>
-            <td class="separator">:</td>
-            <td class="value">{{ $sekolah['nama'] ?? 'SMK BAKTI IDHATA' }}</td>
-            <td class="label">Tahun Pelajaran</td>
-            <td class="separator">:</td>
-            <td>{{ $tahun_akademik->tahun_ajaran }}</td>
-        </tr>
-    </table>
 
     <table class="data">
         <thead>
@@ -240,6 +218,9 @@
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <td colspan="4" style="font-weight: bold;">A. Kelompok Mata Pelajaran Umum</td>
+            </tr>
             @forelse($nilais as $n)
                 @php
                     $nilaiAkhir = $n->nilai_akhir;
@@ -256,32 +237,174 @@
                 </tr>
             @endforelse
         </tbody>
-    </table>
+    </table>    <br>
 
-    <p class="note">
-        Dokumen ini merupakan rekapitulasi nilai peserta didik berdasarkan data akademik yang tercatat pada sistem.
-    </p>
+    @if($catatan && $catatan->kokurikuler)
+    <table class="data">
+        <thead>
+            <tr>
+                <th style="text-align: center;">Kokurikuler</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: justify; padding: 10px;">{{ $catatan->kokurikuler }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="height: 15px;"></div>
+    @endif
+
+    <div style="page-break-before: always;"></div>
+
+    @if($ekstrakurikuler && count($ekstrakurikuler) > 0)
+    <table class="data">
+        <thead>
+            <tr>
+                <th width="30">No</th>
+                <th width="150">Kegiatan Ekstrakurikuler</th>
+                <th width="80">Predikat</th>
+                <th>Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($ekstrakurikuler as $ekstra)
+            <tr>
+                <td class="text-center">{{ $loop->iteration }}</td>
+                <td>{{ $ekstra->nama_kegiatan }}</td>
+                <td class="text-center">{{ $ekstra->predikat ?? '-' }}</td>
+                <td style="text-align: justify;">{{ $ekstra->keterangan ?? '-' }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <div style="height: 15px;"></div>
+    @endif
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="width: 40%; vertical-align: top; padding-right: 10px;">
+                <table class="data">
+                    <thead>
+                        <tr>
+                            <th colspan="3" style="text-align: center;">Ketidakhadiran</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sakit</td>
+                            <td class="text-center" width="10">:</td>
+                            <td>{{ $sakit ?? 0 }} Hari</td>
+                        </tr>
+                        <tr>
+                            <td>Izin</td>
+                            <td class="text-center" width="10">:</td>
+                            <td>{{ $izin ?? 0 }} Hari</td>
+                        </tr>
+                        <tr>
+                            <td>Tanpa Keterangan</td>
+                            <td class="text-center" width="10">:</td>
+                            <td>{{ $tanpa_keterangan ?? 0 }} Hari</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td style="width: 60%; vertical-align: top; padding-left: 10px;">
+                <table class="data">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;">Catatan Wali Kelas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: justify; padding: 10px; height: 75px; vertical-align: top;">
+                                {{ $catatan->catatan ?? '-' }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div style="height: 15px;"></div>
+
+    <table class="data">
+        <thead>
+            <tr>
+                <th style="text-align: center;">Tanggapan Orang Tua/Wali Murid</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="height: 60px;"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="height: 15px;"></div>
+
+    @if($catatan && $catatan->keputusan && stripos($tahun_akademik->semester, 'genap') !== false)
+    <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 14pt; margin-bottom: 10px;">Keputusan</h3>
+        <table style="width: 100%; border: 1px solid #000; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 10px;">
+                    Berdasarkan pencapaian hasil belajar dari semester ganjil dan genap, siswa ditetapkan:<br><br>
+                    <strong>
+                        @php
+                            $nextTingkat = $kelas->tingkat + 1;
+                            $angkaTerbilang = [
+                                11 => 'sebelas',
+                                12 => 'dua belas',
+                                13 => 'tiga belas'
+                            ];
+                            $terbilang = $angkaTerbilang[$nextTingkat] ?? '';
+                            $naikText = "Naik ke kelas {$nextTingkat} " . ($terbilang ? "({$terbilang})" : "");
+                        @endphp
+                        @if($catatan->keputusan == 'Naik ke kelas')
+                            {{ $naikText }} / <strike>Tinggal Kelas</strike>
+                        @elseif($catatan->keputusan == 'Tinggal Kelas')
+                            <strike>{{ $naikText }}</strike> / Tinggal Kelas
+                        @else
+                            {{ $naikText }} / Tinggal Kelas
+                        @endif
+                    </strong>
+                </td>
+            </tr>
+        </table>
+    </div>
+    @endif
 
     <table class="signature-table">
         <tr>
             <td>
                 <div class="signature-box">
-                    <p>Mengetahui,</p>
-                    <p>Orang Tua / Wali</p>
+                    <p style="margin: 0 0 4px;">Mengetahui,</p>
+                    <p style="margin: 0 0 4px;">Orang Tua/Wali,</p>
                     <div class="signature-space"></div>
-                    <p class="signature-name">&nbsp;</p>
+                    <p class="signature-name" style="margin-bottom: 2px; border-bottom: 1px solid #000;">........................</p>
                 </div>
             </td>
             <td>
-                <div class="signature-box signature-right">
-                    <p>Jakarta, {{ now()->translatedFormat('d F Y') }}</p>
-                    <p>Wali Kelas</p>
+                <div class="signature-box">
+                    <p style="margin: 0 0 4px;">Mengetahui</p>
+                    <p style="margin: 0 0 4px;">Kepala Sekolah,</p>
                     <div class="signature-space"></div>
-                    <p class="signature-name">{{ $nama_wali }}</p>
-                    <p>NIP. {{ $nip_wali ?? '-' }}</p>
+                    <p class="signature-name" style="margin-bottom: 2px; border-bottom: 1px solid #000;">{{ $nama_kepsek }}</p>
+                    <p style="margin:0;">NIP. {{ $nip_kepsek }}</p>
+                </div>
+            </td>
+            <td>
+                <div class="signature-box">
+                    <p style="margin: 0 0 4px;">Jakarta, {{ now()->translatedFormat('d F Y') }}</p>
+                    <p style="margin: 0 0 4px;">Wali Kelas,</p>
+                    <div class="signature-space"></div>
+                    <p class="signature-name" style="margin-bottom: 2px; border-bottom: 1px solid #000;">{{ $nama_wali }}</p>
+                    <p style="margin:0;">NIP. {{ $nip_wali ?? '-' }}</p>
                 </div>
             </td>
         </tr>
     </table>
+    </main>
 </body>
 </html>

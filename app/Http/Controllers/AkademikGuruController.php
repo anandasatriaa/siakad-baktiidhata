@@ -6,6 +6,8 @@ use App\Models\JadwalPelajaran;
 use App\Models\Nilai;
 use App\Models\Siswa;
 use App\Models\Guru;
+use App\Models\CatatanWaliKelas;
+use App\Models\EkstrakurikulerSiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -210,18 +212,51 @@ class AkademikGuruController extends Controller
         $nama_wali = $guru_wali ? $guru_wali->nama : Auth::user()->name;
         $nip_wali = $guru_wali ? $guru_wali->nip : '-';
 
+        $catatan = CatatanWaliKelas::where([
+            'siswa_id' => $siswa_id,
+            'kelas_id' => $kelas_id,
+            'tahun_akademik_id' => $periode_id
+        ])->first();
+
+        $ekstrakurikuler = EkstrakurikulerSiswa::where([
+            'siswa_id' => $siswa_id,
+            'kelas_id' => $kelas_id,
+            'tahun_akademik_id' => $periode_id
+        ])->get();
+
+        $absensi = \App\Models\AbsensiHarian::where('siswa_id', $siswa_id)
+            ->whereHas('jadwal', function($q) use ($periode_id) {
+                $q->where('tahun_akademik_id', $periode_id);
+            })
+            ->get();
+            
+        $sakit = $absensi->where('status', 'Sakit')->count();
+        $izin = $absensi->where('status', 'Izin')->count();
+        $tanpa_keterangan = $absensi->where('status', 'Alpa')->count();
+
+        $kepsek = \App\Models\Guru::where('jenis_ptk', 'Kepala Sekolah')->first();
+        $nama_kepsek = $kepsek ? $kepsek->nama : 'Nurman, M.Pd.';
+        $nip_kepsek = $kepsek ? $kepsek->nip : '-';
+
         $pdf = Pdf::loadView('guru.export.nilai-pdf', [
             'siswa' => $siswa,
             'kelas' => $kelas,
             'tahun_akademik' => $tahun_akademik,
             'nilais' => $nilais,
+            'catatan' => $catatan,
+            'ekstrakurikuler' => $ekstrakurikuler,
+            'sakit' => $sakit,
+            'izin' => $izin,
+            'tanpa_keterangan' => $tanpa_keterangan,
             'nama_wali' => $nama_wali,
             'nip_wali' => $nip_wali,
+            'nama_kepsek' => $nama_kepsek,
+            'nip_kepsek' => $nip_kepsek,
             'logoPath' => public_path('assets/images/logo/logo-smkbaktiidhata.png'),
             'sekolah' => [
                 'nama' => 'SMK BAKTI IDHATA',
                 'yayasan' => 'YAYASAN PENDIDIKAN BAKTI IDHATA',
-                'alamat' => 'Jl. Melati No. 25, Cilandak Barat, Jakarta Selatan',
+                'alamat' => 'Jl. Melati No. 25 Cilandak',
                 'kontak' => 'Telp. (021) 7500000 | Email: info@smkbaktiidhata.sch.id',
                 'website' => 'www.smkbaktiidhata.sch.id',
             ],
@@ -244,5 +279,84 @@ class AkademikGuruController extends Controller
         $siswa = Siswa::findOrFail($siswa_id);
 
         return Excel::download(new NilaiExport($siswa_id, $kelas_id, $periode_id), 'Rapor_' . $siswa->nama_lengkap . '_' . $kelas->nama_kelas . '.xlsx');
+    }
+
+    public function inputRapor(Request $request, $siswa_id, $kelas_id, $periode_id)
+    {
+        $kelas = \App\Models\Kelas::findOrFail($kelas_id);
+        if ($kelas->wali_kelas_id != Auth::id()) {
+            abort(403, 'Anda bukan wali kelas untuk kelas ini.');
+        }
+
+        $siswa = Siswa::findOrFail($siswa_id);
+        $tahun_akademik = \App\Models\TahunAkademik::findOrFail($periode_id);
+
+        $catatan = CatatanWaliKelas::where([
+            'siswa_id' => $siswa_id,
+            'kelas_id' => $kelas_id,
+            'tahun_akademik_id' => $periode_id
+        ])->first();
+
+        $ekstrakurikuler = EkstrakurikulerSiswa::where([
+            'siswa_id' => $siswa_id,
+            'kelas_id' => $kelas_id,
+            'tahun_akademik_id' => $periode_id
+        ])->get();
+
+        return view('guru.input-rapor', compact('siswa', 'kelas', 'tahun_akademik', 'catatan', 'ekstrakurikuler'));
+    }
+
+    public function storeRapor(Request $request, $siswa_id, $kelas_id, $periode_id)
+    {
+        $kelas = \App\Models\Kelas::findOrFail($kelas_id);
+        if ($kelas->wali_kelas_id != Auth::id()) {
+            abort(403, 'Anda bukan wali kelas untuk kelas ini.');
+        }
+
+        $request->validate([
+            'kokurikuler' => 'nullable|string',
+            'catatan' => 'nullable|string',
+            'keputusan' => 'nullable|in:Naik ke kelas,Tinggal Kelas',
+            'ekstrakurikuler.*.nama_kegiatan' => 'required_with:ekstrakurikuler.*.predikat,ekstrakurikuler.*.keterangan|string',
+            'ekstrakurikuler.*.predikat' => 'nullable|string',
+            'ekstrakurikuler.*.keterangan' => 'nullable|string',
+        ]);
+
+        CatatanWaliKelas::updateOrCreate(
+            [
+                'siswa_id' => $siswa_id,
+                'kelas_id' => $kelas_id,
+                'tahun_akademik_id' => $periode_id
+            ],
+            [
+                'kokurikuler' => $request->kokurikuler,
+                'catatan' => $request->catatan,
+                'keputusan' => $request->keputusan
+            ]
+        );
+
+        // Handle Ekstrakurikuler (Delete old and recreate)
+        EkstrakurikulerSiswa::where([
+            'siswa_id' => $siswa_id,
+            'kelas_id' => $kelas_id,
+            'tahun_akademik_id' => $periode_id
+        ])->delete();
+
+        if ($request->has('ekstrakurikuler') && is_array($request->ekstrakurikuler)) {
+            foreach ($request->ekstrakurikuler as $ekstra) {
+                if (!empty($ekstra['nama_kegiatan'])) {
+                    EkstrakurikulerSiswa::create([
+                        'siswa_id' => $siswa_id,
+                        'kelas_id' => $kelas_id,
+                        'tahun_akademik_id' => $periode_id,
+                        'nama_kegiatan' => $ekstra['nama_kegiatan'],
+                        'predikat' => $ekstra['predikat'] ?? null,
+                        'keterangan' => $ekstra['keterangan'] ?? null,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('guru.rekap-nilai', ['kelas_id' => $kelas_id, 'periode_id' => $periode_id])->with('success', 'Data rapor siswa berhasil disimpan.');
     }
 }
