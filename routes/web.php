@@ -33,7 +33,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Master Data
+    Route::get('guru/export-pdf', [GuruController::class, 'exportPdf'])->name('guru.export-pdf');
+    Route::get('guru/export-excel', [GuruController::class, 'exportExcel'])->name('guru.export-excel');
     Route::resource('guru', GuruController::class);
+    Route::get('siswa/export-pdf', [SiswaController::class, 'exportPdf'])->name('siswa.export-pdf');
+    Route::get('siswa/export-excel', [SiswaController::class, 'exportExcel'])->name('siswa.export-excel');
     Route::resource('siswa', SiswaController::class);
     Route::resource('kelas', KelasController::class);
     Route::resource('mapel', MataPelajaranController::class);
@@ -74,6 +78,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Laporan
     Route::get('/laporan-absensi-keterlambatan', [LaporanController::class, 'absensiKeterlambatan'])->name('laporan.absensi-keterlambatan');
+    Route::get('/laporan-absensi-keterlambatan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
+    Route::get('/laporan-absensi-keterlambatan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.export-excel');
 
 });
 

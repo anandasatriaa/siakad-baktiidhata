@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Guru;
 use App\Models\User;
+use App\Models\TahunAkademik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Exports\GuruExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GuruController extends Controller
 {
@@ -110,5 +114,29 @@ class GuruController extends Controller
         });
 
         return redirect()->route('guru.index')->with('success', 'Data Guru berhasil dihapus');
+    }
+
+    public function exportPdf()
+    {
+        $gurus = Guru::latest()->get();
+        $tahun_akademik = TahunAkademik::where('is_active', true)->first();
+
+        $pdf = Pdf::loadView('admin.guru.export.export-pdf', [
+            'gurus' => $gurus,
+            'tahun_akademik' => $tahun_akademik,
+            'sekolah' => [
+                'nama' => 'SMK BAKTI IDHATA',
+                'alamat' => 'Jl. Melati No. 25 Cilandak',
+                'kontak' => 'Telp. (021) 7500000 | Email: info@smkbaktiidhata.sch.id',
+                'website' => 'www.smkbaktiidhata.sch.id',
+            ],
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('Data_Guru_' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new GuruExport, 'Data_Guru_' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }

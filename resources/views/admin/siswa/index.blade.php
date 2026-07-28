@@ -8,9 +8,17 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title">Daftar Siswa</h4>
-                <a href="{{ route('siswa.create') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle icon-mid"></i> Tambah Siswa
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('siswa.export-pdf') }}" class="btn btn-danger btn-export">
+                        <i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF
+                    </a>
+                    <a href="{{ route('siswa.export-excel') }}" class="btn btn-success btn-export">
+                        <i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel
+                    </a>
+                    <a href="{{ route('siswa.create') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle icon-mid"></i> Tambah Siswa
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -61,5 +69,37 @@
                 </div>
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const exportBtns = document.querySelectorAll('.btn-export');
+
+                exportBtns.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        let originalHtml = this.innerHTML;
+                        if (this.classList.contains('btn-danger')) {
+                            originalHtml = '<i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF';
+                        } else {
+                            originalHtml = '<i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel';
+                        }
+                        handleDownloadLoading(this, originalHtml);
+                    });
+                });
+
+                function handleDownloadLoading(btn, originalHtml) {
+                    if (btn.classList.contains('disabled')) return;
+
+                    btn.classList.add('disabled');
+                    btn.style.pointerEvents = 'none';
+                    btn.innerHTML =
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+                    setTimeout(function() {
+                        btn.classList.remove('disabled');
+                        btn.style.pointerEvents = 'auto';
+                        btn.innerHTML = originalHtml;
+                    }, 4000);
+                }
+            });
+        </script>
     </section>
 @endsection

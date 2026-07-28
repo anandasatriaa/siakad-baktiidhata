@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Exports\SiswaExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SiswaController extends Controller
 {
@@ -148,6 +151,30 @@ class SiswaController extends Controller
         });
 
         return redirect()->route('siswa.index')->with('success', 'Data Siswa berhasil dihapus');
+    }
+
+    public function exportPdf()
+    {
+        $siswas = Siswa::with(['kelas.kelas'])->latest()->get();
+        $tahun_akademik = $this->tahunAkademikAktif();
+
+        $pdf = Pdf::loadView('admin.siswa.export.export-pdf', [
+            'siswas' => $siswas,
+            'tahun_akademik' => $tahun_akademik,
+            'sekolah' => [
+                'nama' => 'SMK BAKTI IDHATA',
+                'alamat' => 'Jl. Melati No. 25 Cilandak',
+                'kontak' => 'Telp. (021) 7500000 | Email: info@smkbaktiidhata.sch.id',
+                'website' => 'www.smkbaktiidhata.sch.id',
+            ],
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('Data_Siswa_' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new SiswaExport, 'Data_Siswa_' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 
     private function tahunAkademikAktif()

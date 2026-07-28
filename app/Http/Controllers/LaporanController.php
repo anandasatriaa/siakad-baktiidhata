@@ -7,18 +7,51 @@ use App\Models\Keterlambatan;
 use App\Models\Siswa;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use App\Exports\LaporanAbsensiExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
     public function absensiKeterlambatan(Request $request)
     {
+        $data = $this->getRekapData($request);
+        return view('admin.laporan.index', $data);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $data = $this->getRekapData($request);
+        $data['sekolah'] = [
+            'nama' => 'SMK BAKTI IDHATA',
+            'alamat' => 'Jl. Melati No. 25 Cilandak',
+            'kontak' => 'Telp. (021) 7500000 | Email: info@smkbaktiidhata.sch.id',
+            'website' => 'www.smkbaktiidhata.sch.id',
+        ];
+
+        $pdf = Pdf::loadView('admin.laporan.export.export-pdf', $data)
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->download('Laporan_Absensi_Keterlambatan_' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $data = $this->getRekapData($request);
+        return Excel::download(new LaporanAbsensiExport($data), 'Laporan_Absensi_Keterlambatan_' . date('Y-m-d_H-i-s') . '.xlsx');
+    }
+
+    private function getRekapData(Request $request)
+    {
         $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();
         $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
+        $tahun_akademik = \App\Models\TahunAkademik::find($periode_id) ?? $active_periode;
         
         $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
         $kelas = Kelas::where('tahun_akademik_id', $periode_id)->get();
         
         $selected_kelas = $request->kelas_id;
+        $info_kelas = $selected_kelas ? Kelas::find($selected_kelas) : null;
         $tanggal_mulai = $request->tanggal_mulai ?? date('Y-m-01'); // Awal bulan
         $tanggal_selesai = $request->tanggal_selesai ?? date('Y-m-d');
 
@@ -60,6 +93,16 @@ class LaporanController extends Controller
             $siswas[] = $siswa;
         }
 
-        return view('admin.laporan.index', compact('kelas', 'siswas', 'selected_kelas', 'tanggal_mulai', 'tanggal_selesai', 'periodes', 'periode_id'));
+        return compact(
+            'kelas',
+            'siswas',
+            'selected_kelas',
+            'info_kelas',
+            'tanggal_mulai',
+            'tanggal_selesai',
+            'periodes',
+            'periode_id',
+            'tahun_akademik'
+        );
     }
 }
