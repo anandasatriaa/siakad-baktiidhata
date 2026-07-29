@@ -131,8 +131,14 @@ class AkademikGuruController extends Controller
             ->pluck('id')
             ->toArray();
 
-        $all_kelas_ids = array_unique(array_merge($kelas_mengajar_ids, $kelas_wali_ids));
-        $daftar_kelas = \App\Models\Kelas::whereIn('id', $all_kelas_ids)->get();
+        if (in_array(Auth::user()->role, ['admin', 'super_admin', 'kepala_sekolah'])) {
+            $daftar_kelas = \App\Models\Kelas::when($periode_id, function ($q) use ($periode_id) {
+                return $q->where('tahun_akademik_id', $periode_id);
+            })->get();
+        } else {
+            $all_kelas_ids = array_unique(array_merge($kelas_mengajar_ids, $kelas_wali_ids));
+            $daftar_kelas = \App\Models\Kelas::whereIn('id', $all_kelas_ids)->get();
+        }
 
         $periodes = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
 
@@ -145,7 +151,7 @@ class AkademikGuruController extends Controller
 
         if ($selected_kelas) {
             $info_kelas = \App\Models\Kelas::find($selected_kelas);
-            if ($info_kelas && $info_kelas->wali_kelas_id == Auth::id() && $info_kelas->tahun_akademik_id == $periode_id) {
+            if ($info_kelas && ($info_kelas->wali_kelas_id == Auth::id() || Auth::user()->role == 'super_admin') && $info_kelas->tahun_akademik_id == $periode_id) {
                 $is_wali_kelas = true;
             }
 
@@ -195,7 +201,7 @@ class AkademikGuruController extends Controller
         $periode_id = $request->periode_id;
 
         $kelas = \App\Models\Kelas::findOrFail($kelas_id);
-        if ($kelas->wali_kelas_id != Auth::id()) {
+        if ($kelas->wali_kelas_id != Auth::id() && Auth::user()->role != 'super_admin') {
             abort(403, 'Anda bukan wali kelas untuk kelas ini.');
         }
 
@@ -208,8 +214,8 @@ class AkademikGuruController extends Controller
             ->where('tahun_akademik_id', $periode_id)
             ->get();
 
-        $guru_wali = Guru::where('user_id', Auth::id())->first();
-        $nama_wali = $guru_wali ? $guru_wali->nama : Auth::user()->name;
+        $guru_wali = Guru::where('user_id', $kelas->wali_kelas_id)->first();
+        $nama_wali = $guru_wali ? $guru_wali->nama : ($kelas->wali_kelas->name ?? Auth::user()->name);
         $nip_wali = $guru_wali ? $guru_wali->nip : '-';
 
         $catatan = CatatanWaliKelas::where([
@@ -272,7 +278,7 @@ class AkademikGuruController extends Controller
         $periode_id = $request->periode_id;
 
         $kelas = \App\Models\Kelas::findOrFail($kelas_id);
-        if ($kelas->wali_kelas_id != Auth::id()) {
+        if ($kelas->wali_kelas_id != Auth::id() && Auth::user()->role != 'super_admin') {
             abort(403, 'Anda bukan wali kelas untuk kelas ini.');
         }
 
@@ -284,7 +290,7 @@ class AkademikGuruController extends Controller
     public function inputRapor(Request $request, $siswa_id, $kelas_id, $periode_id)
     {
         $kelas = \App\Models\Kelas::findOrFail($kelas_id);
-        if ($kelas->wali_kelas_id != Auth::id()) {
+        if ($kelas->wali_kelas_id != Auth::id() && Auth::user()->role != 'super_admin') {
             abort(403, 'Anda bukan wali kelas untuk kelas ini.');
         }
 
@@ -309,7 +315,7 @@ class AkademikGuruController extends Controller
     public function storeRapor(Request $request, $siswa_id, $kelas_id, $periode_id)
     {
         $kelas = \App\Models\Kelas::findOrFail($kelas_id);
-        if ($kelas->wali_kelas_id != Auth::id()) {
+        if ($kelas->wali_kelas_id != Auth::id() && Auth::user()->role != 'super_admin') {
             abort(403, 'Anda bukan wali kelas untuk kelas ini.');
         }
 
