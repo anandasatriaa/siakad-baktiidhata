@@ -80,6 +80,22 @@ class JadwalController extends Controller
                         'Jam selesai harus lebih besar dari jam mulai pada baris ' . ($index + 1) . '.'
                     );
                 }
+
+                $exists = \App\Models\JadwalPelajaran::where('kelas_id', $request->kelas_id)
+                    ->where('tahun_akademik_id', $request->tahun_akademik_id)
+                    ->where('hari', $item['hari'])
+                    ->where('jam_mulai', $item['jam_mulai'])
+                    ->where('jam_selesai', $item['jam_selesai'])
+                    ->where('mapel_id', $item['mapel_id'])
+                    ->where('guru_id', $item['guru_id'])
+                    ->exists();
+
+                if ($exists) {
+                    $validator->errors()->add(
+                        "schedules.$index.hari",
+                        'Jadwal pada baris ' . ($index + 1) . ' sudah ada (duplikat jadwal).'
+                    );
+                }
             }
         });
 
@@ -114,7 +130,7 @@ class JadwalController extends Controller
 
     public function update(Request $request, JadwalPelajaran $jadwal)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'kelas_id' => 'required|exists:kelas,id',
             'mapel_id' => 'required|exists:mata_pelajaran,id',
             'guru_id' => 'required|exists:guru,id',
@@ -123,6 +139,24 @@ class JadwalController extends Controller
             'jam_mulai' => 'required',
             'jam_selesai' => 'required|after:jam_mulai',
         ]);
+
+        $validator->after(function ($validator) use ($request, $jadwal) {
+            $exists = \App\Models\JadwalPelajaran::where('kelas_id', $request->kelas_id)
+                ->where('tahun_akademik_id', $request->tahun_akademik_id)
+                ->where('hari', $request->hari)
+                ->where('jam_mulai', $request->jam_mulai)
+                ->where('jam_selesai', $request->jam_selesai)
+                ->where('mapel_id', $request->mapel_id)
+                ->where('guru_id', $request->guru_id)
+                ->where('id', '!=', $jadwal->id)
+                ->exists();
+
+            if ($exists) {
+                $validator->errors()->add('hari', 'Jadwal pelajaran ini sudah ada (duplikat).');
+            }
+        });
+
+        $validator->validate();
 
         $jadwal->update($request->all());
 
