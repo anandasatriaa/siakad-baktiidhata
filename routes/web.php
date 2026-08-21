@@ -42,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('siswa/import-excel', [SiswaController::class, 'importExcel'])->name('siswa.import-excel');
     Route::resource('siswa', SiswaController::class);
     Route::resource('kelas', KelasController::class);
+    Route::get('mapel/template-excel', [MataPelajaranController::class, 'downloadTemplate'])->name('mapel.template-excel');
+    Route::post('mapel/import-excel', [MataPelajaranController::class, 'importExcel'])->name('mapel.import-excel');
     Route::resource('mapel', MataPelajaranController::class);
     Route::resource('jadwal', JadwalController::class);
     Route::resource('pengumuman', PengumumanController::class);

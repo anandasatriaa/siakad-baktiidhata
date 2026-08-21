@@ -8,9 +8,14 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Daftar Mata Pelajaran</h4>
-            <a href="{{ route('mapel.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle icon-mid"></i> Tambah Mapel
-            </a>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#importModal">
+                    <i class="bi bi-upload icon-mid"></i> Import Excel
+                </button>
+                <a href="{{ route('mapel.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle icon-mid"></i> Tambah Mapel
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -51,6 +56,37 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Import Excel -->
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('mapel.import-excel') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importModalLabel">Import Data Mata Pelajaran</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <p class="text-muted">Gunakan template berikut untuk memasukkan data mata pelajaran. Data yang sudah ada dengan Kode Mapel yang sama akan diabaikan.</p>
+                            <a href="{{ route('mapel.template-excel') }}" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-download"></i> Download Template Excel
+                            </a>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="file_excel">Pilih File Excel (.xlsx, .xls)</label>
+                            <input type="file" id="file_excel" name="file_excel" class="form-control" accept=".xlsx, .xls, .csv" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Mulai Import</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
