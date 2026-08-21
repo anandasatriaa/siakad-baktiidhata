@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class TahunAkademikController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy', 'activate']);
+        $this->middleware('role:admin,kepala_sekolah')->only(['index', 'show']);
+    }
+
     public function index()
     {
         $tahun_akademiks = TahunAkademik::orderBy('tahun_ajaran', 'desc')->orderBy('semester', 'desc')->get();

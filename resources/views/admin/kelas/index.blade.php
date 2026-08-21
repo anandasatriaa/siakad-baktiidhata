@@ -21,9 +21,11 @@
                     </select>
                 </form>
             </div>
+            @if (Auth::user()->role !== 'kepala_sekolah')
             <a href="{{ route('kelas.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle icon-mid"></i> Tambah Kelas
             </a>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -35,7 +37,9 @@
                             <th>Tingkat</th>
                             <th>Tahun Akademik</th>
                             <th>Wali Kelas</th>
+                            @if (Auth::user()->role !== 'kepala_sekolah')
                             <th>Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -46,6 +50,7 @@
                             <td>{{ $k->tingkat }}</td>
                             <td>{{ $k->tahunAkademik->tahun_ajaran }} - {{ $k->tahunAkademik->semester }}</td>
                             <td>{{ $k->wali_kelas->name ?? '-' }}</td>
+                            @if (Auth::user()->role !== 'kepala_sekolah')
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('kelas.edit', $k->id) }}" class="btn btn-sm btn-warning">
@@ -60,10 +65,11 @@
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted">Belum ada data kelas.</td>
+                            <td colspan="{{ Auth::user()->role !== 'kepala_sekolah' ? 6 : 5 }}" class="text-center text-muted">Belum ada data kelas.</td>
                         </tr>
                         @endforelse
                     </tbody>

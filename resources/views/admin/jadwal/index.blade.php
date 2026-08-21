@@ -56,9 +56,11 @@
                     </select>
                 </form>
             </div>
+            @if (Auth::user()->role !== 'kepala_sekolah')
             <a href="{{ route('jadwal.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle icon-mid"></i> Tambah Jadwal
             </a>
+            @endif
         </div>
         <div class="card-body">
                 @php
@@ -120,7 +122,9 @@
                                                                         <th>Mata Pelajaran</th>
                                                                         <th>Guru</th>
                                                                         <th>Semester</th>
+                                                                        @if (Auth::user()->role !== 'kepala_sekolah')
                                                                         <th width="120" class="text-center pe-4">Aksi</th>
+                                                                        @endif
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -157,6 +161,7 @@
                                                                                 <div class="small text-muted">
                                                                                     {{ $j->tahun_akademik->tahun_ajaran }}</div>
                                                                             </td>
+                                                                            @if (Auth::user()->role !== 'kepala_sekolah')
                                                                             <td class="pe-4 text-center">
                                                                                 <div class="d-flex justify-content-center gap-2">
                                                                                     <a href="{{ route('jadwal.edit', $j->id) }}"
@@ -177,6 +182,7 @@
                                                                                     </form>
                                                                                 </div>
                                                                             </td>
+                                                                            @endif
                                                                         </tr>
                                                                     @endforeach
                                                                 </tbody>

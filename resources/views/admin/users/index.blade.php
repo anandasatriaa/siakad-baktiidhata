@@ -8,9 +8,11 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Daftar Akun Pengguna</h4>
+            @if (Auth::user()->role !== 'kepala_sekolah')
             <a href="{{ route('users.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus"></i> Tambah Akun
             </a>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -21,7 +23,9 @@
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Role</th>
+                            @if (Auth::user()->role !== 'kepala_sekolah')
                             <th>Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -41,6 +45,7 @@
                                     <span class="badge bg-info">Kepala Sekolah</span>
                                 @endif
                             </td>
+                            @if (Auth::user()->role !== 'kepala_sekolah')
                             <td>
                                 <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning">
                                     <i class="bi bi-pencil"></i>
@@ -55,6 +60,7 @@
                                 </form>
                                 @endif
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

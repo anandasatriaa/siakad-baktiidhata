@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class PengumumanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy']);
+        $this->middleware('role:admin,kepala_sekolah')->only(['index', 'show']);
+    }
+
     public function index(Request $request)
     {
         $active_periode = \App\Models\TahunAkademik::where('is_active', true)->first();

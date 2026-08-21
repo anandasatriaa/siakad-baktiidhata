@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy']);
+        $this->middleware('role:admin,kepala_sekolah')->only(['index', 'show']);
+    }
+
     public function index()
     {
         $users = User::whereNotIn('role', ['siswa', 'guru'])->latest()->get();

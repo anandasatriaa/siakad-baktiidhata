@@ -14,6 +14,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class GuruController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy']);
+        $this->middleware('role:admin,kepala_sekolah')->only(['index', 'show', 'exportPdf', 'exportExcel']);
+    }
+
     public function index()
     {
         $gurus = Guru::latest()->get();

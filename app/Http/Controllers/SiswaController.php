@@ -19,6 +19,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SiswaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy', 'importExcel']);
+        $this->middleware('role:admin,kepala_sekolah')->only(['index', 'show', 'exportPdf', 'exportExcel', 'downloadTemplate']);
+    }
+
     public function index()
     {
         // Eager load kelas (AnggotaKelas) dan kelas asli di dalamnya

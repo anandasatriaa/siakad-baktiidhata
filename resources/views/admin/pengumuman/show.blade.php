@@ -26,7 +26,7 @@
                 {!! nl2br(e($pengumuman->konten)) !!}
             </div>
         </div>
-        @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
+        @if (in_array(Auth::user()->role, ['super_admin', 'admin']))
         <div class="card-footer d-flex justify-content-end gap-2">
             <a href="{{ route('pengumuman.edit', $pengumuman->id) }}" class="btn btn-warning">
                 <i class="bi bi-pencil-fill icon-mid"></i> Edit

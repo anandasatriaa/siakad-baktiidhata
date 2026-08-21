@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class KelasController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy']);
+        $this->middleware('role:admin,kepala_sekolah')->only(['index', 'show']);
+    }
+
     public function index(Request $request)
     {
         $active_periode = TahunAkademik::where('is_active', true)->first();

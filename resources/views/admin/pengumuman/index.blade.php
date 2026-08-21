@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Daftar Pengumuman</h4>
-            @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
+            @if (in_array(Auth::user()->role, ['super_admin', 'admin']))
             <a href="{{ route('pengumuman.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle icon-mid"></i> Tambah Pengumuman
             </a>
@@ -37,7 +37,7 @@
                             <th>Judul</th>
                             <th>Penulis</th>
                             <th>Detail</th>
-                            @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
+                            @if (in_array(Auth::user()->role, ['super_admin', 'admin']))
                             <th>Aksi</th>
                             @endif
                         </tr>
@@ -54,7 +54,7 @@
                                     <i class="bi bi-eye-fill icon-mid"></i> Lihat
                                 </a>
                             </td>
-                                @if (in_array(Auth::user()->role, ['super_admin', 'admin', 'kepala_sekolah']))
+                                @if (in_array(Auth::user()->role, ['super_admin', 'admin']))
                                 <td>
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('pengumuman.edit', $p->id) }}" class="btn btn-sm btn-warning">
@@ -73,7 +73,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted">Belum ada pengumuman.</td>
+                            <td colspan="{{ in_array(Auth::user()->role, ['super_admin', 'admin']) ? 6 : 5 }}" class="text-center text-muted">Belum ada pengumuman.</td>
                         </tr>
                         @endforelse
                     </tbody>

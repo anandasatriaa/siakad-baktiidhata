@@ -15,12 +15,14 @@
                     <a href="{{ route('siswa.export-excel') }}" class="btn btn-success btn-export">
                         <i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel
                     </a>
+                    @if (Auth::user()->role !== 'kepala_sekolah')
                     <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#importModal">
                         <i class="bi bi-upload icon-mid"></i> Import Excel
                     </button>
                     <a href="{{ route('siswa.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle icon-mid"></i> Tambah Siswa
                     </a>
+                    @endif
                 </div>
             </div>
             <div class="card-body">
@@ -33,7 +35,9 @@
                                 <th>Kelas</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Akun Login</th>
+                                @if (Auth::user()->role !== 'kepala_sekolah')
                                 <th>Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -49,6 +53,7 @@
                                         <div><small>Email: {{ $siswa->user->email ?? '-' }}</small></div>
                                         <div><small>Pass: {{ $siswa->user->password_plain ?? '-' }}</small></div>
                                     </td>
+                                    @if (Auth::user()->role !== 'kepala_sekolah')
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-sm btn-warning">
@@ -64,10 +69,11 @@
                                             </form>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted">Belum ada data siswa.</td>
+                                    <td colspan="{{ Auth::user()->role !== 'kepala_sekolah' ? 6 : 5 }}" class="text-center text-muted">Belum ada data siswa.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -80,6 +86,7 @@
             });
         </script>
 
+        @if (Auth::user()->role !== 'kepala_sekolah')
         <!-- Modal Import Excel -->
         <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -113,5 +120,6 @@
                 </div>
             </div>
         </div>
+        @endif
     </section>
 @endsection

@@ -8,9 +8,11 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Daftar Tahun Akademik</h4>
+            @if (Auth::user()->role !== 'kepala_sekolah')
             <a href="{{ route('tahun-akademik.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle icon-mid"></i> Tambah Tahun Akademik
             </a>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -21,7 +23,9 @@
                             <th>Tahun Ajaran</th>
                             <th>Semester</th>
                             <th>Status</th>
+                            @if (Auth::user()->role !== 'kepala_sekolah')
                             <th>Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -35,8 +39,8 @@
                                     <form action="{{ route('tahun-akademik.activate', $ta->id) }}" method="POST">
                                         @csrf
                                         <input class="form-check-input" type="checkbox" role="switch" id="switch-{{ $ta->id }}" 
-                                            {{ $ta->is_active ? 'checked disabled' : '' }} 
-                                            onchange="this.form.submit()" style="cursor: {{ $ta->is_active ? 'default' : 'pointer' }}">
+                                            {{ $ta->is_active || Auth::user()->role === 'kepala_sekolah' ? 'checked disabled' : '' }} 
+                                            @if(Auth::user()->role !== 'kepala_sekolah') onchange="this.form.submit()" @endif style="cursor: {{ $ta->is_active || Auth::user()->role === 'kepala_sekolah' ? 'default' : 'pointer' }}">
                                         <label class="form-check-label ms-2" for="switch-{{ $ta->id }}">
                                             @if ($ta->is_active)
                                                 <span class="badge bg-success">Aktif</span>
@@ -47,6 +51,7 @@
                                     </form>
                                 </div>
                             </td>
+                            @if (Auth::user()->role !== 'kepala_sekolah')
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('tahun-akademik.edit', $ta->id) }}" class="btn btn-sm btn-warning">
@@ -61,10 +66,11 @@
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="text-center text-muted">Belum ada data tahun akademik.</td>
+                            <td colspan="{{ Auth::user()->role !== 'kepala_sekolah' ? 5 : 4 }}" class="text-center text-muted">Belum ada data tahun akademik.</td>
                         </tr>
                         @endforelse
                     </tbody>

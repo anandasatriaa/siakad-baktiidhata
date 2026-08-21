@@ -9,12 +9,14 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4 class="card-title">Daftar Mata Pelajaran</h4>
             <div class="d-flex gap-2">
+                @if (Auth::user()->role !== 'kepala_sekolah')
                 <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#importModal">
                     <i class="bi bi-upload icon-mid"></i> Import Excel
                 </button>
                 <a href="{{ route('mapel.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle icon-mid"></i> Tambah Mapel
                 </a>
+                @endif
             </div>
         </div>
         <div class="card-body">
@@ -25,7 +27,9 @@
                             <th>No</th>
                             <th>Kode Mapel</th>
                             <th>Nama Mata Pelajaran</th>
+                            @if (Auth::user()->role !== 'kepala_sekolah')
                             <th>Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -34,6 +38,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td><span class="badge bg-light-primary">{{ $m->kode_mapel }}</span></td>
                             <td>{{ $m->nama_mapel }}</td>
+                            @if (Auth::user()->role !== 'kepala_sekolah')
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('mapel.edit', $m->id) }}" class="btn btn-sm btn-warning">
@@ -48,10 +53,11 @@
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted">Belum ada data mata pelajaran.</td>
+                            <td colspan="{{ Auth::user()->role !== 'kepala_sekolah' ? 4 : 3 }}" class="text-center text-muted">Belum ada data mata pelajaran.</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -60,6 +66,7 @@
         </div>
     </div>
 
+    @if (Auth::user()->role !== 'kepala_sekolah')
     <!-- Modal Import Excel -->
     <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -90,5 +97,6 @@
             </div>
         </div>
     </div>
+    @endif
 </section>
 @endsection

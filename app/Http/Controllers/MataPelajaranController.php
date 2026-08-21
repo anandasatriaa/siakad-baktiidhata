@@ -10,6 +10,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class MataPelajaranController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy', 'importExcel']);
+        $this->middleware('role:admin,kepala_sekolah')->only(['index', 'show', 'downloadTemplate']);
+    }
+
     public function index()
     {
         $mapels = MataPelajaran::all();
