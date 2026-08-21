@@ -60,4 +60,39 @@
         </div>
     </div>
 </section>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const assignedWali = @json($assignedWaliKelas);
+        const tahunAkademikSelect = document.getElementById('tahun_akademik_id');
+        const waliSelect = document.getElementById('wali_kelas_id');
+
+        function updateWaliOptions() {
+            const selectedTahun = tahunAkademikSelect.value;
+            const usedIds = assignedWali[selectedTahun] || [];
+
+            Array.from(waliSelect.options).forEach(option => {
+                if (option.value === "") return;
+                
+                const valId = parseInt(option.value);
+                if (usedIds.includes(valId)) {
+                    option.disabled = true;
+                    option.style.color = '#adb5bd';
+                    option.style.backgroundColor = '#e9ecef';
+                } else {
+                    option.disabled = false;
+                    option.style.color = '';
+                    option.style.backgroundColor = '';
+                }
+            });
+        }
+
+        if(tahunAkademikSelect) {
+            tahunAkademikSelect.addEventListener('change', updateWaliOptions);
+            updateWaliOptions(); // Call on load
+        }
+    });
+</script>
+@endpush
 @endsection

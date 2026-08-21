@@ -38,8 +38,16 @@
                             <label for="wali_kelas_id">Wali Kelas</label>
                             <select id="wali_kelas_id" class="form-select @error('wali_kelas_id') is-invalid @enderror" name="wali_kelas_id">
                                 <option value="">-- Pilih Wali Kelas --</option>
+                                @php
+                                    $assignedWali = $assignedWaliKelas[$kelas->tahun_akademik_id] ?? [];
+                                @endphp
                                 @foreach ($gurus as $g)
-                                    <option value="{{ $g->id }}" {{ old('wali_kelas_id', $kelas->wali_kelas_id) == $g->id ? 'selected' : '' }}>{{ $g->name }}</option>
+                                    @php
+                                        $isDisabled = in_array($g->id, $assignedWali);
+                                    @endphp
+                                    <option value="{{ $g->id }}" {{ old('wali_kelas_id', $kelas->wali_kelas_id) == $g->id ? 'selected' : '' }} {{ $isDisabled ? 'disabled' : '' }} {!! $isDisabled ? 'style="color: #adb5bd; background-color: #e9ecef;"' : '' !!}>
+                                        {{ $g->name }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('wali_kelas_id') <div class="invalid-feedback">{{ $message }}</div> @enderror

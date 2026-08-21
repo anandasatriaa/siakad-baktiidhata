@@ -35,8 +35,15 @@ class KelasController extends Controller
         }
 
         $gurus = User::where('role', 'guru')->get();
+        
+        $assignedWaliKelas = Kelas::whereNotNull('wali_kelas_id')
+            ->get()
+            ->groupBy('tahun_akademik_id')
+            ->map(function($group) {
+                return $group->pluck('wali_kelas_id')->toArray();
+            });
             
-        return view('admin.kelas.create', compact('gurus', 'active_periode', 'periodes'));
+        return view('admin.kelas.create', compact('gurus', 'active_periode', 'periodes', 'assignedWaliKelas'));
     }
 
     public function store(Request $request)
@@ -60,14 +67,17 @@ class KelasController extends Controller
 
     public function edit(Kelas $kela)
     {
-        $gurus = User::where('role', 'guru')
-            ->where(function ($query) use ($kela) {
-                $query->whereDoesntHave('wali_kelas', function ($q) use ($kela) {
-                    $q->where('tahun_akademik_id', $kela->tahun_akademik_id);
-                })->orWhere('id', $kela->wali_kelas_id);
-            })
-            ->get();
-        return view('admin.kelas.edit', ['kelas' => $kela, 'gurus' => $gurus]);
+        $gurus = User::where('role', 'guru')->get();
+            
+        $assignedWaliKelas = Kelas::whereNotNull('wali_kelas_id')
+            ->where('id', '!=', $kela->id) // kecualikan kelas ini sendiri agar walinya tetap bisa dipilih (tidak disabled) jika tidak diubah
+            ->get()
+            ->groupBy('tahun_akademik_id')
+            ->map(function($group) {
+                return $group->pluck('wali_kelas_id')->toArray();
+            });
+
+        return view('admin.kelas.edit', ['kelas' => $kela, 'gurus' => $gurus, 'assignedWaliKelas' => $assignedWaliKelas]);
     }
 
     public function update(Request $request, Kelas $kela)
