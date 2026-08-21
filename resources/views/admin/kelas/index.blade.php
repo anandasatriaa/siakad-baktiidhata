@@ -11,6 +11,7 @@
                 <h4 class="card-title mb-0">Daftar Kelas</h4>
                 <form action="{{ route('kelas.index') }}" method="GET" id="filterForm" class="d-flex align-items-center gap-2">
                     <select name="periode_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="all" {{ $periode_id === 'all' ? 'selected' : '' }}>-- Semua Periode --</option>
                         @foreach($periodes as $p)
                             <option value="{{ $p->id }}" {{ $periode_id == $p->id ? 'selected' : '' }}>
                                 {{ $p->tahun_ajaran }} - {{ $p->semester }}

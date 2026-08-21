@@ -12,10 +12,15 @@ class KelasController extends Controller
     public function index(Request $request)
     {
         $active_periode = TahunAkademik::where('is_active', true)->first();
-        $periode_id = $request->periode_id ?? ($active_periode->id ?? null);
+        
+        if ($request->has('periode_id')) {
+            $periode_id = $request->periode_id;
+        } else {
+            $periode_id = $active_periode->id ?? null;
+        }
         
         $kelas = Kelas::with(['wali_kelas', 'tahunAkademik'])
-            ->when($periode_id, function($q) use ($periode_id) {
+            ->when($periode_id && $periode_id !== 'all', function($q) use ($periode_id) {
                 return $q->where('tahun_akademik_id', $periode_id);
             })
             ->get();
