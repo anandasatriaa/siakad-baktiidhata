@@ -125,33 +125,6 @@
             });
         });
 
-        const exportBtns = document.querySelectorAll('.btn-export');
-        exportBtns.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                let originalHtml = this.innerHTML;
-                if (this.classList.contains('btn-danger')) {
-                    originalHtml = '<i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF';
-                } else {
-                    originalHtml = '<i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel';
-                }
-                handleDownloadLoading(this, originalHtml);
-            });
-        });
-
-        function handleDownloadLoading(btn, originalHtml) {
-            if (btn.classList.contains('disabled')) return;
-
-            btn.classList.add('disabled');
-            btn.style.pointerEvents = 'none';
-            btn.innerHTML =
-                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
-
-            setTimeout(function() {
-                btn.classList.remove('disabled');
-                btn.style.pointerEvents = 'auto';
-                btn.innerHTML = originalHtml;
-            }, 4000);
-        }
     });
 </script>
 @endpush

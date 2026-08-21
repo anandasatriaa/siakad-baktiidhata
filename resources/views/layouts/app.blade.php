@@ -157,6 +157,62 @@
             if (table) {
                 new simpleDatatables.DataTable(table);
             }
+
+            // Global Export Button Handler using Fetch API to track completion
+            document.querySelectorAll('.btn-export').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (this.classList.contains('disabled')) return;
+
+                    let originalHtml = this.innerHTML;
+                    if (this.classList.contains('btn-danger')) {
+                        originalHtml = '<i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF';
+                    } else if (this.classList.contains('btn-success')) {
+                        originalHtml = '<i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel';
+                    }
+
+                    this.classList.add('disabled');
+                    this.style.pointerEvents = 'none';
+                    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+                    fetch(this.href)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            
+                            let filename = this.classList.contains('btn-danger') ? 'export.pdf' : 'export.xlsx';
+                            const disposition = response.headers.get('content-disposition');
+                            if (disposition && disposition.indexOf('attachment') !== -1) {
+                                const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                                if (matches != null && matches[1]) {
+                                    filename = matches[1].replace(/['"]/g, '');
+                                }
+                            }
+                            return response.blob().then(blob => ({ blob, filename }));
+                        })
+                        .then(({ blob, filename }) => {
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.style.display = 'none';
+                            a.href = url;
+                            a.download = filename;
+                            document.body.appendChild(a);
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                            
+                            this.classList.remove('disabled');
+                            this.style.pointerEvents = 'auto';
+                            this.innerHTML = originalHtml;
+                        })
+                        .catch(error => {
+                            console.error('Error downloading file:', error);
+                            alert('Terjadi kesalahan saat mengunduh file.');
+                            this.classList.remove('disabled');
+                            this.style.pointerEvents = 'auto';
+                            this.innerHTML = originalHtml;
+                        });
+                });
+            });
         });
 
     </script>

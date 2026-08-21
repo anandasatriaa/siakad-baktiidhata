@@ -39,39 +39,6 @@
         </div>
     </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const exportBtns = document.querySelectorAll('.btn-export');
-
-        exportBtns.forEach(function(btn) {
-            btn.addEventListener('click', function () {
-                let originalHtml = this.innerHTML;
-                if (this.classList.contains('btn-danger')) {
-                    originalHtml = '<i class="bi bi-file-earmark-pdf"></i>';
-                } else {
-                    originalHtml = '<i class="bi bi-file-earmark-excel"></i>';
-                }
-                handleDownloadLoading(this, originalHtml);
-            });
-        });
-
-        function handleDownloadLoading(btn, originalHtml) {
-            if (btn.classList.contains('disabled')) return;
-
-            btn.classList.add('disabled');
-            btn.style.pointerEvents = 'none';
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-
-            // Restore original state after 4 seconds
-            setTimeout(function () {
-                btn.classList.remove('disabled');
-                btn.style.pointerEvents = 'auto';
-                btn.innerHTML = originalHtml;
-            }, 4000);
-        }
-    });
-    </script>
-
     @if ($selected_kelas && $info_kelas)
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
