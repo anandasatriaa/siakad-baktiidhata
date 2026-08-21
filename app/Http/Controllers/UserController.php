@@ -40,6 +40,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'password_plain' => $request->password,
             'role' => $request->role,
         ]);
 
@@ -78,6 +79,7 @@ class UserController extends Controller
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
+            $data['password_plain'] = $request->password;
         }
 
         $user->update($data);

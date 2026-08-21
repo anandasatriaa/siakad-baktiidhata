@@ -29,7 +29,7 @@
                                 <th>Nama Lengkap</th>
                                 <th>Kelas</th>
                                 <th>Jenis Kelamin</th>
-                                <th>No. HP</th>
+                                <th>Akun Login</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -42,7 +42,10 @@
                                     <td>{{ $siswa->nama_lengkap }}</td>
                                     <td>{{ $siswa->kelas->kelas->nama_kelas ?? '-' }}</td>
                                     <td>{{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                                    <td>{{ $siswa->no_hp ?? '-' }}</td>
+                                    <td>
+                                        <div><small>Email: {{ $siswa->user->email ?? '-' }}</small></div>
+                                        <div><small>Pass: {{ $siswa->user->password_plain ?? '-' }}</small></div>
+                                    </td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('siswa.edit', $siswa->id) }}" class="btn btn-sm btn-warning">

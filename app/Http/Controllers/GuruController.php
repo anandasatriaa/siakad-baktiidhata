@@ -50,6 +50,7 @@ class GuruController extends Controller
                 'name' => $fullName,
                 'email' => $emailPrefix . '@smkbaktiidhata.sch.id',
                 'password' => Hash::make('smkbaktiidhata'),
+                'password_plain' => 'smkbaktiidhata',
                 'role' => 'guru',
             ]);
 
@@ -87,16 +88,17 @@ class GuruController extends Controller
             $emailPrefix = $request->nik;
             $fullName = trim(($request->gelar_depan ? $request->gelar_depan . ' ' : '') . $request->nama . ($request->gelar_belakang ? ', ' . $request->gelar_belakang : ''));
             
-            $guru->user->update([
+            $userData = [
                 'name' => $fullName,
                 'email' => $emailPrefix . '@smkbaktiidhata.sch.id',
-            ]);
+            ];
 
             if ($request->filled('password')) {
-                $guru->user->update([
-                    'password' => Hash::make($request->password),
-                ]);
+                $userData['password'] = Hash::make($request->password);
+                $userData['password_plain'] = $request->password;
             }
+
+            $guru->user->update($userData);
 
             $guru->update($request->all());
         });

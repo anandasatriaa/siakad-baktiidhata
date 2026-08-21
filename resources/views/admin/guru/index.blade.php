@@ -29,6 +29,7 @@
                             <th>Nama Lengkap</th>
                             <th>Jenis Kelamin</th>
                             <th>Jenis PTK</th>
+                            <th>Akun Login</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -42,6 +43,10 @@
                             <td>{{ $guru->gelar_depan ? $guru->gelar_depan . ' ' : '' }}{{ $guru->nama }}{{ $guru->gelar_belakang ? ', ' . $guru->gelar_belakang : '' }}</td>
                             <td>{{ $guru->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                             <td>{{ $guru->jenis_ptk ?? '-' }}</td>
+                            <td>
+                                <div><small>Email: {{ $guru->user->email ?? '-' }}</small></div>
+                                <div><small>Pass: {{ $guru->user->password_plain ?? '-' }}</small></div>
+                            </td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('guru.edit', $guru->id) }}" class="btn btn-sm btn-warning">
@@ -59,7 +64,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="text-center text-muted">Belum ada data guru.</td>
+                            <td colspan="6" class="text-center text-muted">Belum ada data guru.</td>
                         </tr>
                         @endforelse
                     </tbody>

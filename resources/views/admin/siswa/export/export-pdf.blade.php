@@ -175,6 +175,8 @@
                     <th>Nama Lengkap</th>
                     <th width="70">Kelas</th>
                     <th width="90">Jenis Kelamin</th>
+                    <th>Email</th>
+                    <th>Password</th>
                     <th width="95">No. HP</th>
                     <th>Alamat</th>
                 </tr>
@@ -187,12 +189,14 @@
                         <td>{{ $siswa->nama_lengkap }}</td>
                         <td class="text-center">{{ $siswa->kelas->kelas->nama_kelas ?? '-' }}</td>
                         <td class="text-center">{{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                        <td>{{ $siswa->user->email ?? '-' }}</td>
+                        <td>{{ $siswa->user->password_plain ?? '-' }}</td>
                         <td class="text-center">{{ $siswa->no_hp ?? '-' }}</td>
                         <td>{{ $siswa->alamat ?? '-' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center">Belum ada data siswa.</td>
+                        <td colspan="9" class="text-center">Belum ada data siswa.</td>
                     </tr>
                 @endforelse
             </tbody>

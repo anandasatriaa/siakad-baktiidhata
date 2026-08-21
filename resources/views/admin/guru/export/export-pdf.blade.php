@@ -175,6 +175,8 @@
                     <th width="100">NUPTK</th>
                     <th>Nama Lengkap</th>
                     <th width="90">Jenis Kelamin</th>
+                    <th>Email</th>
+                    <th>Password</th>
                     <th width="110">Jenis PTK</th>
                     <th>Status Kepegawaian</th>
                 </tr>
@@ -187,12 +189,14 @@
                         <td class="text-center">{{ $guru->nuptk ?? '-' }}</td>
                         <td>{{ trim(($guru->gelar_depan ? $guru->gelar_depan . ' ' : '') . $guru->nama . ($guru->gelar_belakang ? ', ' . $guru->gelar_belakang : '')) }}</td>
                         <td class="text-center">{{ $guru->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                        <td>{{ $guru->user->email ?? '-' }}</td>
+                        <td>{{ $guru->user->password_plain ?? '-' }}</td>
                         <td class="text-center">{{ $guru->jenis_ptk ?? '-' }}</td>
                         <td class="text-center">{{ $guru->status_kepegawaian ?? '-' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center">Belum ada data guru.</td>
+                        <td colspan="9" class="text-center">Belum ada data guru.</td>
                     </tr>
                 @endforelse
             </tbody>

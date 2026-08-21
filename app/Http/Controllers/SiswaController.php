@@ -57,6 +57,7 @@ class SiswaController extends Controller
                 'name' => $request->nama_lengkap,
                 'email' => $request->nis . '@smkbaktiidhata.sch.id',
                 'password' => Hash::make('smkbaktiidhata'),
+                'password_plain' => 'smkbaktiidhata',
                 'role' => 'siswa',
             ]);
 
@@ -109,16 +110,17 @@ class SiswaController extends Controller
         ]);
 
         DB::transaction(function () use ($request, $siswa, $tahunAkademik) {
-            $siswa->user->update([
+            $userData = [
                 'name' => $request->nama_lengkap,
                 'email' => $request->nis . '@smkbaktiidhata.sch.id',
-            ]);
+            ];
 
             if ($request->filled('password')) {
-                $siswa->user->update([
-                    'password' => Hash::make($request->password),
-                ]);
+                $userData['password'] = Hash::make($request->password);
+                $userData['password_plain'] = $request->password;
             }
+
+            $siswa->user->update($userData);
 
             $siswa->update([
                 'nis' => $request->nis,
