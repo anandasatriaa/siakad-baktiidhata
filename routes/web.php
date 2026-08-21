@@ -38,6 +38,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('guru', GuruController::class);
     Route::get('siswa/export-pdf', [SiswaController::class, 'exportPdf'])->name('siswa.export-pdf');
     Route::get('siswa/export-excel', [SiswaController::class, 'exportExcel'])->name('siswa.export-excel');
+    Route::get('siswa/template-excel', [SiswaController::class, 'downloadTemplate'])->name('siswa.template-excel');
+    Route::post('siswa/import-excel', [SiswaController::class, 'importExcel'])->name('siswa.import-excel');
     Route::resource('siswa', SiswaController::class);
     Route::resource('kelas', KelasController::class);
     Route::resource('mapel', MataPelajaranController::class);

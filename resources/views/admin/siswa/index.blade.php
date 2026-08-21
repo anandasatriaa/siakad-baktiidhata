@@ -15,6 +15,9 @@
                     <a href="{{ route('siswa.export-excel') }}" class="btn btn-success btn-export">
                         <i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel
                     </a>
+                    <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#importModal">
+                        <i class="bi bi-upload icon-mid"></i> Import Excel
+                    </button>
                     <a href="{{ route('siswa.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle icon-mid"></i> Tambah Siswa
                     </a>
@@ -76,5 +79,39 @@
             document.addEventListener('DOMContentLoaded', function() {
             });
         </script>
+
+        <!-- Modal Import Excel -->
+        <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('siswa.import-excel') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="importModalLabel">Import Data Siswa</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <p class="text-muted">Gunakan template berikut untuk memasukkan data siswa. Data yang sudah ada dengan NIS yang sama akan diabaikan.</p>
+                                <a href="{{ route('siswa.template-excel') }}" class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-download"></i> Download Template Excel
+                                </a>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="file_excel">Pilih File Excel (.xlsx, .xls)</label>
+                                <input type="file" id="file_excel" name="file_excel" class="form-control" accept=".xlsx, .xls, .csv" required>
+                            </div>
+                            <div class="alert alert-warning py-2 mb-0">
+                                <i class="bi bi-exclamation-triangle"></i> Semua akun (User) untuk siswa yang diimpor akan otomatis dibuat dengan password: <strong>smkbaktiidhata</strong>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Mulai Import</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection

@@ -7,11 +7,13 @@ use App\Models\User;
 use App\Models\Kelas;
 use App\Models\AnggotaKelas;
 use App\Models\TahunAkademik;
+use App\Exports\SiswaExport;
+use App\Exports\TemplateSiswaExport;
+use App\Imports\SiswaImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use App\Exports\SiswaExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -177,6 +179,25 @@ class SiswaController extends Controller
     public function exportExcel()
     {
         return Excel::download(new SiswaExport, 'Data_Siswa_' . date('Y-m-d_H-i-s') . '.xlsx');
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new TemplateSiswaExport, 'Template_Import_Siswa.xlsx');
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:5120',
+        ]);
+
+        try {
+            Excel::import(new SiswaImport, $request->file('file_excel'));
+            return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil diimpor.');
+        } catch (\Exception $e) {
+            return redirect()->route('siswa.index')->with('error', 'Gagal mengimpor data: ' . $e->getMessage());
+        }
     }
 
     private function tahunAkademikAktif()
