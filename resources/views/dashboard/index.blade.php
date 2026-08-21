@@ -126,6 +126,119 @@
                         </div>
                     @endif
 
+                    <!-- LAPORAN ABSENSI & KETERLAMBATAN FOR GURU PIKET -->
+                    @if (isset($piket_stats))
+                        <div class="col-12 mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Laporan Absensi & Keterlambatan</h4>
+                                </div>
+                                <div class="card-body">
+                                    <form action="{{ route('dashboard') }}" method="GET" id="laporan-filter-form">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="periode_id">Tahun Akademik</label>
+                                                    <select name="periode_id" id="periode_id" class="form-select auto-submit-filter">
+                                                        @foreach ($periodes_piket as $p)
+                                                            <option value="{{ $p->id }}" {{ $periode_id_piket == $p->id ? 'selected' : '' }}>
+                                                                {{ $p->tahun_ajaran }} - {{ $p->semester }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="kelas_id">Kelas</label>
+                                                    <select name="kelas_id" id="kelas_id" class="form-select auto-submit-filter">
+                                                        <option value="">Semua Kelas</option>
+                                                        @foreach ($kelas_piket as $k)
+                                                            <option value="{{ $k->id }}" {{ $selected_kelas_piket == $k->id ? 'selected' : '' }}>
+                                                                {{ $k->nama_kelas }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="tanggal_mulai">Dari Tanggal</label>
+                                                    <input type="date" name="tanggal_mulai" id="tanggal_mulai" class="form-control auto-submit-filter" value="{{ $tanggal_mulai_piket }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="tanggal_selesai">Sampai Tanggal</label>
+                                                    <input type="date" name="tanggal_selesai" id="tanggal_selesai" class="form-control auto-submit-filter" value="{{ $tanggal_selesai_piket }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title">Hasil Rekapitulasi</h4>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('laporan.export-pdf', request()->all()) }}" class="btn btn-danger btn-export">
+                                            <i class="bi bi-file-earmark-pdf icon-mid"></i> Export PDF
+                                        </a>
+                                        <a href="{{ route('laporan.export-excel', request()->all()) }}" class="btn btn-success btn-export">
+                                            <i class="bi bi-file-earmark-excel icon-mid"></i> Export Excel
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Siswa</th>
+                                                    <th>Kelas</th>
+                                                    <th class="text-center bg-light-success">H</th>
+                                                    <th class="text-center bg-light-warning">S</th>
+                                                    <th class="text-center bg-light-info">I</th>
+                                                    <th class="text-center bg-light-danger">A</th>
+                                                    <th class="text-center">Terlambat</th>
+                                                    <th class="text-center">Total Menit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($siswas_piket as $siswa)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $siswa->nama_lengkap }}</td>
+                                                    <td>{{ $siswa->nama_kelas }}</td>
+                                                    <td class="text-center">{{ $siswa->rekap_absensi['Hadir'] }}</td>
+                                                    <td class="text-center">{{ $siswa->rekap_absensi['Sakit'] }}</td>
+                                                    <td class="text-center">{{ $siswa->rekap_absensi['Izin'] }}</td>
+                                                    <td class="text-center text-danger font-bold">{{ $siswa->rekap_absensi['Alpa'] }}</td>
+                                                    <td class="text-center">
+                                                        <span class="badge {{ $siswa->total_keterlambatan > 0 ? 'bg-danger' : 'bg-success' }}">
+                                                            {{ $siswa->total_keterlambatan }}x
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-center">{{ $siswa->total_menit }} Menit</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="mt-4 p-3 bg-light rounded">
+                                        <small class="text-muted">
+                                            <strong>Keterangan:</strong><br>
+                                            H: Hadir | S: Sakit | I: Izin | A: Alpa (Tanpa Keterangan)
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- STATS FOR SISWA -->
                     @if (isset($siswa_stats))
                         <div class="col-12 mb-2">
@@ -340,4 +453,18 @@
             </div>
         </section>
     </div>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('laporan-filter-form');
+        if (form) {
+            document.querySelectorAll('.auto-submit-filter').forEach(function (field) {
+                field.addEventListener('change', function () {
+                    form.submit();
+                });
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

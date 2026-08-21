@@ -15,7 +15,7 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $activePeriod = \App\Models\TahunAkademik::where('is_active', true)->first();
@@ -113,6 +113,58 @@ class DashboardController extends Controller
                 'absensi_today' => AbsensiHarian::whereDate('tanggal', Carbon::today())->count(),
                 'terlambat_today' => Keterlambatan::whereDate('tanggal', Carbon::today())->count(),
             ];
+
+            // Tambahkan rekap data khusus untuk laporan di dashboard
+            $periode_id_piket = $request->periode_id ?? ($activePeriod->id ?? null);
+            $tahun_akademik_piket = \App\Models\TahunAkademik::find($periode_id_piket) ?? $activePeriod;
+            
+            $data['periodes_piket'] = \App\Models\TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
+            $data['kelas_piket'] = Kelas::where('tahun_akademik_id', $periode_id_piket)->get();
+            
+            $selected_kelas_piket = $request->kelas_id;
+            $data['info_kelas_piket'] = $selected_kelas_piket ? Kelas::find($selected_kelas_piket) : null;
+            $data['tanggal_mulai_piket'] = $request->tanggal_mulai ?? date('Y-m-01');
+            $data['tanggal_selesai_piket'] = $request->tanggal_selesai ?? date('Y-m-d');
+
+            $query_anggota = \App\Models\AnggotaKelas::with(['siswa', 'kelas'])
+                ->where('tahun_akademik_id', $periode_id_piket);
+
+            if ($selected_kelas_piket) {
+                $query_anggota->where('kelas_id', $selected_kelas_piket);
+            }
+
+            $anggota_kelas = $query_anggota->get();
+            $siswas_piket = [];
+
+            foreach ($anggota_kelas as $ak) {
+                $siswa_piket = $ak->siswa;
+                $siswa_piket->nama_kelas = $ak->kelas->nama_kelas;
+
+                $absensi = AbsensiHarian::where('siswa_id', $siswa_piket->id)
+                    ->whereBetween('tanggal', [$data['tanggal_mulai_piket'], $data['tanggal_selesai_piket']])
+                    ->get();
+                
+                $siswa_piket->rekap_absensi = [
+                    'Hadir' => $absensi->where('status', 'Hadir')->count(),
+                    'Sakit' => $absensi->where('status', 'Sakit')->count(),
+                    'Izin' => $absensi->where('status', 'Izin')->count(),
+                    'Alpa' => $absensi->where('status', 'Alpa')->count(),
+                ];
+
+                $keterlambatan = Keterlambatan::where('siswa_id', $siswa_piket->id)
+                    ->whereBetween('tanggal', [$data['tanggal_mulai_piket'], $data['tanggal_selesai_piket']])
+                    ->get();
+                
+                $siswa_piket->total_keterlambatan = $keterlambatan->count();
+                $siswa_piket->total_menit = $keterlambatan->sum('lama_menit');
+                
+                $siswas_piket[] = $siswa_piket;
+            }
+
+            $data['siswas_piket'] = $siswas_piket;
+            $data['selected_kelas_piket'] = $selected_kelas_piket;
+            $data['periode_id_piket'] = $periode_id_piket;
+            $data['tahun_akademik_piket'] = $tahun_akademik_piket;
         }
 
         return view('dashboard.index', $data);
