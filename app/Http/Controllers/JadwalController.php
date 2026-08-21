@@ -13,11 +13,22 @@ use Illuminate\Support\Facades\Validator;
 
 class JadwalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $active_periode = TahunAkademik::where('is_active', true)->first();
+        
+        if ($request->has('periode_id') && $request->periode_id !== '') {
+            $periode_id = $request->periode_id;
+        } else {
+            $periode_id = $active_periode->id ?? null;
+        }
+        
         $daysOrder = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
         $jadwals = JadwalPelajaran::with(['kelas', 'mata_pelajaran', 'guru', 'tahun_akademik'])
+            ->when($periode_id, function($q) use ($periode_id) {
+                return $q->where('tahun_akademik_id', $periode_id);
+            })
             ->get()
             ->sortBy(function ($item) use ($daysOrder) {
                 $dayIndex = array_search($item->hari, $daysOrder);
@@ -28,13 +39,15 @@ class JadwalController extends Controller
                 ];
             })
             ->groupBy('kelas.nama_kelas');
+            
+        $periodes = TahunAkademik::orderBy('tahun_ajaran', 'desc')->get();
 
-        return view('admin.jadwal.index', compact('jadwals'));
+        return view('admin.jadwal.index', compact('jadwals', 'periodes', 'periode_id', 'active_periode'));
     }
 
     public function create()
     {
-        $kelas = Kelas::all();
+        $kelas = Kelas::with('tahunAkademik')->get();
         $mapels = MataPelajaran::all();
         $gurus = Guru::all();
         $tahun_akademiks = TahunAkademik::all();
@@ -91,7 +104,7 @@ class JadwalController extends Controller
 
     public function edit(JadwalPelajaran $jadwal)
     {
-        $kelas = Kelas::all();
+        $kelas = Kelas::with('tahunAkademik')->get();
         $mapels = MataPelajaran::all();
         $gurus = Guru::all();
         $tahun_akademiks = TahunAkademik::all();

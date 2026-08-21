@@ -207,7 +207,7 @@ class SiswaController extends Controller
 
     private function kelasPeriodeAktif()
     {
-        return Kelas::whereHas('tahunAkademik', function ($query) {
+        return Kelas::with('tahunAkademik')->whereHas('tahunAkademik', function ($query) {
             $query->where('is_active', true);
         })->orderBy('nama_kelas')->get();
     }

@@ -64,16 +64,6 @@
                             @error('guru_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         <div class="form-group mb-3">
-                            <label for="kelas_id">Kelas</label>
-                            <select id="kelas_id" class="form-select @error('kelas_id') is-invalid @enderror" name="kelas_id" required>
-                                <option value="">-- Pilih Kelas --</option>
-                                @foreach ($kelas as $k)
-                                    <option value="{{ $k->id }}" {{ old('kelas_id', $jadwal->kelas_id) == $k->id ? 'selected' : '' }}>{{ $k->nama_kelas }}</option>
-                                @endforeach
-                            </select>
-                            @error('kelas_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-                        <div class="form-group mb-3">
                             <label for="tahun_akademik_id">Tahun Akademik / Semester</label>
                             <select id="tahun_akademik_id" class="form-select @error('tahun_akademik_id') is-invalid @enderror" name="tahun_akademik_id" required>
                                 <option value="">-- Pilih Tahun Akademik --</option>
@@ -85,6 +75,18 @@
                             </select>
                             @error('tahun_akademik_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
+                        <div class="form-group mb-3">
+                            <label for="kelas_id">Kelas</label>
+                            <select id="kelas_id" class="form-select @error('kelas_id') is-invalid @enderror" name="kelas_id" required>
+                                <option value="">-- Pilih Kelas --</option>
+                                @foreach ($kelas as $k)
+                                    <option value="{{ $k->id }}" {{ old('kelas_id', $jadwal->kelas_id) == $k->id ? 'selected' : '' }}>
+                                        {{ $k->nama_kelas }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('kelas_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mt-4">
@@ -95,4 +97,42 @@
         </div>
     </div>
 </section>
+
+@push('scripts')
+<script>
+    // Dynamic Kelas Dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+        const tahunAkademikSelect = document.getElementById('tahun_akademik_id');
+        const kelasSelect = document.getElementById('kelas_id');
+        const kelasData = @json($kelas);
+
+        function updateKelasOptions() {
+            const taId = parseInt(tahunAkademikSelect.value);
+            const oldVal = kelasSelect.value || "{{ old('kelas_id', $jadwal->kelas_id) }}";
+
+            kelasSelect.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+
+            if (!taId) return;
+
+            const filteredKelas = kelasData.filter(k => k.tahun_akademik_id === taId);
+
+            filteredKelas.forEach(k => {
+                const option = document.createElement('option');
+                option.value = k.id;
+                option.text = k.nama_kelas;
+                kelasSelect.appendChild(option);
+            });
+
+            if (oldVal && Array.from(kelasSelect.options).some(opt => opt.value == oldVal)) {
+                kelasSelect.value = oldVal;
+            }
+        }
+
+        if(tahunAkademikSelect) {
+            tahunAkademikSelect.addEventListener('change', updateKelasOptions);
+            updateKelasOptions();
+        }
+    });
+</script>
+@endpush
 @endsection
