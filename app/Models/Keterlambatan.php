@@ -8,7 +8,7 @@ class Keterlambatan extends Model
 {
     protected $table = 'keterlambatan';
 
-    protected $fillable = ['siswa_id', 'tahun_akademik_id', 'tanggal', 'lama_menit', 'alasan', 'pencatat_id'];
+    protected $fillable = ['siswa_id', 'tahun_akademik_id', 'tanggal', 'waktu_kedatangan', 'lama_menit', 'alasan', 'pencatat_id'];
 
     public function siswa() { return $this->belongsTo(Siswa::class); }
     public function tahunAkademik() { return $this->belongsTo(TahunAkademik::class); }

@@ -13,6 +13,12 @@
             <form action="{{ route('keterlambatan.update', $keterlambatan->id) }}" method="POST">
                 @csrf
                 @method('PUT')
+                @error('waktu_kedatangan')
+                    <div class="alert alert-danger alert-dismissible show fade">
+                        {{ $message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @enderror
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-3">
@@ -43,14 +49,7 @@
                             <input type="date" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal" value="{{ old('tanggal', $keterlambatan->tanggal) }}" required>
                             @error('tanggal') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="lama_menit">Lama Terlambat (Menit)</label>
-                            <div class="input-group">
-                                <input type="number" id="lama_menit" class="form-control @error('lama_menit') is-invalid @enderror" name="lama_menit" value="{{ old('lama_menit', $keterlambatan->lama_menit) }}" required min="1">
-                                <span class="input-group-text">Menit</span>
-                            </div>
-                            @error('lama_menit') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
+                        <input type="hidden" name="waktu_kedatangan" value="{{ old('waktu_kedatangan', $keterlambatan->waktu_kedatangan ? \Carbon\Carbon::parse($keterlambatan->waktu_kedatangan)->format('H:i') : '') }}">
                         <div class="form-group mb-3">
                             <label for="alasan">Alasan / Keterangan</label>
                             <textarea id="alasan" class="form-control @error('alasan') is-invalid @enderror" name="alasan" rows="3">{{ old('alasan', $keterlambatan->alasan) }}</textarea>

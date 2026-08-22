@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     // Piket
     Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
     Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store');
+    Route::post('keterlambatan/update-jam-masuk', [KeterlambatanController::class, 'updateJamMasuk'])->name('keterlambatan.update-jam-masuk');
     Route::resource('keterlambatan', KeterlambatanController::class);
 
     // Akademik Guru

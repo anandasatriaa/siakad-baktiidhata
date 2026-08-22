@@ -13,18 +13,30 @@
             </a>
         </div>
         <div class="card-body">
-            <form action="{{ route('keterlambatan.index') }}" method="GET" class="row g-3 mb-4">
-                <div class="col-md-4">
-                    <label for="periode_id" class="form-label">Tahun Akademik</label>
-                    <select name="periode_id" id="periode_id" class="form-select" onchange="this.form.submit()">
-                        @foreach ($periodes as $p)
-                            <option value="{{ $p->id }}" {{ $periode_id == $p->id ? 'selected' : '' }}>
-                                {{ $p->tahun_ajaran }} - {{ $p->semester }} {{ $p->is_active ? '(Aktif)' : '' }}
-                            </option>
-                        @endforeach
-                    </select>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <form action="{{ route('keterlambatan.index') }}" method="GET">
+                        <label for="periode_id" class="form-label">Tahun Akademik</label>
+                        <select name="periode_id" id="periode_id" class="form-select" onchange="this.form.submit()">
+                            @foreach ($periodes as $p)
+                                <option value="{{ $p->id }}" {{ $periode_id == $p->id ? 'selected' : '' }}>
+                                    {{ $p->tahun_ajaran }} - {{ $p->semester }} {{ $p->is_active ? '(Aktif)' : '' }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
                 </div>
-            </form>
+                <div class="col-md-6">
+                    <form action="{{ route('keterlambatan.update-jam-masuk') }}" method="POST">
+                        @csrf
+                        <label for="jam_masuk_sekolah" class="form-label">Jam Masuk Sekolah</label>
+                        <div class="input-group">
+                            <input type="time" name="jam_masuk_sekolah" id="jam_masuk_sekolah" class="form-control" value="{{ $jam_masuk_sekolah }}" required>
+                            <button class="btn btn-primary" type="submit">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-hover mb-0" id="table">
                     <thead>
@@ -33,7 +45,7 @@
                             <th>Tanggal</th>
                             <th>Nama Siswa</th>
                             <th>Kelas</th>
-                            <th>Lama (Menit)</th>
+
                             <th>Alasan</th>
                             <th>Aksi</th>
                         </tr>
@@ -45,7 +57,6 @@
                             <td>{{ \Carbon\Carbon::parse($k->tanggal)->format('d/m/Y') }}</td>
                             <td>{{ $k->siswa->nama_lengkap }}</td>
                             <td>{{ $k->siswa->riwayatKelas->first()->kelas->nama_kelas ?? '-' }}</td>
-                            <td><span class="badge bg-light-danger text-danger">{{ $k->lama_menit }} Menit</span></td>
                             <td>{{ $k->alasan ?? '-' }}</td>
                             <td>
                                 <div class="d-flex gap-2">

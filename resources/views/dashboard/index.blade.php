@@ -203,7 +203,6 @@
                                                     <th class="text-center bg-light-info">I</th>
                                                     <th class="text-center bg-light-danger">A</th>
                                                     <th class="text-center">Terlambat</th>
-                                                    <th class="text-center">Total Menit</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -221,7 +220,6 @@
                                                             {{ $siswa->total_keterlambatan }}x
                                                         </span>
                                                     </td>
-                                                    <td class="text-center">{{ $siswa->total_menit }} Menit</td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>

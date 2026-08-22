@@ -1,13 +1,13 @@
 <table>
     <thead>
         <tr>
-            <th colspan="9" style="text-align: center; font-weight: bold; font-size: 14pt;">LAPORAN ABSENSI DAN KETERLAMBATAN</th>
+            <th colspan="8" style="text-align: center; font-weight: bold; font-size: 14pt;">LAPORAN ABSENSI DAN KETERLAMBATAN</th>
         </tr>
         <tr>
-            <th colspan="9" style="text-align: center; font-weight: bold; font-size: 12pt;">SMK BAKTI IDHATA</th>
+            <th colspan="8" style="text-align: center; font-weight: bold; font-size: 12pt;">SMK BAKTI IDHATA</th>
         </tr>
         <tr>
-            <th colspan="9" style="text-align: center; font-size: 10pt;">
+            <th colspan="8" style="text-align: center; font-size: 10pt;">
                 Tahun Akademik: {{ $tahun_akademik ? $tahun_akademik->tahun_ajaran . ' (' . ucfirst($tahun_akademik->semester) . ')' : '-' }} | Kelas: {{ $info_kelas ? $info_kelas->nama_kelas : 'Semua Kelas' }} | Periode: {{ date('d/m/Y', strtotime($tanggal_mulai)) }} - {{ date('d/m/Y', strtotime($tanggal_selesai)) }}
             </th>
         </tr>
@@ -21,7 +21,6 @@
             <th style="border: 1px solid #000; font-weight: bold; text-align: center; background-color: #D3D3D3;">Izin (I)</th>
             <th style="border: 1px solid #000; font-weight: bold; text-align: center; background-color: #D3D3D3;">Alpa (A)</th>
             <th style="border: 1px solid #000; font-weight: bold; text-align: center; background-color: #D3D3D3;">Terlambat</th>
-            <th style="border: 1px solid #000; font-weight: bold; text-align: center; background-color: #D3D3D3;">Total Menit</th>
         </tr>
     </thead>
     <tbody>
@@ -35,11 +34,10 @@
             <td style="border: 1px solid #000; text-align: center;">{{ $siswa->rekap_absensi['Izin'] }}</td>
             <td style="border: 1px solid #000; text-align: center;">{{ $siswa->rekap_absensi['Alpa'] }}</td>
             <td style="border: 1px solid #000; text-align: center;">{{ $siswa->total_keterlambatan }}x</td>
-            <td style="border: 1px solid #000; text-align: center;">{{ $siswa->total_menit }} Menit</td>
         </tr>
         @empty
         <tr>
-            <td colspan="9" style="border: 1px solid #000; text-align: center;">Belum ada data rekapitulasi pada periode ini.</td>
+            <td colspan="8" style="border: 1px solid #000; text-align: center;">Belum ada data rekapitulasi pada periode ini.</td>
         </tr>
         @endforelse
     </tbody>

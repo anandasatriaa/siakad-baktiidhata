@@ -12,6 +12,12 @@
         <div class="card-body">
             <form action="{{ route('keterlambatan.store') }}" method="POST">
                 @csrf
+                @error('waktu_kedatangan')
+                    <div class="alert alert-danger alert-dismissible show fade">
+                        {{ $message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @enderror
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-3">
@@ -42,14 +48,7 @@
                             <input type="date" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" required>
                             @error('tanggal') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="lama_menit">Lama Terlambat (Menit)</label>
-                            <div class="input-group">
-                                <input type="number" id="lama_menit" class="form-control @error('lama_menit') is-invalid @enderror" name="lama_menit" value="{{ old('lama_menit') }}" required min="1" placeholder="Masukkan angka">
-                                <span class="input-group-text">Menit</span>
-                            </div>
-                            @error('lama_menit') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
+                        <input type="hidden" name="waktu_kedatangan" value="{{ old('waktu_kedatangan', \Carbon\Carbon::now()->timezone('Asia/Jakarta')->format('H:i')) }}">
                         <div class="form-group mb-3">
                             <label for="alasan">Alasan / Keterangan</label>
                             <textarea id="alasan" class="form-control @error('alasan') is-invalid @enderror" name="alasan" rows="3" placeholder="Masukkan alasan keterlambatan">{{ old('alasan') }}</textarea>

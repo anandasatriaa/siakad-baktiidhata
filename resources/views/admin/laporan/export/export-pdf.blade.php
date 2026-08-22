@@ -186,7 +186,6 @@
                     <th width="40">I</th>
                     <th width="40">A</th>
                     <th width="80">Terlambat</th>
-                    <th width="90">Total Menit</th>
                 </tr>
             </thead>
             <tbody>
@@ -200,11 +199,10 @@
                         <td class="text-center">{{ $siswa->rekap_absensi['Izin'] }}</td>
                         <td class="text-center font-bold {{ $siswa->rekap_absensi['Alpa'] > 0 ? 'text-danger' : '' }}">{{ $siswa->rekap_absensi['Alpa'] }}</td>
                         <td class="text-center font-bold {{ $siswa->total_keterlambatan > 0 ? 'text-danger' : '' }}">{{ $siswa->total_keterlambatan }}x</td>
-                        <td class="text-center">{{ $siswa->total_menit }} Menit</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center">Belum ada data rekapitulasi pada periode ini.</td>
+                        <td colspan="8" class="text-center">Belum ada data rekapitulasi pada periode ini.</td>
                     </tr>
                 @endforelse
             </tbody>
