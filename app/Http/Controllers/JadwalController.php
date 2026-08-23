@@ -102,6 +102,24 @@ class JadwalController extends Controller
                         'Jadwal pada baris ' . ($index + 1) . ' sudah ada (duplikat jadwal).'
                     );
                 }
+
+                // Check jika guru sudah mengajar di kelas lain pada rentang waktu yang sama
+                $guruConflict = \App\Models\JadwalPelajaran::where('guru_id', $item['guru_id'])
+                    ->where('tahun_akademik_id', $request->tahun_akademik_id)
+                    ->where('hari', $item['hari'])
+                    ->where(function ($q) use ($item) {
+                        $q->where('jam_mulai', '<', $item['jam_selesai'])
+                          ->where('jam_selesai', '>', $item['jam_mulai']);
+                    })
+                    ->first();
+
+                if ($guruConflict) {
+                    $kelasKonflik = $guruConflict->kelas->nama_kelas ?? 'kelas lain';
+                    $validator->errors()->add(
+                        "schedules.$index.guru_id",
+                        'Guru pada baris ' . ($index + 1) . ' sudah memiliki jadwal mengajar di ' . $kelasKonflik . ' pada rentang waktu tersebut.'
+                    );
+                }
             }
         });
 
@@ -159,6 +177,22 @@ class JadwalController extends Controller
 
             if ($exists) {
                 $validator->errors()->add('hari', 'Jadwal pelajaran ini sudah ada (duplikat).');
+            }
+
+            // Check jika guru sudah mengajar di kelas lain pada rentang waktu yang sama
+            $guruConflict = \App\Models\JadwalPelajaran::where('guru_id', $request->guru_id)
+                ->where('tahun_akademik_id', $request->tahun_akademik_id)
+                ->where('hari', $request->hari)
+                ->where('id', '!=', $jadwal->id)
+                ->where(function ($q) use ($request) {
+                    $q->where('jam_mulai', '<', $request->jam_selesai)
+                      ->where('jam_selesai', '>', $request->jam_mulai);
+                })
+                ->first();
+
+            if ($guruConflict) {
+                $kelasKonflik = $guruConflict->kelas->nama_kelas ?? 'kelas lain';
+                $validator->errors()->add('guru_id', 'Guru sudah memiliki jadwal mengajar di ' . $kelasKonflik . ' pada rentang waktu tersebut.');
             }
         });
 
