@@ -11,7 +11,6 @@ class PengumumanController extends Controller
     public function __construct()
     {
         $this->middleware('role:admin')->only(['create', 'store', 'edit', 'update', 'destroy']);
-        $this->middleware('role:admin,kepala_sekolah')->only(['index', 'show']);
     }
 
     public function index(Request $request)

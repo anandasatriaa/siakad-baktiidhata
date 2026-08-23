@@ -24,7 +24,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        {{-- <div class="col-md-6">
             <div class="card bg-light-danger">
                 <div class="card-body px-4 py-4-5">
                     <div class="row">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="col-md-6">
             <div class="card bg-light-warning">
                 <div class="card-body px-4 py-4-5">
