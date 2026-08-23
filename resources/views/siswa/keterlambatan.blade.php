@@ -70,7 +70,7 @@
                     <thead>
                         <tr>
                             <th>Tanggal</th>
-                            <th>Durasi</th>
+                            {{-- <th>Durasi</th> --}}
                             <th>Alasan</th>
                         </tr>
                     </thead>
@@ -78,12 +78,12 @@
                         @forelse ($keterlambatans as $k)
                         <tr>
                             <td>{{ \Carbon\Carbon::parse($k->tanggal)->format('d M Y') }}</td>
-                            <td><span class="text-danger fw-bold">{{ $k->lama_menit }} Menit</span></td>
+                            {{-- <td><span class="text-danger fw-bold">{{ $k->lama_menit }} Menit</span></td> --}}
                             <td>{{ $k->alasan ?? '-' }}</td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="3" class="text-center text-muted text-success">
+                            <td colspan="2" class="text-center text-muted text-success">
                                 <i class="bi bi-check-circle"></i> Anda tidak memiliki catatan keterlambatan pada periode ini.
                             </td>
                         </tr>
